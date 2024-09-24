@@ -15,8 +15,13 @@ return new class extends Migration
             $table->id();
             $table->string("email");
             $table->string("username");
-            $table->string("firstname");
-            $table->
+            $table->string("firstname")->nullable();
+            $table->string('lastname')->nullable();
+            $table->string('middlename')->nullable();
+            $table->integer('age')->nullable();
+            $table->foreignId('institute_id')->constrained('institutes');
+            $table->foreignId('course_id')->constrained('courses');
+            $table->boolean('is_verified')->default(false);
             $table->timestamps();
         });
     }
