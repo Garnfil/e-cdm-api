@@ -16,6 +16,7 @@ return new class extends Migration
             $table->string('name');
             $table->foreignId('course_id')->constrained('courses');
             $table->string('year_level');
+            $table->text('description')->nullable();
             $table->string('status');
             $table->timestamps();
         });

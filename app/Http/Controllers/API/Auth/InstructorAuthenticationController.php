@@ -3,16 +3,14 @@
 namespace App\Http\Controllers\API\Auth;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Auth\StudentAuth\LoginRequest;
-use App\Http\Requests\Auth\StudentAuth\RegisterRequest;
-use App\Models\Student;
+use App\Models\Instructor;
 use App\Services\ExceptionHandlerService;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 
-class StudentAuthenticationController extends Controller
+class InstructorAuthenticationController extends Controller
 {   
     private $exceptionHandler;
 
@@ -20,17 +18,13 @@ class StudentAuthenticationController extends Controller
         $this->exceptionHandler = $exceptionHandlerService;
     }
 
-    public function register(RegisterRequest $request)
+    public function register(Request $request)
     {
         try {
             DB::beginTransaction();
-            $data = $request->validated();
+            $data = $request->all();
 
-            // Check if the student id was already exist.
-            $existing_student = Student::where('student_id', $request->student_id)->exists();
-            if($existing_student) throw new Exception("The Student ID was already exists", 422);
-
-            $student = Student::create(array_merge($data, ['password' => Hash::make($request->password)]));
+            $instructor = Instructor::create(array_merge($data, ['password' => Hash::make($request->password)]));
 
             DB::commit();
 
@@ -45,19 +39,19 @@ class StudentAuthenticationController extends Controller
         }
     }
 
-    public function login(LoginRequest $request) {
+    public function login(Request $request) {
         try {
             $login_type = filter_var($request->login, FILTER_VALIDATE_EMAIL) ? 'email' : 'username';
-            $student = Student::where($login_type, $request->login)->firstOrFail();
+            $instructor = Instructor::where($login_type, $request->login)->firstOrFail();
 
-            if(!Hash::check($request->password, $student->password)) 
+            if(!Hash::check($request->password, $instructor->password)) 
                 throw new Exception('Invalid Credentials', '400');
 
-            $token = $student->createToken("STUDENT TOKEN")->plainTextToken;
+            $token = $instructor->createToken("INSTRUCTOR TOKEN")->plainTextToken;
 
             return response()->json([
                 'token' => $token,
-                'student' => $student,
+                'instructor' => $instructor,
             ]);
 
         } catch (Exception $exception) {

@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('institute_id')->constrained('institutes')->cascadeOnDelete();
             $table->string('name');
+            $table->string('logo_file_name')->nullable();
             $table->timestamps();
         });
     }

@@ -19,8 +19,8 @@ return new class extends Migration
             $table->string('lastname')->nullable();
             $table->string('middlename')->nullable();
             $table->integer('age')->nullable();
-            $table->foreignId('institute_id')->constrained('institutes');
-            $table->foreignId('course_id')->constrained('courses');
+            $table->foreignId('institute_id')->nullable()->constrained('institutes')->nullOnDelete();
+            $table->foreignId('course_id')->nullable()->constrained('courses')->nullOnDelete();
             $table->boolean('is_verified')->default(false);
             $table->timestamps();
         });
