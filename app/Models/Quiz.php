@@ -8,4 +8,13 @@ use Illuminate\Database\Eloquent\Model;
 class Quiz extends Model
 {
     use HasFactory;
+    protected $table = "quizzes";
+    protected $fillable = [
+        "school_work_id",
+        "notes",
+        "points",
+        "assessment_type",
+        "quiz_type",
+        "due_datetime",
+    ];
 }
