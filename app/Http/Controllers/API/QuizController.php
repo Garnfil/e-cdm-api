@@ -3,74 +3,50 @@
 namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
-use App\Models\Quiz;
-use App\Models\SchoolWork;
+use App\Http\Requests\Quiz\StoreRequest;
 use App\Services\ExceptionHandlerService;
-use DB;
+use App\Services\QuizService;
 use Exception;
-use Illuminate\Http\Request;
 
 class QuizController extends Controller
 {
     private $exceptionHandler;
-    public function __construct(ExceptionHandlerService $exceptionHandler)
+
+    private $quizService;
+
+    public function __construct(ExceptionHandlerService $exceptionHandler, QuizService $quizService)
     {
         $this->exceptionHandler = $exceptionHandler;
+        $this->quizService = $quizService;
     }
 
-    public function getAll()
-    {
+    public function getAll() {}
 
-    }
+    public function get() {}
 
-    public function get()
-    {
-
-    }
-
-    public function store(Request $request)
+    public function store(StoreRequest $request)
     {
         try {
-            DB::beginTransaction();
-
-            $schoolWork = SchoolWork::create([
-                "class_id" => $request->class_id,
-                "instructor_id" => $request->instructor_id,
-                "title" => $request->title,
-                "description" => $request->description,
-                "type" => $request->type,
-                "status" => $request->status
-            ]);
-
-            $quiz = Quiz::create([
-                "school_work_id" => $schoolWork->id,
-                "notes" => $request->notes,
-                "points" => $request->points,
-                "assessment_type" => 'prelim',
-                "quiz_type" => 'normal',
-                "due_datetime" => $request->datetime,
-            ]);
-
-            DB::commit();
+            $result = $this->quizService->createAndUpload($request);
 
             return response()->json([
-                "status" => "success",
-                "schoolWork" => $schoolWork,
+                'status' => 'success',
+                'schoolWork' => $result['schoolWork'],
             ]);
 
         } catch (Exception $exception) {
-            DB::rollBack();
             return $this->exceptionHandler->__generateExceptionResponse($exception);
         }
     }
 
     public function update()
     {
+        try {
 
+        } catch (Exception $exception) {
+
+        }
     }
 
-    public function destroy()
-    {
-
-    }
+    public function destroy() {}
 }
