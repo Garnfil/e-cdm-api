@@ -20,9 +20,13 @@ class QuizController extends Controller
         $this->quizService = $quizService;
     }
 
-    public function getAll() {}
+    public function getAll()
+    {
+    }
 
-    public function get() {}
+    public function get()
+    {
+    }
 
     public function store(StoreRequest $request)
     {
@@ -48,5 +52,7 @@ class QuizController extends Controller
         }
     }
 
-    public function destroy() {}
+    public function destroy()
+    {
+    }
 }
