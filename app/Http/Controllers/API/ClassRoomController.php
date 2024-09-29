@@ -12,30 +12,32 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 
 class ClassRoomController extends Controller
-{   
+{
     private $exceptionHandler;
 
-    public function __construct(ExceptionHandlerService $exceptionHandlerService) {
+    public function __construct(ExceptionHandlerService $exceptionHandlerService)
+    {
         $this->exceptionHandler = $exceptionHandlerService;
     }
 
-    public function getAll(Request $request) {
-        
-    }
+    public function getAll(Request $request) {}
 
-    public function get(Request $request) {
+    public function get(Request $request)
+    {
         $classes = Classroom::where('status', 'active')->get();
+
         return response()->json([
             'status' => 'success',
             'classes' => $classes,
         ]);
     }
 
-    public function store(StoreRequest $request) {
+    public function store(StoreRequest $request)
+    {
         try {
             DB::beginTransaction();
             $data = $request->validated();
-        
+
             $classCode = Str::random(6);
             $class = Classroom::create(array_merge($data, ['class_code' => $classCode, 'status' => 'active']));
 
@@ -43,17 +45,19 @@ class ClassRoomController extends Controller
 
             return response()->json([
                 'status' => 'success',
-                "message" => "Class Created Successfully",
-                "class" => $class,
+                'message' => 'Class Created Successfully',
+                'class' => $class,
             ]);
 
         } catch (Exception $exception) {
             DB::rollBack();
+
             return $this->exceptionHandler->__generateExceptionResponse($exception);
         }
     }
 
-    public function update(Request $request) {
+    public function update(Request $request)
+    {
         try {
             DB::beginTransaction();
             $data = $request->validated();
@@ -65,21 +69,18 @@ class ClassRoomController extends Controller
 
             return response()->json([
                 'status' => 'success',
-                "message" => "Class Updated Successfully",
-                "class" => $class,
+                'message' => 'Class Updated Successfully',
+                'class' => $class,
             ]);
 
         } catch (Exception $exception) {
             DB::rollBack();
+
             return $this->exceptionHandler->__generateExceptionResponse($exception);
         }
     }
 
-    public function updateCoverPhoto(Request $request) {
-        
-    }
+    public function updateCoverPhoto(Request $request) {}
 
-    public function destroy(Request $request) {
-
-    }
+    public function destroy(Request $request) {}
 }

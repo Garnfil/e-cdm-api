@@ -13,12 +13,14 @@ return new class extends Migration
     {
         Schema::create('classes', function (Blueprint $table) {
             $table->id();
-            $table->string("class_code");
+            $table->string('class_code');
+            $table->string('title');
             $table->foreignId('subject_id')->constrained('subjects');
             $table->foreignId('section_id')->constrained('sections');
             $table->foreignId('instructor_id')->constrained('instructors');
-            $table->string("cover_image_file_name")->nullable();
-            $table->string("status");
+            $table->text('description')->nullable();
+            $table->string('cover_image_file_name')->nullable();
+            $table->enum('status', ['active', 'inactive'])->default('active');
             $table->timestamps();
         });
     }
