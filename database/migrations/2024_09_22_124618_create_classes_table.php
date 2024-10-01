@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('class_code');
             $table->string('title');
+            $table->enum('semester', ['1st', '2nd']);
             $table->foreignId('subject_id')->constrained('subjects');
             $table->foreignId('section_id')->constrained('sections');
             $table->foreignId('instructor_id')->constrained('instructors');

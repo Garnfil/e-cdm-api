@@ -4,7 +4,8 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration {
+return new class extends Migration
+{
     /**
      * Run the migrations.
      */
@@ -26,16 +27,6 @@ return new class extends Migration {
             $table->foreignId('school_work_id')->constrained('school_works');
             $table->string('attachment_name');
             $table->enum('school_work_type', ['quiz', 'activity', 'assignment', 'exam']);
-            $table->enum('attachment_type', ['file', 'link']);
-            $table->enum('status', ['active', 'inactive'])->default('active');
-            $table->timestamps();
-        });
-
-        Schema::create('student_work_attachments', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('school_work_id')->constrained('school_works');
-            $table->foreignId('student_id')->constrained('students');
-            $table->string('attachment_name');
             $table->enum('attachment_type', ['file', 'link']);
             $table->enum('status', ['active', 'inactive'])->default('active');
             $table->timestamps();
