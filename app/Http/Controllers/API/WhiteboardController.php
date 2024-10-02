@@ -12,9 +12,9 @@ class WhiteboardController extends Controller
     {
 
         // Broadcast the data to the session's Pusher channel
-        $data = $request->input('data');
-        broadcast(new WhiteboardUpdated($data, $sessionId))->toOthers();
+        $data = $request->all();
+        event(new WhiteboardUpdated($data, $sessionId));
 
-        return response()->json(['status' => 'Whiteboard updated']);
+        return response()->json(['status' => 'Whiteboard updated', $data]);
     }
 }

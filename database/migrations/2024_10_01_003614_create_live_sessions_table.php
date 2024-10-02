@@ -18,7 +18,7 @@ return new class extends Migration
             $table->string('session_code', 10)->unique();
             $table->datetime('scheduled_datetime');
             $table->foreignId(column: 'class_id')->constrained('classes');
-            $table->int('grace_period')->default(0);
+            $table->integer('grace_period')->default(0);
             $table->datetime('start_datetime');
             $table->datetime('end_datetime');
             $table->enum('status', ['active', 'inactive', 'ongoing', 'ended']);

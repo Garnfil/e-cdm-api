@@ -18,6 +18,7 @@ use Illuminate\Support\Facades\Route;
 Route::post('instructor/login', [InstructorAuthenticationController::class, 'login']);
 
 Route::group(['middleware' => ['auth:sanctum']], function () {});
-Route::post('/whiteboard/update/{sessionId}', [WhiteboardController::class, 'update']);
+
+Route::post('whiteboard/update/{sessionId}', [WhiteboardController::class, 'update']);
 
 // Route::post('login', [AuthController::class, 'login']);

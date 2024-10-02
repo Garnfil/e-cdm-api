@@ -31,6 +31,6 @@ class WhiteboardUpdated
 
     public function broadcastAs()
     {
-        return 'my-event';
+        return 'whiteboard-updated';
     }
 }
