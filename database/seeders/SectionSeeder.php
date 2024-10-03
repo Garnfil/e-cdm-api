@@ -3,7 +3,6 @@
 namespace Database\Seeders;
 
 use DB;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
 class SectionSeeder extends Seeder
@@ -15,61 +14,68 @@ class SectionSeeder extends Seeder
     {
         DB::table('sections')->insert([
             [
-                'name' => "1A",
+                'name' => '1A',
                 'course_id' => 1,
                 'year_level' => 1,
                 'description' => 'This section is for BSIT 1A',
                 'status' => 'active',
             ],
             [
-                'name' => "1B",
+                'name' => '1B',
                 'course_id' => 1,
                 'year_level' => 1,
                 'description' => 'This section is for BSIT 1B',
                 'status' => 'active',
             ],
             [
-                'name' => "1C",
+                'name' => '1C',
                 'course_id' => 1,
                 'year_level' => 1,
                 'description' => 'This section is for BSIT 1C',
                 'status' => 'active',
             ],
             [
-                'name' => "1D",
+                'name' => '1D',
                 'course_id' => 1,
                 'year_level' => 1,
                 'description' => 'This section is for BSIT 1D',
                 'status' => 'active',
             ],
             [
-                'name' => "1E",
+                'name' => '1E',
                 'course_id' => 1,
                 'year_level' => 1,
                 'description' => 'This section is for BSIT 1E',
                 'status' => 'active',
             ],
             [
-                'name' => "1F",
+                'name' => '1F',
                 'course_id' => 1,
                 'year_level' => 1,
                 'description' => 'This section is for BSIT 1F',
                 'status' => 'active',
             ],
             [
-                'name' => "1G",
+                'name' => '1G',
                 'course_id' => 1,
                 'year_level' => 1,
                 'description' => 'This section is for BSIT 1G',
                 'status' => 'active',
             ],
             [
-                'name' => "1H",
+                'name' => '1H',
                 'course_id' => 1,
                 'year_level' => 1,
                 'description' => 'This section is for BSIT 1H',
                 'status' => 'active',
             ],
-        ]);        
+            [
+                'name' => '4H',
+                'course_id' => 1,
+                'year_level' => 4,
+                'description' => 'This section is for BSIT 4H',
+                'status' => 'active',
+            ],
+        ]);
     }
 }

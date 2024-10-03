@@ -40,10 +40,7 @@ class StudentController extends Controller
         ]);
     }
 
-    public function store(Request $request)
-    {
-        // $data = $request->
-    }
+    public function store(Request $request) {}
 
     public function update(Request $request) {}
 

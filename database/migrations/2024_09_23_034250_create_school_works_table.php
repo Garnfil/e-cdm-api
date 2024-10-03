@@ -24,7 +24,7 @@ return new class extends Migration
 
         Schema::create('school_work_attachments', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('school_work_id')->constrained('school_works');
+            $table->foreignId('school_work_id')->constrained('school_works')->cascadeOnDelete();
             $table->string('attachment_name');
             $table->enum('school_work_type', ['quiz', 'activity', 'assignment', 'exam']);
             $table->enum('attachment_type', ['file', 'link']);
@@ -34,7 +34,7 @@ return new class extends Migration
 
         Schema::create('assignments', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('school_work_id')->constrained('school_works');
+            $table->foreignId('school_work_id')->constrained('school_works')->cascadeOnDelete();
             $table->text('notes')->nullable();
             $table->string('points');
             $table->enum('assessment_type', ['prelim', 'midterm', 'final']);
@@ -44,8 +44,8 @@ return new class extends Migration
 
         Schema::create('student_assignments', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('assignment_id')->constrained('assignments');
-            $table->foreignId('student_id')->constrained('students');
+            $table->foreignId('assignment_id')->constrained('assignments')->cascadeOnDelete();
+            $table->foreignId('student_id')->constrained('students')->cascadeOnDelete();
             $table->string('score');
             $table->string('grade');
             $table->dateTime('datetime_submitted');
@@ -54,7 +54,7 @@ return new class extends Migration
 
         Schema::create('quizzes', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('school_work_id')->constrained('school_works');
+            $table->foreignId('school_work_id')->constrained('school_works')->cascadeOnDelete();
             $table->text('notes')->nullable();
             $table->string('points');
             $table->enum('assessment_type', ['prelim', 'midterm', 'final']);
@@ -65,8 +65,8 @@ return new class extends Migration
 
         Schema::create('student_quizzes', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('quiz_id')->constrained('quizzes');
-            $table->foreignId('student_id')->constrained('students');
+            $table->foreignId('quiz_id')->constrained('quizzes')->cascadeOnDelete();
+            $table->foreignId('student_id')->constrained('students')->cascadeOnDelete();
             $table->string('score');
             $table->string('grade');
             $table->dateTime('datetime_submitted');
@@ -75,7 +75,7 @@ return new class extends Migration
 
         Schema::create('activities', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('school_work_id')->constrained('school_works');
+            $table->foreignId('school_work_id')->constrained('school_works')->cascadeOnDelete();
             $table->text('notes')->nullable();
             $table->string('points');
             $table->enum('assessment_type', ['prelim', 'midterm', 'final']);
@@ -86,8 +86,8 @@ return new class extends Migration
 
         Schema::create('student_activities', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('activity_id')->constrained('activities');
-            $table->foreignId('student_id')->constrained('students');
+            $table->foreignId('activity_id')->constrained('activities')->cascadeOnDelete();
+            $table->foreignId('student_id')->constrained('students')->cascadeOnDelete();
             $table->string('score');
             $table->string('grade');
             $table->dateTime('datetime_submitted');
@@ -96,7 +96,7 @@ return new class extends Migration
 
         Schema::create('exams', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('school_work_id')->constrained('school_works');
+            $table->foreignId('school_work_id')->constrained('school_works')->cascadeOnDelete();
             $table->text('notes')->nullable();
             $table->string('points');
             $table->enum('assessment_type', ['prelim', 'midterm', 'final']);
@@ -107,8 +107,8 @@ return new class extends Migration
 
         Schema::create('student_exams', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('exam_id')->constrained('exams');
-            $table->foreignId('student_id')->constrained('students');
+            $table->foreignId('exam_id')->constrained('exams')->cascadeOnDelete();
+            $table->foreignId('student_id')->constrained('students')->cascadeOnDelete();
             $table->string('score');
             $table->string('grade');
             $table->dateTime('datetime_submitted');

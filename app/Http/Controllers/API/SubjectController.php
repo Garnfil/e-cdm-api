@@ -10,7 +10,15 @@ use Illuminate\Http\Request;
 
 class SubjectController extends Controller
 {
-    public function getAll(Request $request) {}
+    public function getAll(Request $request)
+    {
+        $sections = Subject::get();
+
+        return response()->json([
+            'status' => 'success',
+            'sections' => $sections,
+        ]);
+    }
 
     public function get(Request $request)
     {
@@ -43,6 +51,16 @@ class SubjectController extends Controller
         return response()->json([
             'status' => 'success',
             'message' => 'Section Updated Successfully',
+            'section' => $section,
+        ]);
+    }
+
+    public function show(Request $request, $id)
+    {
+        $section = Subject::where('id', $id)->first();
+
+        return response()->json([
+            'status' => 'success',
             'section' => $section,
         ]);
     }

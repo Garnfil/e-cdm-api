@@ -18,6 +18,8 @@ class DatabaseSeeder extends Seeder
             SectionSeeder::class,
             SubjectSeeder::class,
             InstructorSeeder::class,
+            StudentSeeder::class,
+            DiscussionSeeder::class,
         ]);
     }
 }

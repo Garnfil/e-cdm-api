@@ -29,6 +29,8 @@ class Instructor extends Model
         'is_verified' => 'boolean',
     ];
 
+    protected $hidden = ['password'];
+
     public function institute()
     {
         return $this->belongsTo(Institute::class, 'institute_id');

@@ -21,6 +21,7 @@ class InstructorSeeder extends Seeder
             'lastname' => 'Tructor',
             'institute_id' => 1,
             'course_id' => 1,
+            'role' => 'instructor',
             'is_verified' => 1,
         ]);
     }

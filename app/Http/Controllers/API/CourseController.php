@@ -10,15 +10,23 @@ use Illuminate\Http\Request;
 
 class CourseController extends Controller
 {
-    public function getAll(Request $request) {}
-
-    public function get(Request $request)
+    public function getAll(Request $request)
     {
-        $sections = Course::where('status', 'active')->get();
+        $courses = Course::get();
 
         return response()->json([
             'status' => 'success',
-            'sections' => $sections,
+            'courses' => $courses,
+        ]);
+    }
+
+    public function get(Request $request)
+    {
+        $courses = Course::where('status', 'active')->get();
+
+        return response()->json([
+            'status' => 'success',
+            'courses' => $courses,
         ]);
     }
 
@@ -44,6 +52,16 @@ class CourseController extends Controller
             'status' => 'success',
             'message' => 'Section Updated Successfully',
             'section' => $section,
+        ]);
+    }
+
+    public function show(Request $request, $id)
+    {
+        $course = Course::find($id);
+
+        return response()->json([
+            'status' => 'success',
+            'course' => $course,
         ]);
     }
 

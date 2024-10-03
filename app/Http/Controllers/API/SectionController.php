@@ -10,49 +10,69 @@ use Illuminate\Http\Request;
 
 class SectionController extends Controller
 {
-    public function getAll(Request $request) {
-
-    }
-
-    public function get(Request $request) {
-        $sections = Section::where('status', 'active')->get();
+    public function getAll(Request $request)
+    {
+        $sections = Section::get();
 
         return response()->json([
-            "status" => "success",
-            "sections" => $sections
+            'status' => 'success',
+            'sections' => $sections,
         ]);
     }
 
-    public function store(StoreRequest $request) {
+    public function get(Request $request)
+    {
+        $sections = Section::where('status', 'active')->get();
+
+        return response()->json([
+            'status' => 'success',
+            'sections' => $sections,
+        ]);
+    }
+
+    public function store(StoreRequest $request)
+    {
         $data = $request->validated();
         $section = Section::create($data);
 
         return response()->json([
-            "status" => 'success',
-            "message" => "Section Created Successfully",
-            "section" => $section
+            'status' => 'success',
+            'message' => 'Section Created Successfully',
+            'section' => $section,
         ]);
     }
 
-    public function update(UpdateRequest $request) {
+    public function update(UpdateRequest $request)
+    {
         $data = $request->validated();
         $section = Section::where('id', $request->id)->first();
         $section->update($data);
 
         return response()->json([
-            "status" => 'success',
-            "message" => "Section Updated Successfully",
-            "section" => $section
+            'status' => 'success',
+            'message' => 'Section Updated Successfully',
+            'section' => $section,
         ]);
     }
 
-    public function destroy(Request $request) {
+    public function show(Request $request, $id)
+    {
+        $section = Section::where('id', $id)->first();
+
+        return response()->json([
+            'status' => 'success',
+            'section' => $section,
+        ]);
+    }
+
+    public function destroy(Request $request)
+    {
         $section = Section::where('id', $request->id)->first();
         $section->delete();
 
         return response()->json([
-            "status" => 'success',
-            "message" => "Section Deleted Successfully",
+            'status' => 'success',
+            'message' => 'Section Deleted Successfully',
         ]);
     }
 }

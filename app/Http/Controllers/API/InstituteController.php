@@ -10,7 +10,15 @@ use Illuminate\Http\Request;
 
 class InstituteController extends Controller
 {
-    public function getAll(Request $request) {}
+    public function getAll(Request $request)
+    {
+        $institutes = Institute::get();
+
+        return response()->json([
+            'status' => 'success',
+            'institutes' => $institutes,
+        ]);
+    }
 
     public function get(Request $request)
     {
@@ -44,6 +52,16 @@ class InstituteController extends Controller
             'status' => 'success',
             'message' => 'Section Updated Successfully',
             'section' => $section,
+        ]);
+    }
+
+    public function show(Request $request, $id)
+    {
+        $institute = Institute::find($id);
+
+        return response()->json([
+            'status' => 'success',
+            'institute' => $institute,
         ]);
     }
 

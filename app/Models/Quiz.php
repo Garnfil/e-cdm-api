@@ -8,13 +8,20 @@ use Illuminate\Database\Eloquent\Model;
 class Quiz extends Model
 {
     use HasFactory;
-    protected $table = "quizzes";
+
+    protected $table = 'quizzes';
+
     protected $fillable = [
-        "school_work_id",
-        "notes",
-        "points",
-        "assessment_type",
-        "quiz_type",
-        "due_datetime",
+        'school_work_id',
+        'notes',
+        'points',
+        'assessment_type',
+        'quiz_type',
+        'due_datetime',
     ];
+
+    public function school_work()
+    {
+        return $this->belongsTo(SchoolWork::class, 'school_work_id');
+    }
 }

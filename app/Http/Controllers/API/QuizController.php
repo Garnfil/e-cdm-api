@@ -24,9 +24,25 @@ class QuizController extends Controller
         $this->quizService = $quizService;
     }
 
-    public function getAll() {}
+    public function getAll()
+    {
+        $quizzes = Quiz::with('school_work')->get();
 
-    public function get() {}
+        return response()->json([
+            'status' => 'success',
+            'quizzes' => $quizzes,
+        ]);
+    }
+
+    public function get()
+    {
+        $quizzes = Quiz::with('school_work')->get();
+
+        return response()->json([
+            'status' => 'success',
+            'quizzes' => $quizzes,
+        ]);
+    }
 
     public function store(StoreRequest $request)
     {

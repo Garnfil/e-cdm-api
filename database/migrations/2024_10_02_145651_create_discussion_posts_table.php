@@ -17,7 +17,7 @@ return new class extends Migration
             $table->text('content');
             $table->integer('user_id');
             $table->enum('user_type', ['student', 'instructor']);
-            $table->json('images');
+            $table->json('images')->nullable();
             $table->enum('visibility', ['public', 'private']);
             $table->foreignId('institute_id')->nullable()->constrained()->onDelete('cascade'); // Restriction to institute
             $table->foreignId('course_id')->nullable()->constrained()->onDelete('cascade'); // Restriction to course

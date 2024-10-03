@@ -22,6 +22,7 @@ return new class extends Migration
             $table->integer('age')->nullable();
             $table->foreignId('institute_id')->nullable()->constrained('institutes')->nullOnDelete();
             $table->foreignId('course_id')->nullable()->constrained('courses')->nullOnDelete();
+            $table->string('role')->default('instructor');
             $table->boolean('is_verified')->default(false);
             $table->timestamps();
         });
