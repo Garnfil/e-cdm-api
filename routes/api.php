@@ -1,11 +1,14 @@
 <?php
 
+use App\Http\Controllers\API\ActivityController;
 use App\Http\Controllers\API\AssignmentController;
 use App\Http\Controllers\API\Auth\InstructorAuthenticationController;
 use App\Http\Controllers\API\Auth\StudentAuthenticationController;
 use App\Http\Controllers\API\ClassRoomController;
+use App\Http\Controllers\API\ClassScheduleController;
 use App\Http\Controllers\API\CourseController;
 use App\Http\Controllers\API\DiscussionForumController;
+use App\Http\Controllers\API\ExamController;
 use App\Http\Controllers\API\InstituteController;
 use App\Http\Controllers\API\QuizController;
 use App\Http\Controllers\API\SectionController;
@@ -39,12 +42,19 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
 
     Route::get('quizzes', [QuizController::class, 'getAll']);
     Route::post('quizzes', [QuizController::class, 'store']);
-    Route::get('quizzes/active', [QuizController::class, 'get']);
     Route::get('quizzes/{id}', [QuizController::class, 'show']);
 
     Route::get('assignments', [AssignmentController::class, 'get']);
     Route::post('assignments', [AssignmentController::class, 'store']);
     Route::get('assignments/{id}', [AssignmentController::class, 'show']);
+
+    Route::get('activities', [ActivityController::class, 'get']);
+    Route::post('activities', [ActivityController::class, 'store']);
+    Route::get('activities/{id}', [ActivityController::class, 'show']);
+
+    Route::get('exams', [ExamController::class, 'get']);
+    Route::post('exams', [ExamController::class, 'store']);
+    Route::get('exams/{id}', [ExamController::class, 'show']);
 
     Route::get('sections', [SectionController::class, 'getAll']);
     Route::get('sections/active', [SectionController::class, 'get']);
@@ -66,7 +76,10 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::post('discussions', [DiscussionForumController::class, 'store']);
     Route::get('users/{user_id}/{user_type}/discussions', [DiscussionForumController::class, 'ownerDiscussions']);
     Route::get('discussions/{id}', [DiscussionForumController::class, 'show']);
-    // Route::get('discussions');
+
+    Route::get('class-schedules', [ClassScheduleController::class, 'get']);
+    Route::post('class-schedules', [ClassScheduleController::class, 'store']);
+    Route::post('instructors/{instructor_id}/class-schedules', [ClassScheduleController::class, 'instructorClassesSchedule']);
 });
 
 Route::post('whiteboard/update/{sessionId}', [WhiteboardController::class, 'update']);

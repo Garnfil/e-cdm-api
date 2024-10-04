@@ -44,6 +44,15 @@ class QuizController extends Controller
         ]);
     }
 
+    public function show(Request $request, $id)
+    {
+        $quiz = Quiz::with('school_work')->findOrFail($id);
+        return response()->json([
+            'status' => 'success',
+            'quiz' => $quiz,
+        ]);
+    }
+
     public function store(StoreRequest $request)
     {
         try {
@@ -51,7 +60,7 @@ class QuizController extends Controller
 
             return response()->json([
                 'status' => 'success',
-                'schoolWork' => $result['schoolWork'],
+                'quiz' => $result['quiz']->load('school_work'),
             ]);
 
         } catch (Exception $exception) {
@@ -99,7 +108,7 @@ class QuizController extends Controller
         } catch (Exception $e) {
             \DB::rollBack();
 
-            return response()->json(['error' => 'An error occurred: '.$e->getMessage()], 500);
+            return response()->json(['error' => 'An error occurred: ' . $e->getMessage()], 500);
         }
     }
 
@@ -112,5 +121,7 @@ class QuizController extends Controller
         }
     }
 
-    public function destroy() {}
+    public function destroy()
+    {
+    }
 }

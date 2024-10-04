@@ -12,7 +12,9 @@ use Illuminate\Support\Str;
 
 class QuizService
 {
-    public function __construct() {}
+    public function __construct()
+    {
+    }
 
     public function createAndUpload($request)
     {
@@ -32,7 +34,7 @@ class QuizService
                 foreach ($request->attachments as $key => $attachment) {
                     $file_name = null;
                     if (! is_string($attachment)) {
-                        $file_name = time().'-'.Str::random(5).'.'.$attachment->getClientOriginalExtension();
+                        $file_name = time() . '-' . Str::random(5) . '.' . $attachment->getClientOriginalExtension();
                         $file_path = 'school_works_attachments/';
                         Storage::disk('public')->putFileAs($file_path, $attachment, $file_name);
                     }
@@ -51,9 +53,9 @@ class QuizService
                 'school_work_id' => $schoolWork->id,
                 'notes' => $request->notes,
                 'points' => $request->points,
-                'assessment_type' => 'prelim',
-                'quiz_type' => 'normal',
-                'due_datetime' => $request->datetime,
+                'assessment_type' => $request->assessment_type,
+                'quiz_type' => $request->quiz_type,
+                'due_datetime' => $request->due_datetime,
             ]);
 
             DB::commit();
@@ -64,6 +66,7 @@ class QuizService
             ];
         } catch (Exception $e) {
             DB::rollBack();
+            dd($e);
             throw $e;
         }
     }

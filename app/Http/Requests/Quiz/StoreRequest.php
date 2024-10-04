@@ -9,7 +9,7 @@ class StoreRequest extends FormRequest
     /**
      * Determine if the user is authorized to make this request.
      */
-    public function authorize(): bool
+    public function authorize() : bool
     {
         return true;
     }
@@ -19,7 +19,7 @@ class StoreRequest extends FormRequest
      *
      * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
      */
-    public function rules(): array
+    public function rules() : array
     {
         return [
             'class_id' => ['required', 'exists:classes,id'],
@@ -31,7 +31,7 @@ class StoreRequest extends FormRequest
             'attachments' => ['nullable', 'array'],
             'notes' => ['nullable'],
             'points' => ['required'],
-            'assessment_type' => ['nullable'],
+            'assessment_type' => ['nullable', 'in:prelim,midterm,finals'],
             'quiz_type' => ['nullable'],
             'due_datetime' => ['required'],
         ];
