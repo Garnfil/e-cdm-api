@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\ClassRoom\StoreRequest;
 use App\Models\Classroom;
 use App\Models\ClassStudent;
+use App\Models\SchoolWork;
 use App\Models\Section;
 use App\Models\Student;
 use App\Models\Subject;
@@ -98,7 +99,7 @@ class ClassRoomController extends Controller
     {
         try {
             DB::beginTransaction();
-            $data = $request->validated();
+            $data = $request->all();
             $class = ClassRoom::where('id', $request->id)->firstOrFail();
 
             $class->update(attributes: $data);
@@ -132,7 +133,7 @@ class ClassRoomController extends Controller
 
     public function destroy(Request $request) {}
 
-    public function classStudents(Request $request, $class_id)
+    public function getClassStudents(Request $request, $class_id)
     {
         $class_student_ids = ClassStudent::where('class_id', $class_id)->pluck('student_id')->toArray();
 
@@ -142,5 +143,58 @@ class ClassRoomController extends Controller
             'status' => 'success',
             'students' => $students,
         ]);
+    }
+
+    public function getClassSchoolWorks(Request $request, $class_id)
+    {
+        $school_works = SchoolWork::where('class_id', $class_id)->get();
+
+        $school_works->each(function ($school_work) {
+            switch ($school_work->type) {
+                case 'assignment':
+                    $school_work->load('assignment');
+                    break;
+
+                case 'activity':
+                    $school_work->load('activity');
+                    break;
+
+                case 'quiz':
+                    $school_work->load('quiz');
+                    break;
+
+                case 'exam':
+                    $school_work->load('exam');
+                    break;
+            }
+        });
+
+        return response()->json([
+            'status' => 'success',
+            'school_works' => $school_works,
+        ]);
+    }
+
+    public function classJoinStudent(Request $request)
+    {
+        $class = Classroom::where('class_code', $request->class_code)->first();
+
+        if (! $class) {
+            return response()->json([
+                'status' => 'failed',
+                'message' => 'Class Code Invalid',
+            ], 404);
+        }
+
+        ClassStudent::updateOrCreate([
+            'student_id' => $request->student_id,
+            'class_id' => $class->id,
+        ], ['status' => 'active']);
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Joined Class Successfully',
+        ]);
+
     }
 }

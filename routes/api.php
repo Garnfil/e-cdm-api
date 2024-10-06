@@ -10,8 +10,13 @@ use App\Http\Controllers\API\CourseController;
 use App\Http\Controllers\API\DiscussionForumController;
 use App\Http\Controllers\API\ExamController;
 use App\Http\Controllers\API\InstituteController;
+use App\Http\Controllers\API\ModuleController;
 use App\Http\Controllers\API\QuizController;
+use App\Http\Controllers\API\QuizQuestionController;
+use App\Http\Controllers\API\SchoolWorkController;
 use App\Http\Controllers\API\SectionController;
+use App\Http\Controllers\API\StudentAssignmentController;
+use App\Http\Controllers\API\StudentController;
 use App\Http\Controllers\API\SubjectController;
 use App\Http\Controllers\API\WhiteboardController;
 use Illuminate\Support\Facades\Route;
@@ -33,20 +38,38 @@ Route::post('student/login', [StudentAuthenticationController::class, 'login']);
 Route::post('student/register', [StudentAuthenticationController::class, 'register']);
 
 Route::group(['middleware' => ['auth:sanctum']], function () {
+    Route::prefix('students')->group(function () {
+        Route::get('/', [StudentController::class, 'getAll']);
+        Route::get('/{id}', [StudentController::class, 'show']);
+        Route::post('/', [StudentController::class, 'store']);
+        Route::put('/{id}', [StudentController::class, 'update']);
+        Route::delete('/{id}', [StudentController::class, 'destroy']);
+    });
+
     Route::get('classes', [ClassRoomController::class, 'getAll']);
     Route::post('classes', [ClassRoomController::class, 'store']);
     Route::get('classes/active', [ClassRoomController::class, 'get']);
-    Route::get('classes/{class_id}/students', [ClassRoomController::class, 'classStudents']);
+    Route::post('classes/join', [ClassRoomController::class, 'classJoinStudent']);
+    Route::get('classes/{class_id}/school-works', [ClassRoomController::class, 'getClassSchoolWorks']);
+    Route::get('classes/{class_id}/students', [ClassRoomController::class, 'getClassStudents']);
     Route::get('classes/{id}', [ClassRoomController::class, 'show']);
     Route::get('/instructors/{instructor_id}/classes', [ClassRoomController::class, 'getInstructorClasses']);
+
+    Route::get('school-works/{id}', [SchoolWorkController::class, 'show']);
 
     Route::get('quizzes', [QuizController::class, 'getAll']);
     Route::post('quizzes', [QuizController::class, 'store']);
     Route::get('quizzes/{id}', [QuizController::class, 'show']);
 
+    Route::post('quiz-questions', [QuizQuestionController::class, 'store']);
+    Route::post('quizzes/{quiz_id}/quiz-questions', [QuizQuestionController::class, 'getQuizQuestions']);
+
     Route::get('assignments', [AssignmentController::class, 'get']);
     Route::post('assignments', [AssignmentController::class, 'store']);
     Route::get('assignments/{id}', [AssignmentController::class, 'show']);
+
+    Route::post('student-assignments', [StudentAssignmentController::class, 'store']);
+    Route::get('student-assignments/submitted/assignments/{assignment_id}', [StudentAssignmentController::class, 'submittedStudentAssignments']);
 
     Route::get('activities', [ActivityController::class, 'get']);
     Route::post('activities', [ActivityController::class, 'store']);
@@ -55,6 +78,15 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::get('exams', [ExamController::class, 'get']);
     Route::post('exams', [ExamController::class, 'store']);
     Route::get('exams/{id}', [ExamController::class, 'show']);
+
+    Route::get('classes/{class_id}/modules', [ModuleController::class, 'classModules']);
+    Route::prefix('modules')->group(function () {
+        Route::get('/', [ModuleController::class, 'getAll']);
+        Route::get('/{id}', [ModuleController::class, 'show']);
+        Route::post('/', [ModuleController::class, 'store']);
+        Route::put('/{id}', [ModuleController::class, 'update']);
+        Route::delete('/{id}', [ModuleController::class, 'destroy']);
+    });
 
     Route::get('sections', [SectionController::class, 'getAll']);
     Route::get('sections/active', [SectionController::class, 'get']);

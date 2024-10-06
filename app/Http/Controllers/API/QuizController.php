@@ -47,6 +47,7 @@ class QuizController extends Controller
     public function show(Request $request, $id)
     {
         $quiz = Quiz::with('school_work')->findOrFail($id);
+
         return response()->json([
             'status' => 'success',
             'quiz' => $quiz,
@@ -108,7 +109,7 @@ class QuizController extends Controller
         } catch (Exception $e) {
             \DB::rollBack();
 
-            return response()->json(['error' => 'An error occurred: ' . $e->getMessage()], 500);
+            return response()->json(['error' => 'An error occurred: '.$e->getMessage()], 500);
         }
     }
 
@@ -121,7 +122,5 @@ class QuizController extends Controller
         }
     }
 
-    public function destroy()
-    {
-    }
+    public function destroy() {}
 }

@@ -62,7 +62,7 @@ class StudentAuthenticationController extends Controller
 
             return response()->json([
                 'token' => $token,
-                'student' => $student,
+                'user' => $student,
             ]);
 
         } catch (Exception $exception) {

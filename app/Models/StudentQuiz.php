@@ -8,4 +8,8 @@ use Illuminate\Database\Eloquent\Model;
 class StudentQuiz extends Model
 {
     use HasFactory;
+
+    protected $table = 'student_quizzes';
+
+    protected $fillable = ['quiz_id', 'student_id', 'score', 'grade', 'datetime_submitted'];
 }

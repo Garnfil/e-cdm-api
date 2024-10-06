@@ -53,7 +53,7 @@ class AssignmentController extends Controller
                 'title' => $request->title,
                 'description' => $request->description,
                 'type' => 'assignment',
-                'status' => $request->status,
+                'status' => $request->status ?? 'posted',
             ]);
 
             $assignment = Assignment::create([

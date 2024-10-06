@@ -11,6 +11,19 @@ return new class extends Migration
      */
     public function up(): void
     {
+        Schema::create('rubrics', function (Blueprint $table) {
+            $table->id();
+            $table->foreignId('class_id')->constrained('classes')->cascadeOnDelete();
+            $table->enum('assessment_type', ['prelim', 'midterm', 'final']);
+            $table->integer('assignment_percentage'); // percentage for assignments
+            $table->integer('quiz_percentage');       // percentage for quizzes
+            $table->integer('exam_percentage');       // percentage for exams
+            $table->integer('activity_percentage');   // percentage for activities
+            $table->integer('attendance_percentage'); // percentage for attendance
+            $table->integer('other_performance_percentage')->default(0); // percentage for other performance
+            $table->timestamps();
+        });
+
         Schema::create('school_works', function (Blueprint $table) {
             $table->id();
             $table->foreignId('class_id')->constrained('classes');
@@ -46,8 +59,8 @@ return new class extends Migration
             $table->id();
             $table->foreignId('assignment_id')->constrained('assignments')->cascadeOnDelete();
             $table->foreignId('student_id')->constrained('students')->cascadeOnDelete();
-            $table->string('score');
-            $table->string('grade');
+            $table->string('score')->default(0);
+            $table->string('grade')->default('passed');
             $table->dateTime('datetime_submitted');
             $table->timestamps();
         });
@@ -67,8 +80,8 @@ return new class extends Migration
             $table->id();
             $table->foreignId('quiz_id')->constrained('quizzes')->cascadeOnDelete();
             $table->foreignId('student_id')->constrained('students')->cascadeOnDelete();
-            $table->string('score');
-            $table->string('grade');
+            $table->string('score')->default(0);
+            $table->string('grade')->default('passed');
             $table->dateTime('datetime_submitted');
             $table->timestamps();
         });
@@ -88,8 +101,8 @@ return new class extends Migration
             $table->id();
             $table->foreignId('activity_id')->constrained('activities')->cascadeOnDelete();
             $table->foreignId('student_id')->constrained('students')->cascadeOnDelete();
-            $table->string('score');
-            $table->string('grade');
+            $table->string('score')->default(0);
+            $table->string('grade')->default('passed');
             $table->dateTime('datetime_submitted');
             $table->timestamps();
         });
@@ -109,11 +122,37 @@ return new class extends Migration
             $table->id();
             $table->foreignId('exam_id')->constrained('exams')->cascadeOnDelete();
             $table->foreignId('student_id')->constrained('students')->cascadeOnDelete();
-            $table->string('score');
-            $table->string('grade');
+            $table->string('score')->default(0);
+            $table->string('grade')->default('passed');
             $table->dateTime('datetime_submitted');
             $table->timestamps();
         });
+
+        Schema::create('student_school_works_grades', function (Blueprint $table) {
+            $table->id();
+            $table->foreignId('class_id')->constrained('classes')->cascadeOnDelete();
+            $table->foreignId('student_id')->constrained('students')->cascadeOnDelete();
+            $table->foreignId('graded_by')->nullable()->constrained('instructors')->nullOnDelete();
+            $table->enum('assessment_category', ['prelim', 'midterm', 'finals']);
+            $table->double('assignment_grade_percentage', 10, 2);
+            $table->double('activities_grade_percentage', 10, 2);
+            $table->double('quizzes_grade_percentage', 10, 2);
+            $table->double('exams_grade_percentage', 10, 2);
+            $table->double('atttendance_grade_percentage', 10, 2);
+            $table->double('other_performances_grade_percentage', 10, 2);
+            $table->timestamps();
+        });
+
+        Schema::create('student_final_grades', function (Blueprint $table) {
+            $table->id();
+            $table->foreignId('student_school_works_grade_id')->constrained('student_school_works_grades')->cascadeOnDelete();
+            $table->foreignId('student_id')->constrained('students')->cascadeOnDelete();
+            $table->foreignId('class_id')->constrained('classes')->cascadeOnDelete();
+            $table->enum('assessment_type', ['prelim', 'midterm', 'final']);
+            $table->float('final_grade'); // final grade for this assessment
+            $table->timestamps();
+        });
+
     }
 
     /**
@@ -121,6 +160,7 @@ return new class extends Migration
      */
     public function down(): void
     {
+        Schema::dropIfExists('rubrics');
         Schema::dropIfExists('school_works');
         Schema::dropIfExists('assignments');
         Schema::dropIfExists('student_assignments');
@@ -130,5 +170,7 @@ return new class extends Migration
         Schema::dropIfExists('student_activities');
         Schema::dropIfExists('exams');
         Schema::dropIfExists('student_exams');
+        Schema::dropIfExists('student_school_works_grades');
+        Schema::dropIfExists('student_final_grades');
     }
 };

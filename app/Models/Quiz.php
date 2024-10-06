@@ -24,4 +24,9 @@ class Quiz extends Model
     {
         return $this->belongsTo(SchoolWork::class, 'school_work_id');
     }
+
+    public function questions()
+    {
+        return $this->hasMany(QuizQuestion::class);
+    }
 }

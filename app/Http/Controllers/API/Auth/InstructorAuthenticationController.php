@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\API\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Auth\InstructorAuth\LoginRequest;
 use App\Models\Instructor;
 use App\Services\ExceptionHandlerService;
 use Exception;
@@ -11,10 +12,11 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 
 class InstructorAuthenticationController extends Controller
-{   
+{
     private $exceptionHandler;
 
-    public function __construct(ExceptionHandlerService $exceptionHandlerService) {
+    public function __construct(ExceptionHandlerService $exceptionHandlerService)
+    {
         $this->exceptionHandler = $exceptionHandlerService;
     }
 
@@ -29,29 +31,32 @@ class InstructorAuthenticationController extends Controller
             DB::commit();
 
             return response()->json([
-                "status" => "success",
-                "message" => "The Registration is successfully submitted.",
+                'status' => 'success',
+                'message' => 'The Registration is successfully submitted.',
             ]);
 
         } catch (Exception $exception) {
             DB::rollBack();
+
             return $this->exceptionHandler->__generateExceptionResponse($exception);
         }
     }
 
-    public function login(Request $request) {
+    public function login(LoginRequest $request)
+    {
         try {
             $login_type = filter_var($request->login, FILTER_VALIDATE_EMAIL) ? 'email' : 'username';
             $instructor = Instructor::where($login_type, $request->login)->firstOrFail();
 
-            if(!Hash::check($request->password, $instructor->password)) 
+            if (! Hash::check($request->password, $instructor->password)) {
                 throw new Exception('Invalid Credentials', '400');
+            }
 
-            $token = $instructor->createToken("INSTRUCTOR TOKEN")->plainTextToken;
+            $token = $instructor->createToken('INSTRUCTOR TOKEN')->plainTextToken;
 
             return response()->json([
                 'token' => $token,
-                'instructor' => $instructor,
+                'user' => $instructor,
             ]);
 
         } catch (Exception $exception) {

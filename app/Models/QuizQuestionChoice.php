@@ -10,4 +10,6 @@ class QuizQuestionChoice extends Model
     use HasFactory;
 
     protected $table = 'quiz_question_choices';
+
+    protected $fillable = ['question_id', 'choice_text', 'is_correct'];
 }

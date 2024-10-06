@@ -3,9 +3,11 @@
 namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Student\StudentRequest;
 use App\Models\ClassStudent;
 use App\Models\Student;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 
 class StudentController extends Controller
 {
@@ -40,9 +42,52 @@ class StudentController extends Controller
         ]);
     }
 
-    public function store(Request $request) {}
+    // Show a specific student by ID
+    public function show($id)
+    {
+        $student = Student::find($id);
 
-    public function update(Request $request) {}
+        if ($student) {
+            return response()->json(['status' => 'success', 'student' => $student], 200);
+        } else {
+            return response()->json(['error' => 'Student not found'], 404);
+        }
+    }
 
-    public function destroy(Request $request) {}
+    // Create a new student
+    public function store(StudentRequest $request)
+    {
+        $data = array_merge($request->validated(), ['password' => Hash::make($request->password)]);
+        $student = Student::create($data);
+
+        return response()->json(['status' => 'success', 'student' => $student], 201);
+    }
+
+    // Update a student
+    public function update(StudentRequest $request, $id)
+    {
+        $student = Student::find($id);
+
+        if ($student) {
+            $student->update($request->validated());
+
+            return response()->json(['status' => 'success', 'student' => $student], 200);
+        } else {
+            return response()->json(['error' => 'Student not found'], 404);
+        }
+    }
+
+    // Delete a student
+    public function destroy($id)
+    {
+        $student = Student::find($id);
+
+        if ($student) {
+            $student->delete();
+
+            return response()->json(['message' => 'Student deleted successfully'], 200);
+        } else {
+            return response()->json(['error' => 'Student not found'], 404);
+        }
+    }
 }

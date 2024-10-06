@@ -5,6 +5,8 @@ namespace App\Http\Controllers\API;
 use App\Http\Controllers\Controller;
 use App\Models\QuizQuestion;
 use App\Models\QuizQuestionChoice;
+use App\Models\QuizStudentAnswer;
+use App\Models\StudentQuiz;
 use Illuminate\Http\Request;
 
 class StudentQuizController extends Controller

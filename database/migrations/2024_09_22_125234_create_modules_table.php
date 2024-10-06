@@ -17,9 +17,9 @@ return new class extends Migration
             $table->foreignId('instructor_id')->constrained('instructors');
             $table->string('title');
             $table->text('description');
-            $table->json('file_paths');
+            $table->json('file_paths')->nullable();
             $table->enum('status', ['draft', 'scheduled', 'posted']);
-            $table->dateTime('scheduled_datetime');
+            $table->dateTime('scheduled_datetime')->nullable();
             $table->timestamps();
         });
     }

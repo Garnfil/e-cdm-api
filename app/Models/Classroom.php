@@ -11,5 +11,5 @@ class Classroom extends Model
 
     protected $table = 'classes';
 
-    protected $fillable = ['title', 'description', 'class_code', 'subject_id', 'section_id', 'instructor_id', 'cover_image_file_name', 'status'];
+    protected $fillable = ['title', 'description', 'current_assessment_category', 'class_code', 'subject_id', 'section_id', 'instructor_id', 'cover_image_file_name', 'status'];
 }
