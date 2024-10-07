@@ -24,7 +24,7 @@ class StudentAssignmentController extends Controller
 
         if ($request->has('attachments') && is_array($request->attachments)) {
             foreach ($request->attachments as $key => $attachment) {
-                $attachment_name = $attachment['attachment_type'] == 'file' ? Str::random(7).'-'.time().$attachment->getClientOriginalExtension() : $attachment['name'];
+                $attachment_name = $attachment['attachment_type'] == 'file' ? Str::random(7) . '-' . time() . $attachment->getClientOriginalExtension() : $attachment['name'];
                 $file_path = 'student_assignment_attachments/';
                 Storage::disk('public')->putFileAs($file_path, $attachment, $attachment_name);
 
@@ -53,7 +53,7 @@ class StudentAssignmentController extends Controller
         ]);
     }
 
-    public function submittedStudentAssignments(Request $request, $assignment_id)
+    public function submittedStudentActivities(Request $request, $assignment_id)
     {
         $student_assignments = StudentAssignment::where('assignment_id', $assignment_id)
             ->with(['student', 'attachments'])

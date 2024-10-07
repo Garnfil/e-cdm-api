@@ -77,7 +77,12 @@ class StudentQuizController extends Controller
         } catch (\Exception $e) {
             \DB::rollBack();
 
-            return response()->json(['error' => 'An error occurred: '.$e->getMessage()], 500);
+            return response()->json(['error' => 'An error occurred: ' . $e->getMessage()], 500);
         }
+    }
+
+    public function submitStudentAnswer(Request $request)
+    {
+
     }
 }

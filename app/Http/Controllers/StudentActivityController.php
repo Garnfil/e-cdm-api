@@ -23,7 +23,7 @@ class StudentActivityController extends Controller
 
         if ($request->has('attachments') && is_array($request->attachments)) {
             foreach ($request->attachments as $key => $attachment) {
-                $attachment_name = $attachment['attachment_type'] == 'file' ? Str::random(7).'-'.time().$attachment->getClientOriginalExtension() : $attachment['name'];
+                $attachment_name = $attachment['attachment_type'] == 'file' ? Str::random(7) . '-' . time() . $attachment->getClientOriginalExtension() : $attachment['name'];
                 $file_path = 'student_activity_attachments/';
                 Storage::disk('public')->putFileAs($file_path, $attachment, $attachment_name);
 
@@ -87,4 +87,5 @@ class StudentActivityController extends Controller
         ]);
 
     }
+
 }

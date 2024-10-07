@@ -17,6 +17,7 @@ use App\Http\Controllers\API\SchoolWorkController;
 use App\Http\Controllers\API\SectionController;
 use App\Http\Controllers\API\StudentAssignmentController;
 use App\Http\Controllers\API\StudentController;
+use App\Http\Controllers\API\StudentQuizController;
 use App\Http\Controllers\API\SubjectController;
 use App\Http\Controllers\API\WhiteboardController;
 use Illuminate\Support\Facades\Route;
@@ -64,6 +65,8 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::post('quiz-questions', [QuizQuestionController::class, 'store']);
     Route::post('quizzes/{quiz_id}/quiz-questions', [QuizQuestionController::class, 'getQuizQuestions']);
 
+    Route::post('student-quizzes/quiz-form/student-answers', [StudentQuizController::class, 'submitStudentAnswer']);
+
     Route::get('assignments', [AssignmentController::class, 'get']);
     Route::post('assignments', [AssignmentController::class, 'store']);
     Route::get('assignments/{id}', [AssignmentController::class, 'show']);
@@ -74,6 +77,9 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::get('activities', [ActivityController::class, 'get']);
     Route::post('activities', [ActivityController::class, 'store']);
     Route::get('activities/{id}', [ActivityController::class, 'show']);
+
+    Route::post('student-activities', [StudentAssignmentController::class, 'store']);
+    Route::get('student-activities/submitted/activities/{assignment_id}', [StudentAssignmentController::class, 'submittedStudentActivities']);
 
     Route::get('exams', [ExamController::class, 'get']);
     Route::post('exams', [ExamController::class, 'store']);
