@@ -13,6 +13,10 @@ class StudentQuizController extends Controller
 {
     public function store(Request $request)
     {
+    }
+
+    public function submitStudentAnswer(Request $request)
+    {
         $data = $request->all();
         $quizId = $data['quizId'];
         $studentId = $data['studentId'];
@@ -79,10 +83,5 @@ class StudentQuizController extends Controller
 
             return response()->json(['error' => 'An error occurred: ' . $e->getMessage()], 500);
         }
-    }
-
-    public function submitStudentAnswer(Request $request)
-    {
-
     }
 }
