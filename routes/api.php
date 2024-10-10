@@ -18,6 +18,7 @@ use App\Http\Controllers\API\SectionController;
 use App\Http\Controllers\API\StudentAssignmentController;
 use App\Http\Controllers\API\StudentController;
 use App\Http\Controllers\API\StudentQuizController;
+use App\Http\Controllers\API\StudentSubmissionController;
 use App\Http\Controllers\API\SubjectController;
 use App\Http\Controllers\API\WhiteboardController;
 use Illuminate\Support\Facades\Route;
@@ -57,6 +58,8 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::get('/instructors/{instructor_id}/classes', [ClassRoomController::class, 'getInstructorClasses']);
 
     Route::get('school-works/{id}', [SchoolWorkController::class, 'show']);
+
+    Route::get('student-school-works-submissions', [StudentSubmissionController::class, 'store']);
 
     Route::get('quizzes', [QuizController::class, 'getAll']);
     Route::post('quizzes', [QuizController::class, 'store']);

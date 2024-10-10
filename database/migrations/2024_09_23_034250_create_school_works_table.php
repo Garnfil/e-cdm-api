@@ -4,12 +4,11 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration
-{
+return new class extends Migration {
     /**
      * Run the migrations.
      */
-    public function up(): void
+    public function up() : void
     {
         Schema::create('rubrics', function (Blueprint $table) {
             $table->id();
@@ -45,6 +44,27 @@ return new class extends Migration
             $table->timestamps();
         });
 
+        Schema::create('student_submissions', function (Blueprint $table) {
+            $table->id();
+            $table->foreignId('school_work_id')->constrained('school_works')->cascadeOnDelete();
+            $table->foreignId('student_id')->constrained('students')->cascadeOnDelete();
+            $table->string('score')->default(0);
+            $table->string('grade')->default('passed');
+            $table->enum('school_work_type', ['quiz', 'activity', 'assignment', 'exam']);
+            $table->dateTime('datetime_submitted')->nullable();
+            $table->timestamps();
+        });
+
+        Schema::create('student_submission_attachments', function (Blueprint $table) {
+            $table->id();
+            $table->foreignId('student_submission_id')->constrained('student_submissions')->cascadeOnDelete();
+            $table->foreignId('student_id')->constrained('students')->cascadeOnDelete();
+            $table->string('attachment_name');
+            $table->enum('attachment_type', ['file', 'link']);
+            $table->enum('status', ['drafted', 'submitted']);
+            $table->timestamps();
+        });
+
         Schema::create('assignments', function (Blueprint $table) {
             $table->id();
             $table->foreignId('school_work_id')->constrained('school_works')->cascadeOnDelete();
@@ -72,6 +92,7 @@ return new class extends Migration
             $table->string('points');
             $table->enum('assessment_type', ['prelim', 'midterm', 'final']);
             $table->string('quiz_type');
+            $table->boolean('has_quiz_form')->default(0);
             $table->dateTime('due_datetime');
             $table->timestamps();
         });
@@ -158,10 +179,13 @@ return new class extends Migration
     /**
      * Reverse the migrations.
      */
-    public function down(): void
+    public function down() : void
     {
         Schema::dropIfExists('rubrics');
         Schema::dropIfExists('school_works');
+        Schema::dropIfExists('school_work_attachments');
+        Schema::dropIfExists('student_submissions');
+        Schema::dropIfExists('student_submission_attachments');
         Schema::dropIfExists('assignments');
         Schema::dropIfExists('student_assignments');
         Schema::dropIfExists('quizzes');

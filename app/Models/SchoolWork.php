@@ -37,4 +37,28 @@ class SchoolWork extends Model
     {
         return $this->hasOne(Exam::class, 'school_work_id');
     }
+
+    public function schoolWorkPoints()
+    {
+        $points = 0;
+        switch ($this->type) {
+            case 'assignment':
+                $points = $this->assignment->points;
+                break;
+
+            case 'activity':
+                $points = $this->activity->points;
+                break;
+
+            case 'quiz':
+                $points = $this->quiz->points;
+                break;
+
+            case 'exam':
+                $points = $this->exam->points;
+                break;
+        }
+
+        return $points;
+    }
 }
