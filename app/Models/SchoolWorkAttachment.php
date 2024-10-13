@@ -12,4 +12,8 @@ class SchoolWorkAttachment extends Model
     protected $table = 'school_work_attachments';
 
     protected $fillable = ['school_work_id', 'attachment_name', 'school_work_type', 'attachment_type', 'status'];
+
+    const ATTACHMENT_TYPE_FILE = 'file';
+
+    const ATTACHMENT_TYPE_LINK = 'link';
 }

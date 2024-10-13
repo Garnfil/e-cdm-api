@@ -40,7 +40,7 @@ class ClassRoomController extends Controller
 
     public function getInstructorClasses(Request $request)
     {
-        $classes = Classroom::where('instructor_id', $request->instructor_id)->get();
+        $classes = Classroom::where('instructor_id', $request->instructor_id)->latest()->get();
 
         return response()->json([
             'status' => 'success',
@@ -89,7 +89,7 @@ class ClassRoomController extends Controller
 
         } catch (Exception $exception) {
             DB::rollBack();
-            dd($exception);
+            // dd($exception);
 
             return $this->exceptionHandler->__generateExceptionResponse($exception);
         }
@@ -147,7 +147,8 @@ class ClassRoomController extends Controller
 
     public function getClassSchoolWorks(Request $request, $class_id)
     {
-        $school_works = SchoolWork::where('class_id', $class_id)->get();
+        $auth = auth()->user()->role;
+        $school_works = SchoolWork::where('class_id', $class_id)->latest()->get();
 
         $school_works->each(function ($school_work) {
             switch ($school_work->type) {

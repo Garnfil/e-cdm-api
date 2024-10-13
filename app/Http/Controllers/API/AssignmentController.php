@@ -4,6 +4,7 @@ namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
 use App\Models\Assignment;
+use App\Models\Classroom;
 use App\Models\SchoolWork;
 use App\Models\SchoolWorkAttachment;
 use App\Services\ExceptionHandlerService;
@@ -47,6 +48,11 @@ class AssignmentController extends Controller
         try {
             DB::beginTransaction();
 
+            $class = Classroom::where('id', $request->class_id)->exists();
+            if (! $class) {
+                throw new Exception('Invalid Class.', 400);
+            }
+
             $schoolWork = SchoolWork::create([
                 'class_id' => $request->class_id,
                 'instructor_id' => $request->instructor_id,
@@ -54,6 +60,7 @@ class AssignmentController extends Controller
                 'description' => $request->description,
                 'type' => 'assignment',
                 'status' => $request->status ?? 'posted',
+                'due_datetime' => $request->due_datetime,
             ]);
 
             $assignment = Assignment::create([
@@ -61,7 +68,6 @@ class AssignmentController extends Controller
                 'notes' => $request->notes,
                 'points' => $request->points,
                 'assessment_type' => $request->assessment_type,
-                'due_datetime' => $request->due_datetime,
             ]);
 
             if ($request->has('attachments') && is_array($request->attachments)) {
@@ -91,7 +97,8 @@ class AssignmentController extends Controller
             ]);
         } catch (Exception $exception) {
             DB::rollBack();
-            dd($exception);
+
+            return response($exception);
 
             return $this->exceptionHandlerService->__generateExceptionResponse($exception);
         }

@@ -11,7 +11,7 @@ class Assignment extends Model
 
     protected $table = 'assignments';
 
-    protected $fillable = ['school_work_id', 'notes', 'points', 'assessment_type', 'due_datetime'];
+    protected $fillable = ['school_work_id', 'notes', 'points', 'assessment_type'];
 
     public function school_work()
     {

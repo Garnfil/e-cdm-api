@@ -4,7 +4,6 @@ namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
 use App\Models\Activity;
-use App\Models\Assignment;
 use App\Models\SchoolWork;
 use App\Models\SchoolWorkAttachment;
 use App\Services\ExceptionHandlerService;
@@ -55,6 +54,7 @@ class ActivityController extends Controller
                 'description' => $request->description,
                 'type' => 'activity',
                 'status' => $request->status,
+                'due_datetime' => $request->due_datetime,
             ]);
 
             $activity = Activity::create([
@@ -62,15 +62,14 @@ class ActivityController extends Controller
                 'notes' => $request->notes,
                 'points' => $request->points,
                 'assessment_type' => $request->assessment_type,
-                'activity_type' => $request->activity_type,
-                'due_datetime' => $request->due_datetime,
+                'activity_type' => $request->activity_type ?? 'practical',
             ]);
 
             if ($request->has('attachments') && is_array($request->attachments)) {
                 foreach ($request->attachments as $key => $attachment) {
                     $file_name = null;
                     if (! is_string($attachment)) {
-                        $file_name = time() . '-' . Str::random(5) . '.' . $attachment->getClientOriginalExtension();
+                        $file_name = time().'-'.Str::random(5).'.'.$attachment->getClientOriginalExtension();
                         $file_path = 'school_works_attachments/';
                         Storage::disk('public')->putFileAs($file_path, $attachment, $file_name);
                     }
@@ -93,17 +92,12 @@ class ActivityController extends Controller
             ]);
         } catch (Exception $exception) {
             DB::rollBack();
-            dd($exception);
 
             return $this->exceptionHandlerService->__generateExceptionResponse($exception);
         }
     }
 
-    public function update(Request $request, $id)
-    {
-    }
+    public function update(Request $request, $id) {}
 
-    public function destroy($id)
-    {
-    }
+    public function destroy($id) {}
 }

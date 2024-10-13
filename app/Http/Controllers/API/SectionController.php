@@ -12,7 +12,10 @@ class SectionController extends Controller
 {
     public function getAll(Request $request)
     {
-        $sections = Section::get();
+        $year_level = $request->query('year_level');
+        $sections = Section::when($year_level, function ($q) use ($year_level) {
+            return $q->where('year_level', $year_level);
+        })->get();
 
         return response()->json([
             'status' => 'success',

@@ -21,6 +21,10 @@ class Quiz extends Model
         'due_datetime',
     ];
 
+    protected $casts = [
+        'has_quiz_form' => 'boolean',
+    ];
+
     public function school_work()
     {
         return $this->belongsTo(SchoolWork::class, 'school_work_id');

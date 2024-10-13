@@ -55,11 +55,16 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::get('classes/{class_id}/school-works', [ClassRoomController::class, 'getClassSchoolWorks']);
     Route::get('classes/{class_id}/students', [ClassRoomController::class, 'getClassStudents']);
     Route::get('classes/{id}', [ClassRoomController::class, 'show']);
-    Route::get('/instructors/{instructor_id}/classes', [ClassRoomController::class, 'getInstructorClasses']);
+    Route::get('instructors/{instructor_id}/classes', [ClassRoomController::class, 'getInstructorClasses']);
 
+    Route::post('school-works/attachments/single-upload', [SchoolWorkController::class, 'uploadSingleAttachment']);
+    Route::delete('school-works/attachments/{attachment_id}/destroy', [SchoolWorkController::class, 'deleteAttachment']);
     Route::get('school-works/{id}', [SchoolWorkController::class, 'show']);
 
-    Route::get('student-school-works-submissions', [StudentSubmissionController::class, 'store']);
+    Route::post('student-school-works/submissions', [StudentSubmissionController::class, 'store']);
+    Route::post('student-school-works/submissions/{submission_id}/graded', [StudentSubmissionController::class, 'gradeStudentSubmission']);
+    Route::get('student-school-works/submissions/{submission_id}', [StudentSubmissionController::class, 'show']);
+    Route::get('student-school-works/{school_work_id}/submissions', [StudentSubmissionController::class, 'schoolWorkStudentSubmissions']);
 
     Route::get('quizzes', [QuizController::class, 'getAll']);
     Route::post('quizzes', [QuizController::class, 'store']);

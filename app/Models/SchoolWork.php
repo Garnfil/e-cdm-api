@@ -11,7 +11,7 @@ class SchoolWork extends Model
 
     protected $table = 'school_works';
 
-    protected $fillable = ['class_id', 'instructor_id', 'title', 'description', 'file_paths', 'type', 'status'];
+    protected $fillable = ['class_id', 'instructor_id', 'title', 'description', 'file_paths', 'type', 'status', 'due_datetime'];
 
     public function attachments()
     {

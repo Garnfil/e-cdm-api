@@ -65,6 +65,8 @@ class QuizController extends Controller
             ]);
 
         } catch (Exception $exception) {
+            // return response($exception);
+
             return $this->exceptionHandler->__generateExceptionResponse($exception);
         }
     }

@@ -21,6 +21,33 @@ use Illuminate\Support\Str;
 
 class StudentSubmissionController extends Controller
 {
+    public function schoolWorkStudentSubmissions(Request $request, $school_work_id)
+    {
+        $studentSubmissions = StudentSubmission::where('school_work_id', $school_work_id)
+            ->latest()
+            ->with('attachments', 'student')
+            ->get();
+
+        return response()->json([
+            'status' => 'success',
+            'student_submissions' => $studentSubmissions,
+        ]);
+    }
+
+    public function show(Request $request, $submission_id)
+    {
+        $studentSubmission = StudentSubmission::where('id', $submission_id)
+            ->latest()
+            ->with(['attachments', 'student', 'school_work'])
+            ->first();
+
+        $studentSubmission->school_work->points = $studentSubmission->school_work->schoolWorkPoints();
+
+        return response()->json([
+            'status' => 'success',
+            'student_submission' => $studentSubmission,
+        ]);
+    }
 
     public function store(StoreRequest $request)
     {
@@ -28,32 +55,41 @@ class StudentSubmissionController extends Controller
             DB::beginTransaction();
             $schoolWork = SchoolWork::find($request->school_work_id);
 
-            if (! $schoolWork)
-                throw new Exception("School Work Not Found", 404);
+            if (! $schoolWork) {
+                throw new Exception('School Work Not Found', 404);
+            }
 
             $studentSubmission = StudentSubmission::create([
-                "school_work_id" => $schoolWork->id,
-                "student_id" => $request->student_id,
-                "score" => 0,
-                "grade" => 0,
-                "school_work_type" => $schoolWork->type,
-                "datetime_submitted" => Carbon::now(),
+                'school_work_id' => $schoolWork->id,
+                'student_id' => $request->student_id,
+                'score' => 0,
+                'grade' => 0,
+                'school_work_type' => $schoolWork->type,
+                'datetime_submitted' => Carbon::now(),
             ]);
 
             if ($request->has('attachments') && is_array($request->attachments)) {
                 foreach ($request->attachments as $key => $attachment) {
-
+                    // dd($attachment);
                     if ($attachment['attachment_type'] == StudentSubmissionAttachment::ATTACHMENT_TYPE_FILE) {
-                        $attachment_name = Str::random(7) . '-' . time() . $attachment->getClientOriginalExtension();
-                    } else {
-                        $attachment_name = $attachment['name'];
-                    }
 
-                    $file_path = 'student_submission_attachments/';
-                    Storage::disk('public')->putFileAs($file_path, $attachment, $attachment_name);
+                        $path_extension = $attachment['attachment']->getClientOriginalExtension();
+
+                        if (in_array($path_extension, ['pdf', 'png', 'jpg', 'jpeg', 'webp'])) {
+                            throw new Exception('The requested attachment does not correspond to a recognized file type. The following file types are supported: pdf, png, jpg, jpeg, and webp.', 422);
+                        }
+
+                        $attachment_name = Str::random(7).'-'.time().'.'.$path_extension;
+
+                        $file_path = 'student_submission_attachments/';
+                        Storage::disk('public')->putFileAs($file_path, $attachment['attachment'], $attachment_name);
+                    } else {
+                        $attachment_name = $attachment['attachment'];
+                    }
 
                     StudentSubmissionAttachment::create([
                         'student_submission_id' => $studentSubmission->id,
+                        'student_id' => $request->student_id,
                         'attachment_name' => $attachment_name,
                         'attachment_type' => $attachment['attachment_type'],
                         'status' => 'submitted',
@@ -65,13 +101,13 @@ class StudentSubmissionController extends Controller
 
             return response()->json([
                 'status' => 'success',
-                'message' => "Submitted Successfully"
+                'message' => 'Submitted Successfully',
             ]);
-
 
         } catch (Exception $e) {
             DB::rollBack();
-            $exceptionHandlerService = new ExceptionHandlerService();
+            $exceptionHandlerService = new ExceptionHandlerService;
+
             return $exceptionHandlerService->__generateExceptionResponse($e);
         }
     }
@@ -92,8 +128,9 @@ class StudentSubmissionController extends Controller
 
             $quiz = Quiz::find($quizId);
 
-            if (! $quiz)
-                throw new Exception("Quiz Not Found.", 404);
+            if (! $quiz) {
+                throw new Exception('Quiz Not Found.', 404);
+            }
 
             foreach ($answers as $questionId => $answer) {
                 $question = QuizQuestion::find($questionId);
@@ -147,28 +184,39 @@ class StudentSubmissionController extends Controller
             return response()->json(['success' => 'Quiz submitted successfully']);
         } catch (Exception $e) {
             DB::rollBack();
-            $exceptionHandlerService = new ExceptionHandlerService();
+            $exceptionHandlerService = new ExceptionHandlerService;
+
             return $exceptionHandlerService->__generateExceptionResponse($e);
         }
     }
 
     public function gradeStudentSubmission(Request $request)
     {
-        $studentSchoolWorkScore = $request->score;
-        $student_submission = StudentSubmission::with('school_work')->findOrFail($request->student_submission_id);
+        try {
+            /**
+             * Request Inputs: score, student_submission_id
+             */
+            $studentSchoolWorkScore = $request->score;
+            $student_submission = StudentSubmission::with('school_work')->findOrFail($request->student_submission_id);
 
-        $schoolWorkPoints = $student_submission->school_work->schoolWorkPoints();
+            $schoolWorkPoints = $student_submission->school_work->schoolWorkPoints();
 
-        $studentSchoolWorkGrade = ($studentSchoolWorkScore / $schoolWorkPoints->assignment->points) * 100;
+            $studentSchoolWorkGrade = ($studentSchoolWorkScore / $schoolWorkPoints) * 100;
 
-        $student_submission->update([
-            'score' => $studentSchoolWorkScore,
-            'grade' => $studentSchoolWorkGrade
-        ]);
+            $student_submission->update([
+                'score' => $studentSchoolWorkScore,
+                'grade' => $studentSchoolWorkGrade,
+            ]);
 
-        return response()->json([
-            'status' => 'success',
-            'message' => "School Work Graded Successfully"
-        ]);
+            return response()->json([
+                'status' => 'success',
+                'message' => 'School Work Graded Successfully',
+            ]);
+        } catch (Exception $e) {
+            DB::rollBack();
+            $exceptionHandlerService = new ExceptionHandlerService;
+
+            return $exceptionHandlerService->__generateExceptionResponse($e);
+        }
     }
 }

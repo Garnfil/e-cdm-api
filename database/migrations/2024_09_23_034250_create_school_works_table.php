@@ -4,11 +4,12 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration {
+return new class extends Migration
+{
     /**
      * Run the migrations.
      */
-    public function up() : void
+    public function up(): void
     {
         Schema::create('rubrics', function (Blueprint $table) {
             $table->id();
@@ -31,6 +32,7 @@ return new class extends Migration {
             $table->text('description');
             $table->enum('type', ['quiz', 'activity', 'assignment', 'exam']);
             $table->enum('status', ['drafted', 'scheduled', 'posted']);
+            $table->dateTime('due_datetime');
             $table->timestamps();
         });
 
@@ -71,7 +73,6 @@ return new class extends Migration {
             $table->text('notes')->nullable();
             $table->string('points');
             $table->enum('assessment_type', ['prelim', 'midterm', 'final']);
-            $table->dateTime('due_datetime');
             $table->timestamps();
         });
 
@@ -80,7 +81,7 @@ return new class extends Migration {
             $table->foreignId('assignment_id')->constrained('assignments')->cascadeOnDelete();
             $table->foreignId('student_id')->constrained('students')->cascadeOnDelete();
             $table->string('score')->default(0);
-            $table->string('grade')->default('passed');
+            $table->double('grade', 10, 2)->default(0);
             $table->dateTime('datetime_submitted');
             $table->timestamps();
         });
@@ -93,7 +94,6 @@ return new class extends Migration {
             $table->enum('assessment_type', ['prelim', 'midterm', 'final']);
             $table->string('quiz_type');
             $table->boolean('has_quiz_form')->default(0);
-            $table->dateTime('due_datetime');
             $table->timestamps();
         });
 
@@ -102,7 +102,7 @@ return new class extends Migration {
             $table->foreignId('quiz_id')->constrained('quizzes')->cascadeOnDelete();
             $table->foreignId('student_id')->constrained('students')->cascadeOnDelete();
             $table->string('score')->default(0);
-            $table->string('grade')->default('passed');
+            $table->double('grade', 10, 2)->default(0);
             $table->dateTime('datetime_submitted');
             $table->timestamps();
         });
@@ -114,7 +114,6 @@ return new class extends Migration {
             $table->string('points');
             $table->enum('assessment_type', ['prelim', 'midterm', 'final']);
             $table->string('activity_type');
-            $table->dateTime('due_datetime');
             $table->timestamps();
         });
 
@@ -123,7 +122,7 @@ return new class extends Migration {
             $table->foreignId('activity_id')->constrained('activities')->cascadeOnDelete();
             $table->foreignId('student_id')->constrained('students')->cascadeOnDelete();
             $table->string('score')->default(0);
-            $table->string('grade')->default('passed');
+            $table->double('grade', 10, 2)->default(0);
             $table->dateTime('datetime_submitted');
             $table->timestamps();
         });
@@ -135,7 +134,6 @@ return new class extends Migration {
             $table->string('points');
             $table->enum('assessment_type', ['prelim', 'midterm', 'final']);
             $table->string('exam_type');
-            $table->dateTime('due_datetime');
             $table->timestamps();
         });
 
@@ -144,7 +142,7 @@ return new class extends Migration {
             $table->foreignId('exam_id')->constrained('exams')->cascadeOnDelete();
             $table->foreignId('student_id')->constrained('students')->cascadeOnDelete();
             $table->string('score')->default(0);
-            $table->string('grade')->default('passed');
+            $table->double('grade', 10, 2)->default(0);
             $table->dateTime('datetime_submitted');
             $table->timestamps();
         });
@@ -179,7 +177,7 @@ return new class extends Migration {
     /**
      * Reverse the migrations.
      */
-    public function down() : void
+    public function down(): void
     {
         Schema::dropIfExists('rubrics');
         Schema::dropIfExists('school_works');

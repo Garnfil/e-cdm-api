@@ -12,9 +12,7 @@ use Illuminate\Support\Str;
 
 class QuizService
 {
-    public function __construct()
-    {
-    }
+    public function __construct() {}
 
     public function createAndUpload($request)
     {
@@ -26,15 +24,16 @@ class QuizService
                 'instructor_id' => $request->instructor_id,
                 'title' => $request->title,
                 'description' => $request->description,
-                'type' => $request->type,
-                'status' => $request->status,
+                'type' => 'quiz',
+                'status' => $request->status ?? 'posted',
+                'due_datetime' => $request->due_datetime,
             ]);
 
             if ($request->has('attachments') && is_array($request->attachments)) {
                 foreach ($request->attachments as $key => $attachment) {
                     $file_name = null;
                     if (! is_string($attachment)) {
-                        $file_name = time() . '-' . Str::random(5) . '.' . $attachment->getClientOriginalExtension();
+                        $file_name = time().'-'.Str::random(5).'.'.$attachment->getClientOriginalExtension();
                         $file_path = 'school_works_attachments/';
                         Storage::disk('public')->putFileAs($file_path, $attachment, $file_name);
                     }
@@ -54,19 +53,18 @@ class QuizService
                 'notes' => $request->notes,
                 'points' => $request->points,
                 'assessment_type' => $request->assessment_type,
+                'has_quiz_form' => $request->has_quiz_form ?? false,
                 'quiz_type' => $request->quiz_type,
-                'due_datetime' => $request->due_datetime,
             ]);
 
             DB::commit();
 
             return [
                 'schoolWork' => $schoolWork,
-                'quiz' => $quiz,
+                'quiz' => $quiz->load('school_work'),
             ];
         } catch (Exception $e) {
             DB::rollBack();
-            dd($e);
             throw $e;
         }
     }
