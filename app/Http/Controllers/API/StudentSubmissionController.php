@@ -12,6 +12,7 @@ use App\Models\SchoolWork;
 use App\Models\StudentSubmission;
 use App\Models\StudentSubmissionAttachment;
 use App\Services\ExceptionHandlerService;
+use App\Services\GradeService;
 use Carbon\Carbon;
 use Exception;
 use Illuminate\Http\Request;
@@ -70,7 +71,8 @@ class StudentSubmissionController extends Controller
 
             if ($request->has('attachments') && is_array($request->attachments)) {
                 foreach ($request->attachments as $key => $attachment) {
-                    // dd($attachment);
+                    $attachment_name = $attachment['attachment'];
+
                     if ($attachment['attachment_type'] == StudentSubmissionAttachment::ATTACHMENT_TYPE_FILE) {
 
                         $path_extension = $attachment['attachment']->getClientOriginalExtension();
@@ -83,8 +85,6 @@ class StudentSubmissionController extends Controller
 
                         $file_path = 'student_submission_attachments/';
                         Storage::disk('public')->putFileAs($file_path, $attachment['attachment'], $attachment_name);
-                    } else {
-                        $attachment_name = $attachment['attachment'];
                     }
 
                     StudentSubmissionAttachment::create([
@@ -197,7 +197,9 @@ class StudentSubmissionController extends Controller
              * Request Inputs: score, student_submission_id
              */
             $studentSchoolWorkScore = $request->score;
-            $student_submission = StudentSubmission::with('school_work')->findOrFail($request->student_submission_id);
+            $submissionId = $request->student_submission_id ?? $request->submission_id;
+
+            $student_submission = StudentSubmission::with('school_work')->find($submissionId);
 
             $schoolWorkPoints = $student_submission->school_work->schoolWorkPoints();
 
@@ -207,6 +209,9 @@ class StudentSubmissionController extends Controller
                 'score' => $studentSchoolWorkScore,
                 'grade' => $studentSchoolWorkGrade,
             ]);
+
+            $gradeService = new GradeService;
+            $gradeService->computeClassStudentGrade($student_submission->school_work_type, $student_submission->student_id, $student_submission->school_work->class_id);
 
             return response()->json([
                 'status' => 'success',

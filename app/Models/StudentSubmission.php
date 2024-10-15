@@ -20,6 +20,14 @@ class StudentSubmission extends Model
         'datetime_submitted',
     ];
 
+    const ACTIVITY_TYPE = 'activity';
+
+    const ASSIGNMENT_TYPE = 'assignment';
+
+    const QUIZ_TYPE = 'quiz';
+
+    const EXAM_TYPE = 'exam';
+
     public function school_work()
     {
         return $this->belongsTo(SchoolWork::class, 'school_work_id');

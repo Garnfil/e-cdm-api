@@ -5,6 +5,7 @@ namespace App\Http\Controllers\API;
 use App\Http\Controllers\Controller;
 use App\Models\Attendance;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 
 class AttendanceController extends Controller
 {
@@ -13,28 +14,29 @@ class AttendanceController extends Controller
         $attendances = Attendance::get();
 
         return response()->json([
-            "status" => "success",
-            "attendances" => $attendances
+            'status' => 'success',
+            'attendances' => $attendances,
         ]);
     }
 
-    public function classAttendance(Request $request)
+    public function classAttendances(Request $request)
     {
         $attendances = Attendance::where('class_id', $request->class_id)->get();
 
         return response()->json([
-            "status" => "success",
-            "attendances" => $attendances
+            'status' => 'success',
+            'attendances' => $attendances,
         ]);
     }
 
     public function store(Request $request)
     {
-        $attendance = Attendance::create($request->all());
+        $attendance_code = Str::random(6).'-'.rand(10000, 100000);
+        $attendance = Attendance::create(array_merge($request->all(), ['attendance_code' => $attendance_code]));
 
         return response()->json([
-            "status" => "success",
-            "attendance" => $attendance
+            'status' => 'success',
+            'attendance' => $attendance,
         ]);
     }
 
@@ -43,8 +45,8 @@ class AttendanceController extends Controller
         $attendance = Attendance::findOrFail($id);
 
         return response()->json([
-            "status" => "success",
-            "attendance" => $attendance
+            'status' => 'success',
+            'attendance' => $attendance,
         ]);
     }
 
@@ -55,8 +57,8 @@ class AttendanceController extends Controller
         $attendance->update($request->all());
 
         return response()->json([
-            "status" => "success",
-            "attendance" => $attendance
+            'status' => 'success',
+            'attendance' => $attendance,
         ]);
     }
 
@@ -66,8 +68,8 @@ class AttendanceController extends Controller
         $attendance->delete();
 
         return response()->json([
-            "status" => "success",
-            "message" => "Attendance Deleted Successfully"
+            'status' => 'success',
+            'message' => 'Attendance Deleted Successfully',
         ]);
     }
 }

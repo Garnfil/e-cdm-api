@@ -25,8 +25,7 @@ class DiscussionForumController extends Controller
                 $query->where('visibility', 'private')
                     ->where(function ($q) use ($user) {
                         $q->where('institute_id', $user->institute_id)
-                            ->orWhere('course_id', $user->course_id)
-                            ->orWhere('section_id', $user->section_id);
+                            ->orWhere('course_id', $user->course_id);
                     });
             })
             ->latest()  // Sort by latest posts

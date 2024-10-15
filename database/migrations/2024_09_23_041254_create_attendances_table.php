@@ -16,6 +16,7 @@ return new class extends Migration
             $table->foreignId('class_id')->constrained('classes');
             $table->string('attendance_code');
             $table->foreignId('student_id')->constrained('students');
+            $table->dateTime('attendance_datetime');
             $table->timestamps();
         });
 
@@ -23,6 +24,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('attendance_id')->constrained('attendances');
             $table->foreignId('student_id')->constrained('students');
+            $table->dateTime('attendance_datetime');
             $table->string('status');
             $table->timestamps();
         });

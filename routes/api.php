@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\API\ActivityController;
 use App\Http\Controllers\API\AssignmentController;
+use App\Http\Controllers\API\AttendanceController;
 use App\Http\Controllers\API\Auth\InstructorAuthenticationController;
 use App\Http\Controllers\API\Auth\StudentAuthenticationController;
 use App\Http\Controllers\API\ClassRoomController;
@@ -60,6 +61,9 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::post('school-works/attachments/single-upload', [SchoolWorkController::class, 'uploadSingleAttachment']);
     Route::delete('school-works/attachments/{attachment_id}/destroy', [SchoolWorkController::class, 'deleteAttachment']);
     Route::get('school-works/{id}', [SchoolWorkController::class, 'show']);
+
+    Route::get('attendances/classes/{class_id}', [AttendanceController::class, 'classAttendances']);
+    Route::post('attendances', [AttendanceController::class, 'store']);
 
     Route::post('student-school-works/submissions', [StudentSubmissionController::class, 'store']);
     Route::post('student-school-works/submissions/{submission_id}/graded', [StudentSubmissionController::class, 'gradeStudentSubmission']);
@@ -125,7 +129,7 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
 
     Route::get('class-schedules', [ClassScheduleController::class, 'get']);
     Route::post('class-schedules', [ClassScheduleController::class, 'store']);
-    Route::post('instructors/{instructor_id}/class-schedules', [ClassScheduleController::class, 'instructorClassesSchedule']);
+    Route::get('instructors/{instructor_id}/class-schedules', [ClassScheduleController::class, 'instructorClassesSchedule']);
 });
 
 Route::post('whiteboard/update/{sessionId}', [WhiteboardController::class, 'update']);

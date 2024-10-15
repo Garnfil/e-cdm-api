@@ -153,12 +153,12 @@ return new class extends Migration
             $table->foreignId('student_id')->constrained('students')->cascadeOnDelete();
             $table->foreignId('graded_by')->nullable()->constrained('instructors')->nullOnDelete();
             $table->enum('assessment_category', ['prelim', 'midterm', 'finals']);
-            $table->double('assignment_grade_percentage', 10, 2);
-            $table->double('activities_grade_percentage', 10, 2);
-            $table->double('quizzes_grade_percentage', 10, 2);
-            $table->double('exams_grade_percentage', 10, 2);
-            $table->double('atttendance_grade_percentage', 10, 2);
-            $table->double('other_performances_grade_percentage', 10, 2);
+            $table->double('assignment_grade_percentage', 10, 2)->default(0);
+            $table->double('activities_grade_percentage', 10, 2)->default(0);
+            $table->double('quizzes_grade_percentage', 10, 2)->default(0);
+            $table->double('exams_grade_percentage', 10, 2)->default(0);
+            $table->double('atttendance_grade_percentage', 10, 2)->default(0);
+            $table->double('other_performances_grade_percentage', 10, 2)->default(0);
             $table->timestamps();
         });
 
