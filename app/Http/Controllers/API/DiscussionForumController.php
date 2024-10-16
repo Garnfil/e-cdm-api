@@ -5,6 +5,9 @@ namespace App\Http\Controllers\API;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Discussion\StoreRequest;
 use App\Models\DiscussionPost;
+use App\Services\ExceptionHandlerService;
+use DB;
+use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
@@ -69,30 +72,46 @@ class DiscussionForumController extends Controller
 
     public function store(StoreRequest $request)
     {
-        $data = $request->validated();
+        try {
+            DB::beginTransaction();
 
-        $discussion = DiscussionPost::create(array_merge($data, ['images' => null]));
+            $discussion = DiscussionPost::create([
+                'title' => $request->title,
+                'content' => $request->discussion_content,
+                'user_id' => $request->user_id,
+                'user_type' => $request->user_type,
+                'visibility' => $request->visibility,
+                'institute_id' => $request->visibility == 'private' ? $request->institute_id : null,
+                'course_id' => $request->visibility == 'private' ? $request->course_id : null,
+            ]);
 
-        if ($request->has('attachments') && is_array($request->attachments)) {
-            $images = [];
-            foreach ($request->attachments as $key => $attachment) {
-                $file_name = null;
-                if (! is_string($attachment)) {
-                    $file_name = time().'-'.Str::random(5).'.'.$attachment->getClientOriginalExtension();
-                    $file_path = 'discussions/'.$discussion->id.'/';
-                    Storage::disk('public')->putFileAs($file_path, $attachment, $file_name);
+            if ($request->has('attachments') && is_array($request->attachments)) {
+                $images = [];
+                foreach ($request->attachments as $key => $attachment) {
+                    $file_name = null;
+                    if (! is_string($attachment)) {
+                        $file_name = time().'-'.Str::random(5).'.'.$attachment->getClientOriginalExtension();
+                        $file_path = 'discussions/'.$discussion->id.'/';
+                        Storage::disk('public')->putFileAs($file_path, $attachment, $file_name);
+                    }
+                    array_push($images, $file_name);
                 }
-                array_push($images, $file_name);
+
+                $discussion->update(['images' => json_encode($discussion)]);
             }
 
-            $discussion->update(['images' => json_encode($discussion)]);
+            DB::commit();
+
+            return response()->json([
+                'status' => 'success',
+                'discussion' => $discussion,
+            ]);
+        } catch (Exception $exception) {
+            DB::rollBack();
+            $exceptionHandlerService = new ExceptionHandlerService;
+
+            return $exceptionHandlerService->__generateExceptionResponse($exception);
         }
-
-        return response()->json([
-            'status' => 'success',
-            'discussion' => $discussion,
-        ]);
-
     }
 
     public function update(Request $request, $id) {}

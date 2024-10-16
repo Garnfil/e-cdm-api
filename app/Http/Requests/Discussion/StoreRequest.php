@@ -23,7 +23,7 @@ class StoreRequest extends FormRequest
     {
         return [
             'title' => ['required'],
-            'content' => ['required'],
+            'discussion_content' => ['required'],
             'images' => ['nullable', 'array'],
             'user_id' => ['required'],
             'user_type' => ['required'],
