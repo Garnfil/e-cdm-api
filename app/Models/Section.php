@@ -12,4 +12,9 @@ class Section extends Model
     protected $table = 'sections';
 
     protected $fillable = ['name', 'course_id', 'year_level', 'description', 'status'];
+
+    public function course()
+    {
+        return $this->belongsTo(Course::class, 'course_id');
+    }
 }

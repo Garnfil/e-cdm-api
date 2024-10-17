@@ -2,8 +2,9 @@
     <div class="app-brand demo">
         <a href="index.html" class="app-brand-link">
             <span class="app-brand-logo demo">
+                <img src="{{ URL::asset('assets/img/cdm-logo.png') }}" style="width: 50px;" alt="">
             </span>
-            <span class="app-brand-text demo menu-text fw-bolder ms-2">Sneat</span>
+            <span class="app-brand-text demo menu-text fw-bolder ms-2">E-CDM</span>
         </a>
 
         <a href="javascript:void(0);" class="layout-menu-toggle menu-link text-large ms-auto d-block d-xl-none">
@@ -29,12 +30,12 @@
             </a>
             <ul class="menu-sub">
                 <li class="menu-item">
-                    <a href="{{ route('students.index') }}" class="menu-link">
+                    <a href="{{ route('admin.students.index') }}" class="menu-link">
                         <div data-i18n="Students">Students</div>
                     </a>
                 </li>
                 <li class="menu-item">
-                    <a href="pages-account-settings-notifications.html" class="menu-link">
+                    <a href="{{ route('admin.instructors.index') }}" class="menu-link">
                         <div data-i18n="Instructors">Instructors</div>
                     </a>
                 </li>
@@ -52,14 +53,14 @@
         </li>
 
         <li class="menu-item">
-            <a href="#" class="menu-link">
+            <a href="{{ route('admin.institutes.index') }}" class="menu-link">
                 <i class="menu-icon tf-icons bx bx-collection"></i>
                 <div data-i18n="Institutes">Institutes</div>
             </a>
         </li>
 
         <li class="menu-item">
-            <a href="#" class="menu-link">
+            <a href="{{ route('admin.courses.index') }}" class="menu-link">
                 <i class="menu-icon tf-icons bx bx-collection"></i>
                 <div data-i18n="Courses">Courses</div>
             </a>

@@ -8,4 +8,12 @@ use Illuminate\Database\Eloquent\Model;
 class Institute extends Model
 {
     use HasFactory;
+
+    protected $table = 'institutes';
+
+    protected $fillable = [
+        'name',
+        'description',
+        'logo_file_name',
+    ];
 }

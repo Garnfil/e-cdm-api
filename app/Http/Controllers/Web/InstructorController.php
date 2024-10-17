@@ -5,13 +5,12 @@ namespace App\Http\Controllers\Web;
 use App\Http\Controllers\Controller;
 use App\Models\Course;
 use App\Models\Institute;
-use App\Models\Section;
-use App\Models\Student;
+use App\Models\Instructor;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Yajra\DataTables\DataTables;
 
-class StudentController extends Controller
+class InstructorController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -19,9 +18,9 @@ class StudentController extends Controller
     public function index(Request $request)
     {
         if ($request->ajax()) {
-            $students = Student::query();
+            $instructors = Instructor::query();
 
-            return DataTables::of($students)
+            return DataTables::of($instructors)
                 ->addIndexColumn()
                 ->addColumn('name', function ($row) {
                     return $row->firstname.' '.$row->lastname;
@@ -34,15 +33,15 @@ class StudentController extends Controller
                 })
                 ->addColumn('actions', function ($row) {
                     return '<div class="btn-group">
-                        <a href="'.route('admin.students.edit', $row->id).'" class="btn btn-primary btn-sm"><i class="bx bx-edit text-white"></i></a>
-                        <a class="btn btn-danger btn-sm"><i class="bx bx-trash text-white"></i></a>
-                    </div>';
+                            <a href="'.route('admin.instructors.edit', $row->id).'" class="btn btn-primary btn-sm"><i class="bx bx-edit text-white"></i></a>
+                            <a class="btn btn-danger btn-sm"><i class="bx bx-trash text-white"></i></a>
+                        </div>';
                 })
                 ->rawColumns(['actions'])
                 ->make(true);
         }
 
-        return view('admin-page.students.index-students');
+        return view('admin-page.instructors.index-instructor');
     }
 
     /**
@@ -52,9 +51,8 @@ class StudentController extends Controller
     {
         $institutes = Institute::get();
         $courses = Course::get();
-        $sections = Section::get();
 
-        return view('admin-page.students.create-student', compact('institutes', 'courses', 'sections'));
+        return view('admin-page.instructors.create-instructor', compact('institutes', 'courses'));
     }
 
     /**
@@ -64,11 +62,11 @@ class StudentController extends Controller
     {
         $data = $request->except('_token', 'password');
 
-        $students = Student::create(array_merge($data, [
+        $instructor = Instructor::create(array_merge($data, [
             'password' => Hash::make($request->password),
         ]));
 
-        return redirect()->route('admin.students.index')->withSuccess('Student Added Successfully');
+        return redirect()->route('admin.instructors.index')->withSuccess('Instructor Added Successfully');
     }
 
     /**
@@ -86,10 +84,9 @@ class StudentController extends Controller
     {
         $institutes = Institute::get();
         $courses = Course::get();
-        $sections = Section::get();
-        $student = Student::findOrFail($id);
+        $instructor = Instructor::findOrFail($id);
 
-        return view('admin-page.students.edit-student', compact('institutes', 'courses', 'sections', 'student'));
+        return view('admin-page.instructors.edit-instructor', compact('institutes', 'courses', 'instructor'));
     }
 
     /**
@@ -97,12 +94,12 @@ class StudentController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        $student = Student::findOrFail($id);
-        $data = $request->except('_token');
+        $data = $request->except('_token', '_method');
+        $instructor = Instructor::findOrFail($id);
 
-        $student->update($data);
+        $instructor->update($data);
 
-        return back()->withSuccess('Student Updated Successfully');
+        return back()->withSuccess('Instructor Updated Successfully');
     }
 
     /**
