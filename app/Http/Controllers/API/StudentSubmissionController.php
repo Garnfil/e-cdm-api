@@ -81,7 +81,7 @@ class StudentSubmissionController extends Controller
                             throw new Exception('The requested attachment does not correspond to a recognized file type. The following file types are supported: pdf, png, jpg, jpeg, and webp.', 422);
                         }
 
-                        $attachment_name = Str::random(7).'-'.time().'.'.$path_extension;
+                        $attachment_name = Str::random(7) . '-' . time() . '.' . $path_extension;
 
                         $file_path = 'student_submission_attachments/';
                         Storage::disk('public')->putFileAs($file_path, $attachment['attachment'], $attachment_name);
