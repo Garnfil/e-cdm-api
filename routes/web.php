@@ -12,6 +12,7 @@ use App\Http\Controllers\Web\ExamController;
 use App\Http\Controllers\Web\InstituteController;
 use App\Http\Controllers\Web\InstructorController;
 use App\Http\Controllers\Web\QuizController;
+use App\Http\Controllers\Web\QuizQuestionController;
 use App\Http\Controllers\Web\SchoolWorkController;
 use App\Http\Controllers\Web\SectionController;
 use App\Http\Controllers\Web\StudentController;
@@ -51,6 +52,8 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.'], function () {
     Route::resource('quizzes', QuizController::class);
     Route::resource('exams', ExamController::class);
     Route::resource('attendances', AttendanceController::class);
+
+    Route::post('quiz-questions/store', [QuizQuestionController::class, 'store'])->name('quiz_questions.store');
 
     Route::post('school-works/attachments/upload', [SchoolWorkController::class, 'upload'])->name('school_works.attachments.upload');
 });

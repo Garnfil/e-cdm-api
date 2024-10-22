@@ -17,6 +17,7 @@ class AttendanceController extends Controller
     {
         if ($request->ajax()) {
             $attendances = Attendance::query();
+
             return DataTables::of($attendances)
                 ->addIndexColumn()
                 ->addColumn('class', function ($row) {
@@ -24,7 +25,7 @@ class AttendanceController extends Controller
                 })
                 ->addColumn('actions', function ($row) {
                     return '<div class="btn-group">
-                        <a href="' . route('admin.attendances.edit', $row->id) . '" class="btn btn-primary btn-sm"><i class="bx bx-edit text-white"></i></a>
+                        <a href="'.route('admin.attendances.edit', $row->id).'" class="btn btn-primary btn-sm"><i class="bx bx-edit text-white"></i></a>
                         <a class="btn btn-danger btn-sm"><i class="bx bx-trash text-white"></i></a>
                     </div>';
                 })
@@ -41,6 +42,7 @@ class AttendanceController extends Controller
     public function create()
     {
         $classes = Classroom::get();
+
         return view('admin-page.attendances.create-attendance', compact('classes'));
     }
 
@@ -52,7 +54,8 @@ class AttendanceController extends Controller
         $data = $request->except('_token');
         $attendance = Attendance::create($data);
 
-        
+        return redirect()->route('admin.attendances.index')->withSuccess('Attendance Added Successfully');
+
     }
 
     /**
@@ -68,7 +71,10 @@ class AttendanceController extends Controller
      */
     public function edit(string $id)
     {
-        //
+        $classes = Classroom::get();
+        $attendance = Attendance::findOrFail($id);
+
+        return view('admin-page.attendances.edit-attendance', compact('classes', 'attendance'));
     }
 
     /**

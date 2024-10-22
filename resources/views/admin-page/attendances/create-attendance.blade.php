@@ -10,7 +10,7 @@
                 </h6>
             </div>
             <div class="action-section btn-group">
-                <a href="{{ route('admin.attendances.index') }}" class="btn btn-primary"><i class="bx bx-plus"></i> Back to
+                <a href="{{ route('admin.attendances.index') }}" class="btn btn-primary"><i class="bx bx-undo"></i> Back to
                     List</a>
             </div>
         </section>
