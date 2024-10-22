@@ -98,13 +98,38 @@ class AssignmentController extends Controller
         } catch (Exception $exception) {
             DB::rollBack();
 
-            return response($exception);
-
             return $this->exceptionHandlerService->__generateExceptionResponse($exception);
         }
     }
 
-    public function update(Request $request, $id) {}
+    public function update(Request $request, $id)
+    {
+        try {
+            DB::beginTransaction();
+            $assignment = Assignment::with('school_work')->find($id);
+
+            $assignment->school_work->update([
+                'title' => $request->title,
+                'description' => $request->description,
+                'due_datetime' => $request->due_datetime,
+            ]);
+
+            $assignment->update([
+                'points' => $request->points,
+            ]);
+
+            DB::commit();
+
+            return response()->json([
+                'status' => 'success',
+                'message' => 'Assignment Updated Successfully',
+            ]);
+        } catch (Exception $exception) {
+            DB::rollBack();
+
+            return $this->exceptionHandlerService->__generateExceptionResponse($exception);
+        }
+    }
 
     public function destroy($id) {}
 }

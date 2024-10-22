@@ -17,7 +17,7 @@
         <div class="card">
             <div class="card-body">
                 <div class="table-responsive text-wrap">
-                    <table class="table table-striped table-bordered" id="institutes-table">
+                    <table class="table table-striped w-100" id="institutes-table">
                         <thead>
                             <tr>
                                 <th>Id</th>

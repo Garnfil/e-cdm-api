@@ -42,7 +42,7 @@
       rel="stylesheet"
     />
 
-    <<!-- Icons. Uncomment required icon fonts -->
+    <!-- Icons. Uncomment required icon fonts -->
     <link rel="stylesheet" href="{{ URL::asset('assets/vendor/fonts/boxicons.css') }}" />
 
     <!-- Core CSS -->
@@ -61,7 +61,6 @@
     <link rel="stylesheet" href="{{ URL::asset('assets/css/palette-callout.css') }}">
     <link rel="stylesheet" href="{{ URL::asset('assets/css/app-transports.css') }}">
 
-    <link rel="stylesheet" href="{{ URL::asset('assets/css/wizard.css') }}">
     <!-- Page CSS -->
 
     <!-- Helpers -->
@@ -74,6 +73,9 @@
     <link rel="stylesheet" href="https://code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
     <link rel="stylesheet" type="text/css" href="https://npmcdn.com/flatpickr/dist/themes/airbnb.css">
+
+    <script src="{{ asset('assets/js/config.js') }}"></script>
+
   </head>
 
   <body>
@@ -106,7 +108,6 @@
     <script src="{{ URL::asset('assets/js/select/select2.full.min.js') }}"></script>
     <script src="{{ URL::asset('assets/js/jquery.steps.min.js') }}"></script>
     <script src="{{ URL::asset('assets/vendor/js/menu.js') }}"></script>
-    <script src="{{ URL::asset('vendor/apexcharts/apexcharts.js') }}"></script>
 
     <!-- Vendors JS -->
     <script src="{{ URL::asset('assets/vendor/libs/apex-charts/apexcharts.js') }}"></script>
@@ -120,6 +121,8 @@
     <script src="{{ asset('assets/js/select/form-select2.js') }}"></script>
     {{-- <script src="{{ asset('assets/js/wizard-steps.js') }}"></script> --}}
     <script src="{{ asset('assets/js/pages-account-settings-account.js') }}"></script>
+
+
 
     <!-- CDN JS -->
     <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
@@ -139,6 +142,12 @@
     @if (Session::get('success'))
 <script>
     toastr.success("{{ Session::get('success') }}", "Success");
+</script>
+@endif
+
+@if (Session::get('fail'))
+<script>
+    toastr.error("{{ Session::get('fail') }}", "Failed");
 </script>
 @endif
 

@@ -60,6 +60,7 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
 
     Route::post('school-works/attachments/single-upload', [SchoolWorkController::class, 'uploadSingleAttachment']);
     Route::delete('school-works/attachments/{attachment_id}/destroy', [SchoolWorkController::class, 'deleteAttachment']);
+    Route::get('school-works/{id}/quizzes/questions', [SchoolWorkController::class, 'quizQuestions']);
     Route::get('school-works/{id}', [SchoolWorkController::class, 'show']);
 
     Route::get('attendances/classes/{class_id}', [AttendanceController::class, 'classAttendances']);
@@ -72,6 +73,7 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
 
     Route::get('quizzes', [QuizController::class, 'getAll']);
     Route::post('quizzes', [QuizController::class, 'store']);
+    Route::put('quizzes/{id}', [QuizController::class, 'update']);
     Route::get('quizzes/{id}', [QuizController::class, 'show']);
 
     Route::post('quiz-questions', [QuizQuestionController::class, 'store']);
@@ -81,6 +83,7 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
 
     Route::get('assignments', [AssignmentController::class, 'get']);
     Route::post('assignments', [AssignmentController::class, 'store']);
+    Route::put('assignments/{id}', [AssignmentController::class, 'update']);
     Route::get('assignments/{id}', [AssignmentController::class, 'show']);
 
     Route::post('student-assignments', [StudentAssignmentController::class, 'store']);
@@ -88,6 +91,7 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
 
     Route::get('activities', [ActivityController::class, 'get']);
     Route::post('activities', [ActivityController::class, 'store']);
+    Route::put('activities/{id}', [ActivityController::class, 'update']);
     Route::get('activities/{id}', [ActivityController::class, 'show']);
 
     Route::post('student-activities', [StudentAssignmentController::class, 'store']);
@@ -95,6 +99,7 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
 
     Route::get('exams', [ExamController::class, 'get']);
     Route::post('exams', [ExamController::class, 'store']);
+    Route::put('exams/{id}', [ExamController::class, 'update']);
     Route::get('exams/{id}', [ExamController::class, 'show']);
 
     Route::get('classes/{class_id}/modules', [ModuleController::class, 'classModules']);

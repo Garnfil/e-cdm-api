@@ -13,6 +13,16 @@ class SchoolWork extends Model
 
     protected $fillable = ['class_id', 'instructor_id', 'title', 'description', 'file_paths', 'type', 'status', 'due_datetime'];
 
+    public function class()
+    {
+        return $this->belongsTo(Classroom::class, 'class_id');
+    }
+
+    public function instructor()
+    {
+        return $this->belongsTo(Instructor::class, 'instructor_id');
+    }
+
     public function attachments()
     {
         return $this->hasMany(SchoolWorkAttachment::class, 'school_work_id');

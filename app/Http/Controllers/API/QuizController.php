@@ -115,12 +115,38 @@ class QuizController extends Controller
         }
     }
 
-    public function update()
+    public function update(Request $request, $id)
     {
+
         try {
+            \DB::beginTransaction();
+            $quiz = Quiz::with('school_work.class')->find($id);
+
+            $quiz->school_work->update([
+                'title' => $request->title,
+                'description' => $request->description,
+                'due_datetime' => $request->due_datetime,
+            ]);
+
+            $quiz->update([
+                'notes' => $request->notes,
+                'points' => $request->points,
+                'assessment_type' => $quiz->school_work->class->current_assessment_category,
+                'has_quiz_form' => $request->has_quiz_form,
+                'quiz_type' => $request->quiz_type,
+            ]);
+
+            \DB::commit();
+
+            return response()->json([
+                'status' => 'success',
+                'message' => 'Quiz Updated Successfully',
+            ]);
 
         } catch (Exception $exception) {
+            \DB::rollBack();
 
+            return response()->json(['error' => 'An error occurred: '.$exception->getMessage()], 500);
         }
     }
 

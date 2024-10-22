@@ -17,7 +17,7 @@
     <ul class="menu-inner py-1">
         <!-- Dashboard -->
         <li class="menu-item active">
-            <a href="index.html" class="menu-link">
+            <a href="{{ route('admin.dashboard') }}" class="menu-link">
                 <i class="menu-icon tf-icons bx bx-home-circle"></i>
                 <div data-i18n="Analytics">Dashboard</div>
             </a>
@@ -67,28 +67,21 @@
         </li>
 
         <li class="menu-item">
-            <a href="#" class="menu-link">
-                <i class="menu-icon tf-icons bx bx-collection"></i>
-                <div data-i18n="Year Level">Year Level</div>
-            </a>
-        </li>
-
-        <li class="menu-item">
-            <a href="#" class="menu-link">
+            <a href="{{ route('admin.sections.index') }}" class="menu-link">
                 <i class="menu-icon tf-icons bx bx-collection"></i>
                 <div data-i18n="Sections">Sections</div>
             </a>
         </li>
 
         <li class="menu-item">
-            <a href="#" class="menu-link">
+            <a href="{{ route('admin.subjects.index') }}" class="menu-link">
                 <i class="menu-icon tf-icons bx bx-collection"></i>
                 <div data-i18n="Sections">Subjects</div>
             </a>
         </li>
 
         <li class="menu-item">
-            <a href="#" class="menu-link">
+            <a href="{{ route('admin.classes.index') }}" class="menu-link">
                 <i class="menu-icon tf-icons bx bx-collection"></i>
                 <div data-i18n="Sections">Classes</div>
             </a>
@@ -101,22 +94,22 @@
             </a>
             <ul class="menu-sub">
                 <li class="menu-item">
-                    <a href="pages-account-settings-account.html" class="menu-link">
+                    <a href="{{ route('admin.assignments.index') }}" class="menu-link">
                         <div data-i18n="Assignments">Assignments</div>
                     </a>
                 </li>
                 <li class="menu-item">
-                    <a href="pages-account-settings-notifications.html" class="menu-link">
+                    <a href="{{ route('admin.activities.index') }}" class="menu-link">
                         <div data-i18n="Activities">Activities</div>
                     </a>
                 </li>
                 <li class="menu-item">
-                    <a href="pages-account-settings-connections.html" class="menu-link">
+                    <a href="{{ route('admin.quizzes.index') }}" class="menu-link">
                         <div data-i18n="Quizzes">Quizzes</div>
                     </a>
                 </li>
                 <li class="menu-item">
-                    <a href="pages-account-settings-connections.html" class="menu-link">
+                    <a href="{{ route('admin.exams.index') }}" class="menu-link">
                         <div data-i18n="Exams">Exams</div>
                     </a>
                 </li>

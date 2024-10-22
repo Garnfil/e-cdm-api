@@ -40,7 +40,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <button class="btn btn-primary btn-block w-100">Save Institute</button>
+                            <button class="btn btn-primary btn-block w-100">Save Course</button>
                         </form>
                     </div>
                 </div>

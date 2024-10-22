@@ -51,7 +51,10 @@ class CourseController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $data = $request->except('_token');
+        $course = Course::create($data);
+
+        return redirect()->route('admin.courses.index')->withSuccess('Course Added Successfully');
     }
 
     /**
@@ -67,7 +70,10 @@ class CourseController extends Controller
      */
     public function edit(string $id)
     {
-        //
+        $institutes = Institute::get();
+        $course = Course::findOrFail($id);
+
+        return view('admin-page.courses.edit-course', compact('course', 'institutes'));
     }
 
     /**

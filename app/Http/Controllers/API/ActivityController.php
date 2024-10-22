@@ -97,7 +97,34 @@ class ActivityController extends Controller
         }
     }
 
-    public function update(Request $request, $id) {}
+    public function update(Request $request, $id)
+    {
+        try {
+            DB::beginTransaction();
+            $activity = Activity::with('school_work')->find($id);
+
+            $activity->school_work->update([
+                'title' => $request->title,
+                'description' => $request->description,
+                'due_datetime' => $request->due_datetime,
+            ]);
+
+            $activity->update([
+                'points' => $request->points,
+            ]);
+
+            DB::commit();
+
+            return response()->json([
+                'status' => 'success',
+                'message' => 'Activity Updated Successfully',
+            ]);
+        } catch (Exception $exception) {
+            DB::rollBack();
+
+            return $this->exceptionHandlerService->__generateExceptionResponse($exception);
+        }
+    }
 
     public function destroy($id) {}
 }

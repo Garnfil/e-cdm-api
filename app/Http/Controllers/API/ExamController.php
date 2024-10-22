@@ -104,7 +104,34 @@ class ExamController extends Controller
         }
     }
 
-    public function update(Request $request, $id) {}
+    public function update(Request $request, $id)
+    {
+        try {
+            DB::beginTransaction();
+            $exam = Exam::with('school_work')->find($id);
+
+            $exam->school_work->update([
+                'title' => $request->title,
+                'description' => $request->description,
+                'due_datetime' => $request->due_datetime,
+            ]);
+
+            $exam->update([
+                'points' => $request->points,
+            ]);
+
+            DB::commit();
+
+            return response()->json([
+                'status' => 'success',
+                'message' => 'Exam Updated Successfully',
+            ]);
+        } catch (Exception $exception) {
+            DB::rollBack();
+
+            return $this->exceptionHandlerService->__generateExceptionResponse($exception);
+        }
+    }
 
     public function destroy($id) {}
 }

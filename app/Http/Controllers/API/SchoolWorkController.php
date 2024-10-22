@@ -110,4 +110,14 @@ class SchoolWorkController extends Controller
 
         return response()->json(['message' => 'File deleted successfully.']);
     }
+
+    public function quizQuestions(Request $request, $id)
+    {
+        $school_work = SchoolWork::with('quiz.questions')->find($id);
+
+        return response()->json([
+            'status' => 'success',
+            'school_work' => $school_work,
+        ]);
+    }
 }

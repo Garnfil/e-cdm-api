@@ -268,8 +268,8 @@ button.list-group-item-primary.active {
 .btn-primary.active,
 .show > .btn-primary.dropdown-toggle {
     color: #fff;
-    background-color: #595cd9;
-    border-color: #595cd9;
+    background-color: #07350b;
+    border-color: #07350b;
 }
 .btn-check:checked + .btn-primary:focus,
 .btn-check:active + .btn-primary:focus,
@@ -309,8 +309,8 @@ button.list-group-item-primary.active {
 .btn-outline-primary.active,
 .btn-outline-primary.dropdown-toggle.show {
     color: #fff;
-    background-color: #595cd9;
-    border-color: #595cd9;
+    background-color: #07350b;
+    border-color: #07350b;
 }
 .btn-check:checked + .btn-outline-primary:focus,
 .btn-check:active + .btn-outline-primary:focus,

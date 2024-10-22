@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Web;
 
 use App\Http\Controllers\Controller;
+use App\Models\Course;
 use App\Models\Section;
 use Illuminate\Http\Request;
 use Yajra\DataTables\DataTables;
@@ -32,7 +33,7 @@ class SectionController extends Controller
                 ->make(true);
         }
 
-        return view('section');
+        return view('admin-page.sections.index-sections');
     }
 
     /**
@@ -40,7 +41,9 @@ class SectionController extends Controller
      */
     public function create()
     {
-        //
+        $courses = Course::get();
+
+        return view('admin-page.sections.create-section', compact('courses'));
     }
 
     /**
@@ -48,7 +51,11 @@ class SectionController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $data = $request->except('_token');
+
+        $section = Section::create($data);
+
+        return redirect()->route('admin.sections.index')->withSuccess('Section Added Successfully');
     }
 
     /**
@@ -64,7 +71,10 @@ class SectionController extends Controller
      */
     public function edit(string $id)
     {
-        //
+        $section = Section::findOrFail($id);
+        $courses = Course::get();
+
+        return view('admin-page.sections.edit-section', compact('section', 'courses'));
     }
 
     /**
@@ -72,7 +82,12 @@ class SectionController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        $data = $request->except('_token');
+        $section = Section::findOrFail($id);
+
+        $section->update($data);
+
+        return back()->withSuccess('Section Updated Successfully');
     }
 
     /**

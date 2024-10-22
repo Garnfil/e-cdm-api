@@ -106,22 +106,6 @@
                             </div>
                             <div class="col-xl-4">
                                 <div class="mb-3">
-                                    <label for="" class="form-label">Gender</label>
-                                    <div class="form-check">
-                                        <input class="form-check-input" type="radio" value="Male"
-                                            id="gender-radio-male" name="gender" checked />
-                                        <label class="form-check-label" for="gender-radio-male"> Male </label>
-                                    </div>
-                                    <div class="form-check">
-                                        <input class="form-check-input" type="radio" value="female"
-                                            id="gender-radio-female" name="gender" />
-                                        <label class="form-check-label" for="gender-radio-female"> Female
-                                        </label>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-xl-4">
-                                <div class="mb-3">
                                     <label for="" class="form-label">Current Address</label>
                                     <input type="text" class="form-control" name="current_address">
                                 </div>
@@ -136,6 +120,22 @@
                                         <option value="locked">Locked</option>
                                         <option value="dropped">Dropped</option>
                                     </select>
+                                </div>
+                            </div>
+                            <div class="col-xl-4">
+                                <div class="mb-3">
+                                    <label for="" class="form-label">Gender</label>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" value="Male"
+                                            id="gender-radio-male" name="gender" checked />
+                                        <label class="form-check-label" for="gender-radio-male"> Male </label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" value="female"
+                                            id="gender-radio-female" name="gender" />
+                                        <label class="form-check-label" for="gender-radio-female"> Female
+                                        </label>
+                                    </div>
                                 </div>
                             </div>
                         </div>
