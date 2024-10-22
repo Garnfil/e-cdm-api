@@ -115,5 +115,12 @@
                 </li>
             </ul>
         </li>
+
+        <li class="menu-item">
+            <a href="{{ route('admin.attendances.index') }}" class="menu-link">
+                <i class="menu-icon tf-icons bx bx-collection"></i>
+                <div data-i18n="Sections">Attendances</div>
+            </a>
+        </li>
     </ul>
 </aside>

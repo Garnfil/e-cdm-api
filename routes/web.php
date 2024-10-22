@@ -3,6 +3,7 @@
 use App\Http\Controllers\API\WhiteboardController;
 use App\Http\Controllers\Web\ActivityController;
 use App\Http\Controllers\Web\AssignmentController;
+use App\Http\Controllers\Web\AttendanceController;
 use App\Http\Controllers\Web\AuthController;
 use App\Http\Controllers\Web\ClassController;
 use App\Http\Controllers\Web\CourseController;
@@ -49,6 +50,7 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.'], function () {
     Route::resource('activities', ActivityController::class);
     Route::resource('quizzes', QuizController::class);
     Route::resource('exams', ExamController::class);
+    Route::resource('attendances', AttendanceController::class);
 
     Route::post('school-works/attachments/upload', [SchoolWorkController::class, 'upload'])->name('school_works.attachments.upload');
 });

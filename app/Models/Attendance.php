@@ -16,4 +16,9 @@ class Attendance extends Model
         'attendance_code',
         'attendance_datetime',
     ];
+
+    public function class()
+    {
+        return $this->belongsTo(Classroom::class, 'class_id');
+    }
 }
