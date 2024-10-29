@@ -35,6 +35,19 @@ class StudentSubmissionController extends Controller
         ]);
     }
 
+    public function classStudentSubmissions(Request $request)
+    {
+        $studentSubmissions = StudentSubmission::where('student_id', operator: $request->student_id)
+            ->whereHas('school_work', function ($q) use ($request) {
+                return $q->where('class_id', $request->class_id);
+            })->get();
+
+        return response()->json([
+            'status' => 'success',
+            'student_submissions' => $studentSubmissions,
+        ]);
+    }
+
     public function show(Request $request, $submission_id)
     {
         $studentSubmission = StudentSubmission::where('id', $submission_id)
@@ -47,6 +60,52 @@ class StudentSubmissionController extends Controller
         return response()->json([
             'status' => 'success',
             'student_submission' => $studentSubmission,
+        ]);
+    }
+
+    public function storeWithGrade(Request $request, $school_work_type)
+    {
+        $request_type = $request->school_work_type;
+        $student_id = $request->student_id;
+        $class_id = $request->class_id;
+
+        if ($request->has('submissions') && is_array($request->submissions)) {
+            // Collect all school_work_ids from submissions for a batch query
+            $school_work_ids = collect($request->submissions)->pluck('school_work_id')->all();
+
+            // Fetch all existing submissions for the student and these school works in one query
+            $existingSubmissions = StudentSubmission::where('student_id', $student_id)
+                ->whereIn('school_work_id', $school_work_ids)
+                ->get()
+                ->keyBy('school_work_id');
+
+            foreach ($request->submissions as $submissionData) {
+                $school_work_id = $submissionData['school_work_id'];
+                $score = $submissionData['score'];
+
+                // Check if a submission already exists
+                $submission = $existingSubmissions->get($school_work_id);
+
+                // Update or create submission based on existence
+                if ($submission) {
+                    $submission->update(['score' => $score]);
+                } elseif ($score > 0) {  // Only create if score > 0
+                    StudentSubmission::create([
+                        'school_work_id' => $school_work_id,
+                        'score' => $score,
+                        'student_id' => $student_id,
+                        'school_work_type' => $request_type,
+                    ]);
+                }
+            }
+        }
+
+        $gradeService = new GradeService;
+        $gradeService->computeClassStudentGrade($request->school_work_type, $student_id, $class_id);
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Submitted Successfully',
         ]);
     }
 
@@ -81,7 +140,7 @@ class StudentSubmissionController extends Controller
                             throw new Exception('The requested attachment does not correspond to a recognized file type. The following file types are supported: pdf, png, jpg, jpeg, and webp.', 422);
                         }
 
-                        $attachment_name = Str::random(7) . '-' . time() . '.' . $path_extension;
+                        $attachment_name = Str::random(7).'-'.time().'.'.$path_extension;
 
                         $file_path = 'student_submission_attachments/';
                         Storage::disk('public')->putFileAs($file_path, $attachment['attachment'], $attachment_name);

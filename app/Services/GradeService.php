@@ -15,141 +15,87 @@ class GradeService
     {
         $rubric = ClassRubric::where('class_id', $class_id)->first();
 
+        $types = [
+            'assignment' => 'assignment_percentage',
+            'activity' => 'activity_percentage',
+            'quiz' => 'quiz_percentage',
+            'exam' => 'exam_percentage',
+        ];
+
+        if (isset($types[$type])) {
+            return $this->computeGrade($type, $student_id, $class_id, $rubric, $types[$type]);
+        }
+
+        return null;
+    }
+
+    private function computeGrade($type, $student_id, $class_id, $rubric, $percentageField)
+    {
+        // Define school work model based on type
+        $models = [
+            'assignment' => Assignment::class,
+            'activity' => Activity::class,
+            'quiz' => Activity::class, // Assuming quiz is stored in Activity model
+            'exam' => Exam::class,
+        ];
+
+        $submissionType = [
+            'assignment' => StudentSubmission::ASSIGNMENT_TYPE,
+            'activity' => StudentSubmission::ACTIVITY_TYPE,
+            'quiz' => StudentSubmission::QUIZ_TYPE,
+            'exam' => StudentSubmission::EXAM_TYPE,
+        ];
+
+        $model = $models[$type];
+        $schoolWorkType = $submissionType[$type];
+
+        // Get total points directly from the database
+        $totalPoints = $model::whereHas('school_work', function ($q) use ($class_id) {
+            $q->where('class_id', $class_id);
+        })->sum('points');
+
+        // Get student score directly from the database
+        $totalScore = StudentSubmission::where('school_work_type', $schoolWorkType)
+            ->where('student_id', $student_id)
+            ->sum('score');
+
+        $percentageScore = $totalPoints > 0 ? ($totalScore / $totalPoints) * 100 : 0;
+
+        // Calculate the weighted grade based on the rubric percentage
+        $percentage = $rubric->$percentageField / 100;
+        $weightedGrade = $percentageScore * $percentage;
+
         switch ($type) {
             case 'assignment':
-                $this->computeAssignmentsGrade($student_id, $class_id, $rubric);
+                $percentage_label = 'assignment_grade_percentage';
                 break;
 
             case 'activity':
-                $this->computeActivitiesGrade($student_id, $class_id, $rubric);
+                $percentage_label = 'activities_grade_percentage';
                 break;
 
             case 'quiz':
-                $this->computeActivitiesGrade($student_id, $class_id, $rubric);
+                $percentage_label = 'quizzes_grade_percentage';
                 break;
 
             case 'exam':
-                $this->computeExamGrade($student_id, $class_id, $rubric);
+                $percentage_label = 'exams_grade_percentage';
+                break;
+
+            default:
+                $percentage_label = 'other_performances_grade_percentage';
                 break;
         }
-    }
 
-    public function computeAssignmentsGrade($student_id, $class_id, $rubric)
-    {
-
-        $assignments = Assignment::whereHas('school_work', function ($q) use ($class_id) {
-            $q->where('class_id', $class_id);
-        })->get();
-
-        $student_submissions = StudentSubmission::where('school_work_type', StudentSubmission::ASSIGNMENT_TYPE)
-            ->where('student_id', $student_id)
-            ->get();
-
-        $assignmentTotalPoints = $assignments->sum('points');
-        $assignmentScore = $student_submissions->sum('score');
-
-        $percentage_score = ($assignmentScore / $assignmentTotalPoints) * 100; // 100%
-
-        $assignment_percentage = $rubric->assignment_percentage / 100;
-        $weighted_assignment_grade = $percentage_score * $assignment_percentage;
-
+        // Update or create the student grade
         StudentSchoolWorkGrade::updateOrCreate([
             'class_id' => $class_id,
             'student_id' => $student_id,
             'assessment_category' => $rubric->assessment_type,
         ], [
-            'assignment_grade_percentage' => $weighted_assignment_grade,
+            $percentage_label => $weightedGrade,
         ]);
 
-        return $weighted_assignment_grade;
-
-    }
-
-    public function computeActivitiesGrade($student_id, $class_id, $rubric)
-    {
-
-        $activities = Activity::whereHas('school_work', function ($q) use ($class_id) {
-            $q->where('class_id', $class_id);
-        })->get();
-
-        $student_submissions = StudentSubmission::where('school_work_type', StudentSubmission::ACTIVITY_TYPE)
-            ->where('student_id', $student_id)
-            ->get();
-
-        $activityTotalPoints = $activities->sum('points');
-        $activityScore = $student_submissions->sum('score');
-
-        $percentage_score = ($activityScore / $activityTotalPoints) * 100;
-        $activity_percentage = $rubric->activity_percentage / 100;
-        $weighted_activity_grade = $percentage_score * $activity_percentage;
-
-        StudentSchoolWorkGrade::updateOrCreate([
-            'class_id' => $class_id,
-            'student_id' => $student_id,
-            'assessment_category' => $rubric->assessment_type,
-        ], [
-            'activities_grade_percentage' => $weighted_activity_grade,
-        ]);
-
-        return $weighted_activity_grade;
-
-    }
-
-    public function computeQuizGrade($student_id, $class_id, $rubric)
-    {
-
-        $quizzes = Activity::whereHas('school_work', function ($q) use ($class_id) {
-            $q->where('class_id', $class_id);
-        })->get();
-
-        $student_submissions = StudentSubmission::where('school_work_type', StudentSubmission::ACTIVITY_TYPE)
-            ->where('student_id', $student_id)
-            ->get();
-
-        $quizTotalPoints = $quizzes->sum('points');
-        $quizScore = $student_submissions->sum('score');
-
-        $percentage_score = ($quizScore / $quizTotalPoints) * 100;
-        $quiz_percentage = $rubric->quiz_percentage / 100;
-        $weighted_quiz_grade = $percentage_score * $quiz_percentage;
-
-        StudentSchoolWorkGrade::updateOrCreate([
-            'class_id' => $class_id,
-            'student_id' => $student_id,
-            'assessment_category' => $rubric->assessment_type,
-        ], [
-            'quizzes_grade_percentage' => $weighted_quiz_grade,
-        ]);
-
-        return $weighted_quiz_grade;
-    }
-
-    public function computeExamGrade($student_id, $class_id, $rubric)
-    {
-
-        $exams = Exam::whereHas('school_work', function ($q) use ($class_id) {
-            $q->where('class_id', $class_id);
-        })->get();
-
-        $student_submissions = StudentSubmission::where('school_work_type', StudentSubmission::EXAM_TYPE)
-            ->where('student_id', $student_id)
-            ->get();
-
-        $examTotalPoints = $exams->sum('points');
-        $examScore = $student_submissions->sum('score');
-
-        $percentage_score = ($examScore / $examTotalPoints) * 100;
-        $exam_percentage = $rubric->exam_percentage / 100;
-        $weighted_exam_grade = $percentage_score * $exam_percentage;
-
-        StudentSchoolWorkGrade::updateOrCreate([
-            'class_id' => $class_id,
-            'student_id' => $student_id,
-            'assessment_category' => $rubric->assessment_type,
-        ], [
-            'exams_grade_percentage' => $weighted_exam_grade,
-        ]);
-
-        return $weighted_exam_grade;
+        return $weightedGrade;
     }
 }

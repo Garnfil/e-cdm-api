@@ -9,6 +9,7 @@ use App\Models\ClassStudent;
 use App\Models\SchoolWork;
 use App\Models\Section;
 use App\Models\Student;
+use App\Models\StudentSubmission;
 use App\Models\Subject;
 use App\Services\ExceptionHandlerService;
 use DB;
@@ -121,7 +122,7 @@ class ClassRoomController extends Controller
 
     public function show(Request $request, $id)
     {
-        $classroom = Classroom::where('id', $id)->first();
+        $classroom = Classroom::where('id', $id)->with('subject', 'section')->first();
 
         return response()->json([
             'status' => 'success',
@@ -148,7 +149,13 @@ class ClassRoomController extends Controller
     public function getClassSchoolWorks(Request $request, $class_id)
     {
         $auth = auth()->user()->role;
-        $school_works = SchoolWork::where('class_id', $class_id)->latest()->get();
+        $request_type = $request->query('type');
+        $school_works = SchoolWork::where('class_id', $class_id)
+            ->when($request_type, function ($q) use ($request_type) {
+                $q->where('type', $request_type);
+            })
+            ->latest()
+            ->get();
 
         $school_works->each(function ($school_work) {
             switch ($school_work->type) {
@@ -173,6 +180,53 @@ class ClassRoomController extends Controller
         return response()->json([
             'status' => 'success',
             'school_works' => $school_works,
+        ]);
+    }
+
+    public function getClassStudentSchoolWorks(Request $request, $class_id, $student_id)
+    {
+        $request_type = $request->query('type');
+
+        $school_works = SchoolWork::select('id', 'class_id', 'title', 'type')->where('class_id', $class_id)
+            ->where('type', $request_type)
+            ->get();
+
+        $school_works->each(function ($school_work) {
+            switch ($school_work->type) {
+                case 'assignment':
+                    $school_work->points = $school_work->schoolWorkPoints();
+                    $school_work->load('assignment');
+                    break;
+
+                case 'activity':
+                    $school_work->points = $school_work->schoolWorkPoints();
+                    $school_work->load('activity');
+                    break;
+
+                case 'quiz':
+                    $school_work->points = $school_work->schoolWorkPoints();
+                    $school_work->load('quiz');
+                    break;
+
+                case 'exam':
+                    $school_work->points = $school_work->schoolWorkPoints();
+                    $school_work->load('exam');
+                    break;
+            }
+        });
+
+        $school_work_ids = $school_works->pluck('id')->toArray();
+
+        $student_submissions = StudentSubmission::select('id', 'school_work_id', 'student_id', 'score')
+            ->where('student_id', $student_id)
+            ->where('school_work_type', $request_type)
+            ->whereIn('school_work_id', $school_work_ids)
+            ->get();
+
+        return response()->json([
+            'status' => 'success',
+            'school_works' => $school_works,
+            'student_submissions' => $student_submissions,
         ]);
     }
 

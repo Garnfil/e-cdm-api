@@ -37,6 +37,8 @@ Route::get('/', function () {
 Route::get('admin/login', [AuthController::class, 'login'])->name('login.get');
 Route::post('admin/login', [AuthController::class, 'saveLogin'])->name('login.post');
 
+Route::post('admin/logout', [AuthController::class, 'logout']);
+
 Route::group(['prefix' => 'admin', 'as' => 'admin.'], function () {
     Route::get('dashboard', [DashboardController::class, 'dashboard'])->name('dashboard');
 

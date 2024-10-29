@@ -19,6 +19,7 @@ use App\Http\Controllers\API\SectionController;
 use App\Http\Controllers\API\StudentAssignmentController;
 use App\Http\Controllers\API\StudentController;
 use App\Http\Controllers\API\StudentQuizController;
+use App\Http\Controllers\API\StudentSchoolWorkGradeController;
 use App\Http\Controllers\API\StudentSubmissionController;
 use App\Http\Controllers\API\SubjectController;
 use App\Http\Controllers\API\WhiteboardController;
@@ -54,12 +55,14 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::get('classes/active', [ClassRoomController::class, 'get']);
     Route::post('classes/join', [ClassRoomController::class, 'classJoinStudent']);
     Route::get('classes/{class_id}/school-works', [ClassRoomController::class, 'getClassSchoolWorks']);
+    Route::get('classes/{class_id}/students/{student_id}/school-works', [ClassRoomController::class, 'getClassStudentSchoolWorks']);
     Route::get('classes/{class_id}/students', [ClassRoomController::class, 'getClassStudents']);
     Route::get('classes/{id}', [ClassRoomController::class, 'show']);
     Route::get('instructors/{instructor_id}/classes', [ClassRoomController::class, 'getInstructorClasses']);
 
     Route::post('school-works/attachments/single-upload', [SchoolWorkController::class, 'uploadSingleAttachment']);
     Route::delete('school-works/attachments/{attachment_id}/destroy', [SchoolWorkController::class, 'deleteAttachment']);
+    // Route::get('school-works')
     Route::get('school-works/{id}/quizzes/questions', [SchoolWorkController::class, 'quizQuestions']);
     Route::get('school-works/{id}', [SchoolWorkController::class, 'show']);
 
@@ -67,9 +70,16 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::post('attendances', [AttendanceController::class, 'store']);
 
     Route::post('student-school-works/submissions', [StudentSubmissionController::class, 'store']);
+    Route::post('student-school-works/submissions-with-grade/{school_work_type}', [StudentSubmissionController::class, 'storeWithGrade']);
     Route::post('student-school-works/submissions/{submission_id}/graded', [StudentSubmissionController::class, 'gradeStudentSubmission']);
+    Route::get('student-school-works/submissions/classes/{class_id}/students/{student_id}', [StudentSubmissionController::class, 'classStudentSubmissions']);
     Route::get('student-school-works/submissions/{submission_id}', [StudentSubmissionController::class, 'show']);
     Route::get('student-school-works/{school_work_id}/submissions', [StudentSubmissionController::class, 'schoolWorkStudentSubmissions']);
+
+    Route::get('students/{student_id}/classes/{class_id}/school-work-grades', [StudentSchoolWorkGradeController::class, 'getStudentSchoolWorkGrades']);
+
+    Route::get('modules', [ModuleController::class, 'getAll']);
+    Route::post('modules', [ModuleController::class, 'store']);
 
     Route::get('quizzes', [QuizController::class, 'getAll']);
     Route::post('quizzes', [QuizController::class, 'store']);

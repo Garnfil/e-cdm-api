@@ -26,8 +26,8 @@ class ModuleRequest extends FormRequest
             'instructor_id' => 'sometimes|exists:instructors,id',
             'title' => 'sometimes|string|max:255',
             'description' => 'sometimes|string',
-            'status' => 'sometimes|in:draft,scheduled,posted',
-            'scheduled_datetime' => 'nullable|date',
+            'status' => 'nullable|in:draft,scheduled,posted',
+            'scheduled_datetime' => 'nullable',
         ];
     }
 }

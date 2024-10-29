@@ -48,6 +48,11 @@ class SchoolWork extends Model
         return $this->hasOne(Exam::class, 'school_work_id');
     }
 
+    public function student_submissions()
+    {
+        return $this->hasMany(StudentSubmission::class, 'school_work_id');
+    }
+
     public function schoolWorkPoints()
     {
         $points = 0;
