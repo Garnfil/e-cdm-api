@@ -77,6 +77,7 @@ class ActivityController extends Controller
 
         $assignment = Activity::create([
             'school_work_id' => $school_work->id,
+            'activity_type' => 'practical',
             'notes' => $request->notes,
             'points' => $request->points,
             'assessment_type' => $class->current_assessment_category,
