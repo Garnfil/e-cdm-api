@@ -52,6 +52,7 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
 
     Route::get('classes', [ClassRoomController::class, 'getAll']);
     Route::post('classes', [ClassRoomController::class, 'store']);
+    Route::get('classes/students/{student_id}', [ClassRoomController::class, 'getStudentClasses']);
     Route::get('classes/active', [ClassRoomController::class, 'get']);
     Route::post('classes/join', [ClassRoomController::class, 'classJoinStudent']);
     Route::get('classes/{class_id}/school-works', [ClassRoomController::class, 'getClassSchoolWorks']);
@@ -145,6 +146,7 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::get('class-schedules', [ClassScheduleController::class, 'get']);
     Route::post('class-schedules', [ClassScheduleController::class, 'store']);
     Route::get('instructors/{instructor_id}/class-schedules', [ClassScheduleController::class, 'instructorClassesSchedule']);
+    Route::get('students/{student_id}/class-schedules', [ClassScheduleController::class, 'studentClassesSchedule']);
 });
 
 Route::post('whiteboard/update/{sessionId}', [WhiteboardController::class, 'update']);

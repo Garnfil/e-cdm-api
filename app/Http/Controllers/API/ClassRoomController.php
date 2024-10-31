@@ -49,6 +49,18 @@ class ClassRoomController extends Controller
         ]);
     }
 
+    public function getStudentClasses(Request $request)
+    {
+        $classIds = ClassStudent::where('student_id', $request->student_id)->pluck('class_id')->toArray();
+
+        $classes = Classroom::whereIn('id', $classIds)->get();
+
+        return response()->json([
+            'status' => 'success',
+            'classes' => $classes,
+        ]);
+    }
+
     public function store(StoreRequest $request)
     {
         try {
