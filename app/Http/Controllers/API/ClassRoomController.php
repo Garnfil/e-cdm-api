@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\ClassRoom\StoreRequest;
 use App\Models\Classroom;
 use App\Models\ClassStudent;
+use App\Models\Module;
 use App\Models\SchoolWork;
 use App\Models\Section;
 use App\Models\Student;
@@ -169,6 +170,10 @@ class ClassRoomController extends Controller
             ->latest()
             ->get();
 
+        $modules = Module::where('class_id', $class_id)->get();
+
+        // $school_works->merge($modules)
+
         $school_works->each(function ($school_work) {
             switch ($school_work->type) {
                 case 'assignment':
@@ -192,6 +197,7 @@ class ClassRoomController extends Controller
         return response()->json([
             'status' => 'success',
             'school_works' => $school_works,
+            'modules' => $modules,
         ]);
     }
 

@@ -54,14 +54,14 @@ class DiscussionSeeder extends Seeder
         DiscussionComment::create([
             'post_id' => 1,
             'user_id' => 1,
-            'user_type' => 'instructor',
+            'user_type' => 'Instructor',
             'comment' => 'Great public post! Thanks for sharing.',
         ]);
 
         DiscussionComment::create([
             'post_id' => 1,
             'user_id' => 1,
-            'user_type' => 'student',
+            'user_type' => 'Student',
             'comment' => 'Interesting discussion on this topic!',
         ]);
     }

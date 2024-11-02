@@ -109,4 +109,13 @@ class InstructorController extends Controller
     {
         //
     }
+
+    public function all(Request $request)
+    {
+        $instructors = Instructor::latest()->get();
+
+        return response()->json([
+            'instructors' => $instructors,
+        ]);
+    }
 }

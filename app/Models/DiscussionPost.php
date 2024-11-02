@@ -25,7 +25,7 @@ class DiscussionPost extends Model
 
     public function comments()
     {
-        return $this->hasMany(DiscussionComment::class, 'post_id');
+        return $this->hasMany(DiscussionComment::class, 'post_id')->latest();
     }
 
     public function votes()
@@ -37,7 +37,7 @@ class DiscussionPost extends Model
     public function user()
     {
         // Ensure case-sensitivity
-        if ($this->user_type === 'student') {
+        if ($this->user_type === 'App\Models\Student') {
             return $this->student(); // Correct lowercase call
         } else {
             return $this->instructor();

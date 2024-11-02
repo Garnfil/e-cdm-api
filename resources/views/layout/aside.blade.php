@@ -40,8 +40,8 @@
                     </a>
                 </li>
                 <li class="menu-item">
-                    <a href="pages-account-settings-connections.html" class="menu-link">
-                        <div data-i18n="Parents">Parents</div>
+                    <a href="{{ route('admin.guardians.index') }}" class="menu-link">
+                        <div data-i18n="Guardians">Guardians</div>
                     </a>
                 </li>
                 <li class="menu-item">
@@ -120,6 +120,12 @@
             <a href="{{ route('admin.attendances.index') }}" class="menu-link">
                 <i class="menu-icon tf-icons bx bx-collection"></i>
                 <div data-i18n="Sections">Attendances</div>
+            </a>
+        </li>
+        <li class="menu-item">
+            <a href="{{ route('admin.discussions.index') }}" class="menu-link">
+                <i class="menu-icon tf-icons bx bx-collection"></i>
+                <div data-i18n="Discussions">Discussions</div>
             </a>
         </li>
     </ul>

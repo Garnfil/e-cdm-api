@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\ClassRubric;
 use App\Models\StudentSchoolWorkGrade;
 use App\Models\StudentSubmission;
+use Illuminate\Http\Request;
 
 class StudentSchoolWorkGradeController extends Controller
 {
@@ -53,5 +54,10 @@ class StudentSchoolWorkGradeController extends Controller
             ],
             'rubrics' => $rubrics,
         ]);
+    }
+
+    public function getStudentAllClassGrades(Request $request)
+    {
+        $school_work_grades = StudentSchoolWorkGrade::where('student_id', $request->student_id);
     }
 }

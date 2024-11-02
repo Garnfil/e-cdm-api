@@ -4,11 +4,14 @@ namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Discussion\StoreRequest;
+use App\Models\DiscussionComment;
 use App\Models\DiscussionPost;
+use App\Models\DiscussionVote;
 use App\Services\ExceptionHandlerService;
 use DB;
 use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
@@ -46,11 +49,25 @@ class DiscussionForumController extends Controller
 
     public function show(Request $request, $id)
     {
+        $user = Auth::user();
         $discussion = DiscussionPost::where('id', $id)
-            ->with('comments')
+            ->with([
+                'votes',
+                'comments.user',
+            ])
             ->first();
 
+        $user_type = $user->role == 'student' ? 'App\Models\Student' : 'App\Models\Instructor';
+
+        $user_discussion_vote = DiscussionVote::where('post_id', $discussion->id)
+            ->where('user_id', $user->id)
+            ->where('user_type', $user_type)->first();
+
         $discussion->user = $discussion->user();
+        $discussion->upvotes_count = $discussion->upvotesCount();
+        $discussion->downvotes_count = $discussion->downvotesCount();
+        $discussion->user_vote_type = $user_discussion_vote->vote_type;
+        $discussion->user_has_vote = $user_discussion_vote->exists() ? true : false;
 
         return response()->json([
             'status' => 'success',
@@ -74,12 +91,13 @@ class DiscussionForumController extends Controller
     {
         try {
             DB::beginTransaction();
+            $user_type = $request->user_type == 'student' ? 'App\Models\Student' : 'App\Models\Instructor';
 
             $discussion = DiscussionPost::create([
                 'title' => $request->title,
                 'content' => $request->discussion_content,
                 'user_id' => $request->user_id,
-                'user_type' => $request->user_type,
+                'user_type' => $user_type,
                 'visibility' => $request->visibility,
                 'institute_id' => $request->visibility == 'private' ? $request->institute_id : null,
                 'course_id' => $request->visibility == 'private' ? $request->course_id : null,
@@ -112,6 +130,49 @@ class DiscussionForumController extends Controller
 
             return $exceptionHandlerService->__generateExceptionResponse($exception);
         }
+    }
+
+    public function storeComment(Request $request, $id)
+    {
+        $request->validate([
+            'comment' => 'required|string',
+            'user_id' => 'required|integer',
+            'user_type' => 'required|in:student,instructor',
+        ]);
+
+        $user_type = $request->user_type == 'student' ? 'App\Models\Student' : 'App\Models\Instructor';
+
+        $comment = new DiscussionComment;
+        $comment->post_id = $id;
+        $comment->user_id = $request->user_id;
+        $comment->user_type = $user_type;
+        $comment->comment = $request->comment;
+        $comment->save();
+
+        return response()->json($comment);
+    }
+
+    public function storeVote(Request $request, $id)
+    {
+        $request->validate([
+            'vote_type' => 'required|in:upvote,downvote',
+            'user_id' => 'required|integer',
+            'user_type' => 'required|in:student,instructor',
+        ]);
+
+        $user_type = $request->user_type == 'student' ? 'App\Models\Student' : 'App\Models\Instructor';
+
+        $vote = DiscussionVote::updateOrCreate([
+            'post_id' => $id,
+            'comment_id' => $request->comment_id ?? null,
+            'user_id' => $request->user_id,
+            'user_type' => $user_type,
+        ], ['vote_type' => $request->vote_type]);
+
+        return response()->json([
+            'status' => 'success',
+            'vote' => $vote,
+        ]);
     }
 
     public function update(Request $request, $id) {}

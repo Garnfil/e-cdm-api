@@ -12,4 +12,9 @@ class Module extends Model
     protected $table = 'modules';
 
     protected $fillable = ['class_id', 'instructor_id', 'title', 'description', 'file_paths', 'status', 'scheduled_datetime'];
+
+    public function attachments()
+    {
+        return $this->hasMany(ModuleAttachment::class, 'module_id');
+    }
 }

@@ -157,7 +157,7 @@ return new class extends Migration
             $table->double('activities_grade_percentage', 10, 2)->default(0);
             $table->double('quizzes_grade_percentage', 10, 2)->default(0);
             $table->double('exams_grade_percentage', 10, 2)->default(0);
-            $table->double('atttendance_grade_percentage', 10, 2)->default(0);
+            $table->double('attendance_grade_percentage', 10, 2)->default(0);
             $table->double('other_performances_grade_percentage', 10, 2)->default(0);
             $table->timestamps();
         });

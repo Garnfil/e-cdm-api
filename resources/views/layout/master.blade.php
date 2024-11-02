@@ -60,7 +60,9 @@
 
     <link rel="stylesheet" href="{{ URL::asset('assets/css/palette-callout.css') }}">
     <link rel="stylesheet" href="{{ URL::asset('assets/css/app-transports.css') }}">
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
 
+  
     <!-- Page CSS -->
 
     <!-- Helpers -->
@@ -138,6 +140,7 @@
     <script src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 
     @if (Session::get('success'))
 <script>

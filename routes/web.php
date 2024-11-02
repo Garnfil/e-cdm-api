@@ -8,7 +8,9 @@ use App\Http\Controllers\Web\AuthController;
 use App\Http\Controllers\Web\ClassController;
 use App\Http\Controllers\Web\CourseController;
 use App\Http\Controllers\Web\DashboardController;
+use App\Http\Controllers\Web\DiscussionController;
 use App\Http\Controllers\Web\ExamController;
+use App\Http\Controllers\Web\GuardianController;
 use App\Http\Controllers\Web\InstituteController;
 use App\Http\Controllers\Web\InstructorController;
 use App\Http\Controllers\Web\QuizController;
@@ -37,13 +39,17 @@ Route::get('/', function () {
 Route::get('admin/login', [AuthController::class, 'login'])->name('login.get');
 Route::post('admin/login', [AuthController::class, 'saveLogin'])->name('login.post');
 
-Route::post('admin/logout', [AuthController::class, 'logout']);
+Route::group(['prefix' => 'admin', 'as' => 'admin.', 'middleware' => ['auth']], function () {
+    Route::post('logout', [AuthController::class, 'logout'])->name('logout');
 
-Route::group(['prefix' => 'admin', 'as' => 'admin.'], function () {
     Route::get('dashboard', [DashboardController::class, 'dashboard'])->name('dashboard');
 
+    Route::get('students/all', [StudentController::class, 'all']);
     Route::resource('students', StudentController::class);
+
+    Route::get('instructors/all', [InstructorController::class, 'all']);
     Route::resource('instructors', InstructorController::class);
+
     Route::resource('institutes', InstituteController::class);
     Route::resource('courses', CourseController::class);
     Route::resource('sections', SectionController::class);
@@ -54,6 +60,8 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.'], function () {
     Route::resource('quizzes', QuizController::class);
     Route::resource('exams', ExamController::class);
     Route::resource('attendances', AttendanceController::class);
+    Route::resource('discussions', DiscussionController::class);
+    Route::resource('guardians', GuardianController::class);
 
     Route::post('quiz-questions/store', [QuizQuestionController::class, 'store'])->name('quiz_questions.store');
 

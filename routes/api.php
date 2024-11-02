@@ -10,6 +10,7 @@ use App\Http\Controllers\API\ClassScheduleController;
 use App\Http\Controllers\API\CourseController;
 use App\Http\Controllers\API\DiscussionForumController;
 use App\Http\Controllers\API\ExamController;
+use App\Http\Controllers\API\GuardianAuthenticationController;
 use App\Http\Controllers\API\InstituteController;
 use App\Http\Controllers\API\ModuleController;
 use App\Http\Controllers\API\QuizController;
@@ -40,6 +41,8 @@ Route::post('instructor/login', [InstructorAuthenticationController::class, 'log
 
 Route::post('student/login', [StudentAuthenticationController::class, 'login']);
 Route::post('student/register', [StudentAuthenticationController::class, 'register']);
+
+Route::post('guardian/login', [GuardianAuthenticationController::class, 'login']);
 
 Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::prefix('students')->group(function () {
@@ -78,9 +81,7 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::get('student-school-works/{school_work_id}/submissions', [StudentSubmissionController::class, 'schoolWorkStudentSubmissions']);
 
     Route::get('students/{student_id}/classes/{class_id}/school-work-grades', [StudentSchoolWorkGradeController::class, 'getStudentSchoolWorkGrades']);
-
-    Route::get('modules', [ModuleController::class, 'getAll']);
-    Route::post('modules', [ModuleController::class, 'store']);
+    Route::get('students/{student_id}/classes/school-work-grades', [StudentSchoolWorkGradeController::class, 'getStudentAllClassGrades']);
 
     Route::get('quizzes', [QuizController::class, 'getAll']);
     Route::post('quizzes', [QuizController::class, 'store']);
@@ -114,6 +115,7 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::get('exams/{id}', [ExamController::class, 'show']);
 
     Route::get('classes/{class_id}/modules', [ModuleController::class, 'classModules']);
+    Route::post('modules/attachments/single-upload', [ModuleController::class, 'uploadSingleAttachment']);
     Route::prefix('modules')->group(function () {
         Route::get('/', [ModuleController::class, 'getAll']);
         Route::get('/{id}', [ModuleController::class, 'show']);
@@ -140,6 +142,8 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
 
     Route::get('discussions', [DiscussionForumController::class, 'get']);
     Route::post('discussions', [DiscussionForumController::class, 'store']);
+    Route::post('discussions/{id}/comments', [DiscussionForumController::class, 'storeComment']);
+    Route::post('discussions/{id}/votes', [DiscussionForumController::class, 'storeVote']);
     Route::get('users/{user_id}/{user_type}/discussions', [DiscussionForumController::class, 'ownerDiscussions']);
     Route::get('discussions/{id}', [DiscussionForumController::class, 'show']);
 

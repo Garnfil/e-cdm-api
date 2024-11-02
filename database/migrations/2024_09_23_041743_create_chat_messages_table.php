@@ -13,13 +13,14 @@ return new class extends Migration
     {
         Schema::create('chat_messages', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('sender_id')->nullable(); // This can be either a student or an instructor
-            $table->foreignId('receiver_id')->nullable(); // This can also be either
-            $table->enum('sender_type', ['student', 'instructor']); // To differentiate sender type
-            $table->enum('receiver_type', ['student', 'instructor']); // To differentiate receiver type
-            $table->text('message');
-            $table->date('message_date');
+            $table->foreignId('class_id')->constrained('classes')->onDelete('cascade');
+            $table->unsignedBigInteger('sender_id');  // Can reference either student or instructor
+            $table->string('sender_type');            // To specify the type (Student or Instructor)
+            $table->text('content');                  // The message content
             $table->timestamps();
+
+            // Index for sender polymorphic relationship
+            $table->index(['sender_id', 'sender_type']);
         });
     }
 

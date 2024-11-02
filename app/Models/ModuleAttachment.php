@@ -18,6 +18,10 @@ class ModuleAttachment extends Model
         'status',
     ];
 
+    const ATTACHMENT_TYPE_FILE = 'file';
+
+    const ATTACHMENT_TYPE_LINK = 'link';
+
     public function module()
     {
         return $this->belongsTo(Module::class, 'module_id');

@@ -8333,6 +8333,17 @@ form select.selectpicker.is-invalid ~ .btn {
     border-color: #ff3e1d;
 }
 
+.select2-container .select2-selection--single {
+    height: 38px !important;
+}
+.select2-container--default .select2-selection--single {
+    border: 1px solid #000 !important;
+}
+
+.select2-container--default .select2-selection--single .select2-selection__rendered {
+    margin-top: 5px;
+}
+
 .modal-content {
     box-shadow: 0 2px 16px 0 rgba(67, 89, 113, 0.45);
 }

@@ -8,6 +8,8 @@ use Illuminate\Http\Request;
 
 class WhiteboardController extends Controller
 {
+    public function create(Request $request) {}
+
     public function update(Request $request, $sessionId)
     {
 
@@ -15,6 +17,6 @@ class WhiteboardController extends Controller
         $data = $request->all();
         event(new WhiteboardUpdated($data, $sessionId));
 
-        return response()->json(['status' => 'Whiteboard updated', $data]);
+        return response()->json(['status' => 'Whiteboard updated', 'data' => $data]);
     }
 }

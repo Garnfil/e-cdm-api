@@ -112,4 +112,19 @@ class StudentController extends Controller
     {
         //
     }
+
+    public function all(Request $request)
+    {
+        $students = Student::query();
+
+        if ($request->query('id')) {
+            $students = $students->where('id', $request->query('id'));
+        }
+
+        $students = $students->get();
+
+        return response()->json([
+            'students' => $students,
+        ]);
+    }
 }
