@@ -33,7 +33,11 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    if (auth()->check()) {
+        return redirect()->route('admin.dashboard');
+    } else {
+        return redirect()->route('login.get');
+    }
 });
 
 Route::get('admin/login', [AuthController::class, 'login'])->name('login.get');
