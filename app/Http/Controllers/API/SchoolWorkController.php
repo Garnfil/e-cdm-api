@@ -120,4 +120,43 @@ class SchoolWorkController extends Controller
             'school_work' => $school_work,
         ]);
     }
+
+    public function todoSchoolWorks(Request $request)
+    {
+        $student_id = $request->student_id;
+        $class_id = $request->class_id;
+
+        $today = now();
+
+        $school_works = SchoolWork::where('class_id', $class_id)
+            ->where('due_datetime', '>', $today)
+            ->whereDoesntHave('student_submissions', function ($query) use ($student_id) {
+                $query->where('student_id', $student_id)
+                    ->whereNotNull('datetime_submitted');
+            })
+            ->get();
+
+        return response()->json([
+            'status' => 'success',
+            'school_works' => $school_works,
+        ]);
+    }
+
+    public function completedSchoolWorks(Request $request)
+    {
+        $student_id = $request->student_id;
+        $class_id = $request->class_id;
+
+        $school_works = SchoolWork::where('class_id', $class_id)
+            ->whereHas('student_submissions', function ($query) use ($student_id) {
+                $query->where('student_id', $student_id)
+                    ->whereNotNull('datetime_submitted');
+            })
+            ->get();
+
+        return response()->json([
+            'status' => 'success',
+            'school_works' => $school_works,
+        ]);
+    }
 }
