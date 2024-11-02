@@ -18,6 +18,12 @@ class SchoolWorkController extends Controller
     {
         $school_work = SchoolWork::with('attachments')->find($id);
 
+        if (! $school_work) {
+            return response()->json([
+                'message' => 'No School Work Found',
+            ], 404);
+        }
+
         switch ($school_work->type) {
             case 'assignment':
                 $school_work->load('assignment');
