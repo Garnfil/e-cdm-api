@@ -18,6 +18,7 @@ use App\Http\Controllers\API\QuizQuestionController;
 use App\Http\Controllers\API\SchoolWorkController;
 use App\Http\Controllers\API\SectionController;
 use App\Http\Controllers\API\StudentAssignmentController;
+use App\Http\Controllers\API\StudentAttendanceController;
 use App\Http\Controllers\API\StudentController;
 use App\Http\Controllers\API\StudentQuizController;
 use App\Http\Controllers\API\StudentSchoolWorkGradeController;
@@ -69,6 +70,8 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     // Route::get('school-works')
     Route::get('school-works/{id}/quizzes/questions', [SchoolWorkController::class, 'quizQuestions']);
     Route::get('school-works/{id}', [SchoolWorkController::class, 'show']);
+
+    Route::post('attendances/students/submit', [StudentAttendanceController::class, 'store']);
 
     Route::get('attendances/classes/{class_id}/today', [AttendanceController::class, 'getClassAttendanceToday']);
     Route::get('attendances/classes/{class_id}', [AttendanceController::class, 'classAttendances']);

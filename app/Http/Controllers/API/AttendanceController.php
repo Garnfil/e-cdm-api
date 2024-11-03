@@ -4,8 +4,10 @@ namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
 use App\Models\Attendance;
+use App\Models\StudentAttendance;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 
 class AttendanceController extends Controller
@@ -76,9 +78,22 @@ class AttendanceController extends Controller
 
     public function getClassAttendanceToday($class_id)
     {
+        $student = Auth::user();
+
         $attendance = Attendance::where('class_id', $class_id)
             ->whereRaw('DATE_ADD(attendance_datetime, INTERVAL grace_period_minute MINUTE) >= ?', [Carbon::now()])
             ->first();
+
+        if ($attendance) {
+            $student_attendance = StudentAttendance::where('attendance_id', $attendance->id)->where('student_id', $student->id)->exists();
+
+            if ($student_attendance) {
+                return response()->json([
+                    'status' => 'success',
+                    'attendance' => null,
+                ]);
+            }
+        }
 
         return response()->json([
             'status' => 'success',
