@@ -77,12 +77,13 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::get('attendances/classes/{class_id}', [AttendanceController::class, 'classAttendances']);
     Route::post('attendances', [AttendanceController::class, 'store']);
 
-    Route::post('student-school-works/submissions', [StudentSubmissionController::class, 'store']);
     Route::post('student-school-works/submissions-with-grade/{school_work_type}', [StudentSubmissionController::class, 'storeWithGrade']);
     Route::post('student-school-works/submissions/{submission_id}/graded', [StudentSubmissionController::class, 'gradeStudentSubmission']);
-    Route::get('student-school-works/submissions/classes/{class_id}/students/{student_id}', [StudentSubmissionController::class, 'classStudentSubmission']);
-    Route::get('student-school-works/submissions/{submission_id}', [StudentSubmissionController::class, 'show']);
+    Route::post('student-school-works/submissions', [StudentSubmissionController::class, 'store']);
+
+    Route::get('student-school-works/{school_work_id}/submissions/students/{student_id}', [StudentSubmissionController::class, 'classStudentSubmission']);
     Route::get('student-school-works/{school_work_id}/submissions', [StudentSubmissionController::class, 'schoolWorkStudentSubmissions']);
+    Route::get('student-school-works/submissions/{submission_id}', [StudentSubmissionController::class, 'show']);
 
     Route::get('students/{student_id}/classes/{class_id}/school-works/todos', [SchoolWorkController::class, 'todoSchoolWorks']);
     Route::get('students/{student_id}/classes/{class_id}/school-works/completed', [SchoolWorkController::class, 'completedSchoolWorks']);
