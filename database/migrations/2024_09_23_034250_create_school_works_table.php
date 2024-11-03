@@ -61,7 +61,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('student_submission_id')->constrained('student_submissions')->cascadeOnDelete();
             $table->foreignId('student_id')->constrained('students')->cascadeOnDelete();
-            $table->string('attachment_name');
+            $table->text('attachment_name');
             $table->enum('attachment_type', ['file', 'link']);
             $table->enum('status', ['drafted', 'submitted']);
             $table->timestamps();

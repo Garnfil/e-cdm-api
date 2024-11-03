@@ -166,7 +166,7 @@ class StudentSubmissionController extends Controller
         } catch (Exception $e) {
             DB::rollBack();
 
-            return response($e);
+            // return response($e, 400);
             $exceptionHandlerService = new ExceptionHandlerService;
 
             return $exceptionHandlerService->__generateExceptionResponse($e);
