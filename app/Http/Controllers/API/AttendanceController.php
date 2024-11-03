@@ -77,7 +77,7 @@ class AttendanceController extends Controller
     public function getClassAttendanceToday($class_id)
     {
         $attendance = Attendance::where('class_id', $class_id)
-            ->whereRaw('DATE_ADD(attendance_datetime, INTERVAL grace_period_minute MINUTE) <= ?', [Carbon::now()])
+            ->whereRaw('DATE_ADD(attendance_datetime, INTERVAL grace_period_minute MINUTE) >= ?', [Carbon::now()])
             ->first();
 
         return response()->json([
