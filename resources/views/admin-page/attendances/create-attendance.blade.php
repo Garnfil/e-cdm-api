@@ -32,7 +32,7 @@
                             </div>
                             <div class="mb-3">
                                 <label for="attendance-datetime" class="form-label">Attendance DateTime</label>
-                                <input type="datetime-local" class="form-control" name="attendance-datetime">
+                                <input type="datetime-local" class="form-control" name="attendance_datetime">
                             </div>
                             <button class="btn btn-primary w-100 d-block">Save Attendance</button>
                         </form>
