@@ -136,7 +136,7 @@ class StudentSubmissionController extends Controller
 
                         $path_extension = $attachment['attachment']->getClientOriginalExtension();
 
-                        if (in_array($path_extension, ['pdf', 'png', 'jpg', 'jpeg', 'webp'])) {
+                        if (! in_array($path_extension, ['pdf', 'png', 'jpg', 'jpeg', 'webp'])) {
                             throw new Exception('The requested attachment does not correspond to a recognized file type. The following file types are supported: pdf, png, jpg, jpeg, and webp.', 422);
                         }
 
