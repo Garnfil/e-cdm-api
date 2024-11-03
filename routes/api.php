@@ -80,7 +80,7 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::post('student-school-works/submissions', [StudentSubmissionController::class, 'store']);
     Route::post('student-school-works/submissions-with-grade/{school_work_type}', [StudentSubmissionController::class, 'storeWithGrade']);
     Route::post('student-school-works/submissions/{submission_id}/graded', [StudentSubmissionController::class, 'gradeStudentSubmission']);
-    Route::get('student-school-works/submissions/classes/{class_id}/students/{student_id}', [StudentSubmissionController::class, 'classStudentSubmissions']);
+    Route::get('student-school-works/submissions/classes/{class_id}/students/{student_id}', [StudentSubmissionController::class, 'classStudentSubmission']);
     Route::get('student-school-works/submissions/{submission_id}', [StudentSubmissionController::class, 'show']);
     Route::get('student-school-works/{school_work_id}/submissions', [StudentSubmissionController::class, 'schoolWorkStudentSubmissions']);
 

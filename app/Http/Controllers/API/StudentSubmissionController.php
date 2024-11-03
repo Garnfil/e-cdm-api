@@ -35,16 +35,16 @@ class StudentSubmissionController extends Controller
         ]);
     }
 
-    public function classStudentSubmissions(Request $request)
+    public function classStudentSubmission(Request $request)
     {
-        $studentSubmissions = StudentSubmission::where('student_id', operator: $request->student_id)
+        $studentSubmission = StudentSubmission::where('student_id', operator: $request->student_id)
             ->whereHas('school_work', function ($q) use ($request) {
                 return $q->where('class_id', $request->class_id);
-            })->get();
+            })->first();
 
         return response()->json([
             'status' => 'success',
-            'student_submissions' => $studentSubmissions,
+            'student_submission' => $studentSubmission,
         ]);
     }
 
