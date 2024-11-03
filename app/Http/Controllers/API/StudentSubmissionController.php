@@ -119,12 +119,13 @@ class StudentSubmissionController extends Controller
                 throw new Exception('School Work Not Found', 404);
             }
 
-            $studentSubmission = StudentSubmission::create([
+            $studentSubmission = StudentSubmission::updateOrCreate([
                 'school_work_id' => $schoolWork->id,
                 'student_id' => $request->student_id,
+                'school_work_type' => $schoolWork->type,
+            ], [
                 'score' => 0,
                 'grade' => 0,
-                'school_work_type' => $schoolWork->type,
                 'datetime_submitted' => Carbon::now(),
             ]);
 
