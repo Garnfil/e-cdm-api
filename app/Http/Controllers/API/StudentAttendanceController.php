@@ -12,6 +12,8 @@ class StudentAttendanceController extends Controller
     public function store(Request $request)
     {
         $data = $request->all();
+
+        return response($data);
         $studentAttendance = StudentAttendance::create(array_merge($data, ['attendance_datetime' => Carbon::now(), 'status' => 'present']));
 
         return response()->json([
