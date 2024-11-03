@@ -38,7 +38,7 @@ class StudentSubmissionController extends Controller
     public function classStudentSubmission(Request $request)
     {
         $studentSubmission = StudentSubmission::where('student_id', operator: $request->student_id)
-            ->where('school_work_id', $request->school_work_id)->first();
+            ->where('school_work_id', $request->school_work_id)->with('attachments')->first();
 
         return response()->json([
             'status' => 'success',
