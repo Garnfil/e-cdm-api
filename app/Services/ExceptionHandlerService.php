@@ -9,6 +9,7 @@ class ExceptionHandlerService
     public function __generateExceptionResponse($exception)
     {
         $exception_code = $exception->getCode();
+        dd($exception_code);
         $result_code = $exception_code == 0 || ! is_numeric($exception_code) ? 500 : $exception_code;
 
         if ($result_code == 500) {
