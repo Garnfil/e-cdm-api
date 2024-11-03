@@ -4,6 +4,7 @@ namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
 use App\Models\Attendance;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 
@@ -70,6 +71,18 @@ class AttendanceController extends Controller
         return response()->json([
             'status' => 'success',
             'message' => 'Attendance Deleted Successfully',
+        ]);
+    }
+
+    public function getClassAttendanceToday($class_id)
+    {
+        $attendance = Attendance::where('class_id', $class_id)
+            ->whereRaw('DATE_ADD(attendance_datetime, INTERVAL grace_period_minute MINUTE) <= ?', [Carbon::now()])
+            ->first();
+
+        return response()->json([
+            'status' => 'success',
+            'attendance' => $attendance,
         ]);
     }
 }

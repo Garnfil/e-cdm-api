@@ -70,6 +70,7 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::get('school-works/{id}/quizzes/questions', [SchoolWorkController::class, 'quizQuestions']);
     Route::get('school-works/{id}', [SchoolWorkController::class, 'show']);
 
+    Route::get('attendances/classes/{class_id}/today', [AttendanceController::class, 'getClassAttendanceToday']);
     Route::get('attendances/classes/{class_id}', [AttendanceController::class, 'classAttendances']);
     Route::post('attendances', [AttendanceController::class, 'store']);
 
