@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Web;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Guardian\StoreRequest;
+use App\Http\Requests\Guardian\UpdateRequest;
 use App\Models\Guardian;
 use App\Models\Student;
 use App\Models\StudentGuardian;
@@ -84,15 +85,35 @@ class GuardianController extends Controller
      */
     public function edit(string $id)
     {
-        //
+        $guardian = Guardian::with('students')->findOrFail($id);
+
+        $guardian_student_ids = $guardian->students->pluck('student_id')->toArray();
+        $students = Student::get();
+
+        return view('admin-page.guardians.edit-guardian', compact('guardian', 'students', 'guardian_student_ids'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(UpdateRequest $request, string $id)
     {
-        //
+        $data = $request->validated();
+        $guardian = Guardian::with('students')->findOrFail($id);
+
+        $guardian->update(array_merge($data, [
+            'phone_number' => '+639'.$request->phone_number,
+        ]));
+
+        foreach ($request->student_ids as $key => $student_id) {
+            StudentGuardian::create([
+                'student_id' => $student_id,
+                'guardian_id' => $guardian->id,
+            ]);
+        }
+
+        return back()->withSuccess('Guardian Updated Successfully');
+
     }
 
     /**

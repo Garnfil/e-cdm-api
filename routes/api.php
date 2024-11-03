@@ -46,6 +46,7 @@ Route::post('student/register', [StudentAuthenticationController::class, 'regist
 Route::post('guardian/login', [GuardianAuthenticationController::class, 'login']);
 
 Route::group(['middleware' => ['auth:sanctum']], function () {
+
     Route::prefix('students')->group(function () {
         Route::get('/', [StudentController::class, 'getAll']);
         Route::get('/{id}', [StudentController::class, 'show']);

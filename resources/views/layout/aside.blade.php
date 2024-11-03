@@ -45,7 +45,7 @@
                     </a>
                 </li>
                 <li class="menu-item">
-                    <a href="pages-account-settings-connections.html" class="menu-link">
+                    <a href="{{ route('admin.admins.index') }}" class="menu-link">
                         <div data-i18n="Admins">Admins</div>
                     </a>
                 </li>

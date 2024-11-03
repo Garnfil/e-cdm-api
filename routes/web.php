@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\API\WhiteboardController;
 use App\Http\Controllers\Web\ActivityController;
+use App\Http\Controllers\Web\AdminController;
 use App\Http\Controllers\Web\AssignmentController;
 use App\Http\Controllers\Web\AttendanceController;
 use App\Http\Controllers\Web\AuthController;
@@ -47,6 +48,8 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'middleware' => ['auth']], 
     Route::post('logout', [AuthController::class, 'logout'])->name('logout');
 
     Route::get('dashboard', [DashboardController::class, 'dashboard'])->name('dashboard');
+
+    Route::resource('admins', AdminController::class);
 
     Route::get('students/all', [StudentController::class, 'all']);
     Route::resource('students', StudentController::class);

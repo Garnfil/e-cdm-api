@@ -24,4 +24,9 @@ class Guardian extends Model
         'age',
         'status',
     ];
+
+    public function students()
+    {
+        return $this->hasMany(StudentGuardian::class, 'guardian_id');
+    }
 }
