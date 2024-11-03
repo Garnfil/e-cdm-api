@@ -13,7 +13,6 @@ class StudentAttendanceController extends Controller
     {
         $data = $request->all();
 
-        return response($data);
         $studentAttendance = StudentAttendance::create(array_merge($data, ['attendance_datetime' => Carbon::now(), 'status' => 'present']));
 
         return response()->json([
