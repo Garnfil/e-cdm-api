@@ -17,6 +17,7 @@ return new class extends Migration
             $table->string('attendance_code');
             $table->foreignId('student_id')->constrained('students');
             $table->dateTime('attendance_datetime');
+            $table->integer('grace_period_minute')->default(3);
             $table->timestamps();
         });
 

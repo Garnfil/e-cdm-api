@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Attendance;
 use App\Models\Classroom;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 use Yajra\DataTables\DataTables;
 
 class AttendanceController extends Controller
@@ -52,7 +53,10 @@ class AttendanceController extends Controller
     public function store(Request $request)
     {
         $data = $request->except('_token');
-        $attendance = Attendance::create($data);
+        $attendance_code = Str::random(8);
+        $attendance = Attendance::create(array_merge($data, [
+            'attendance_code' => $attendance_code,
+        ]));
 
         return redirect()->route('admin.attendances.index')->withSuccess('Attendance Added Successfully');
 

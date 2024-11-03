@@ -15,6 +15,7 @@ class Attendance extends Model
         'class_id',
         'attendance_code',
         'attendance_datetime',
+        'grace_period_minute',
     ];
 
     public function class()
