@@ -43,56 +43,58 @@ class ClassScheduleController extends Controller
             ], 401);
         }
 
-        $today = Carbon::today();
         $now = Carbon::now();
         $nextWeek = Carbon::today()->addWeek();
 
         // Get classes the student is enrolled in
-        $classIds = ClassStudent::where('student_id', $student_id)
-            ->pluck('class_id');
+        $classIds = ClassStudent::where('student_id', $student_id)->pluck('class_id');
 
-        // Query date-based schedules
-        $dateBasedSchedules = ClassSchedule::whereIn('class_id', $classIds)
-            ->where('schedule_date', '>=', $today)
-            ->get()
-            ->map(function ($schedule) {
-                $schedule->start_time = Carbon::parse($schedule->start_time)->format('h:i A');
-                $schedule->schedule_date = Carbon::parse($schedule->schedule_date);
+        $today = Carbon::now();
+        $weekdayNumber = $today->dayOfWeekIso;
 
-                return $schedule;
-            });
+        $schedules = ClassSchedule::whereIn('class_id', $classIds)
+            ->whereJsonContains('days_of_week', (string) $weekdayNumber)
+            ->with('instructor', 'class')
+            ->get();
 
-        // Query day-based schedules
-        $dayOfWeekSchedules = ClassSchedule::whereIn('class_id', $classIds)
-            ->whereNotNull('days_of_week')
-            ->get()
-            ->flatMap(function ($schedule) use ($today) {
-                $days = json_decode($schedule->days_of_week, true);
-                $carbonDays = collect($days)->map(function ($day) {
-                    return Carbon::parse($day)->dayOfWeek;
-                });
+        // // Query date-based schedules
+        // $dateBasedSchedules = ClassSchedule::whereIn('class_id', $classIds)
+        //     ->where('schedule_date', $today)
+        //     ->get();
 
-                $upcomingDays = collect();
-                for ($i = 0; $i < 7; $i++) {
-                    $checkDate = $today->copy()->addDays($i);
-                    if ($carbonDays->contains($checkDate->dayOfWeek)) {
-                        $upcomingDays->push([
-                            'schedule_date' => $checkDate,
-                            'start_time' => Carbon::parse($schedule->start_time)->format('h:i A'),
-                            'type' => 'Face to Face',
-                        ]);
-                    }
-                }
+        // // Query day-based schedules
+        // $dayOfWeekSchedules = ClassSchedule::whereIn('class_id', $classIds)
+        //     ->whereNotNull('days_of_week')
+        //     ->get()
+        //     ->flatMap(function ($schedule) use ($today) {
+        //         $days = json_decode($schedule->days_of_week, true);
+        //         $upcomingDays = collect();
 
-                return $upcomingDays;
-            });
+        //         for ($i = 0; $i < 7; $i++) {
+        //             $checkDate = $today->copy()->addDays($i);
+        //             if (collect($days)->contains($checkDate->dayOfWeek)) {
+        //                 $upcomingDays->push((object) [  // Convert each entry to an object
+        //                     'schedule_date' => $checkDate->toDateString(),
+        //                     'start_time' => Carbon::parse($schedule->start_time)->format('h:i A'),
+        //                     'type' => 'Face to Face',
+        //                     'class_id' => $schedule->class_id,  // Add other relevant fields if necessary
+        //                     'instructor_id' => $schedule->instructor_id,
+        //                 ]);
+        //             }
+        //         }
 
-        // Merge and sort
-        $schedules = $dateBasedSchedules->merge($dayOfWeekSchedules)->sortBy(['schedule_date', 'start_time']);
+        //         return $upcomingDays;
+        //     });
+
+        // // Merge and sort by schedule_date and start_time
+        // $schedules = $dateBasedSchedules->merge($dayOfWeekSchedules)->sortBy([
+        //     fn ($a) => $a->schedule_date,
+        //     fn ($a) => $a->start_time,
+        // ]);
 
         return response()->json([
             'status' => 'success',
-            'schedules' => $schedules,
+            'schedules' => $schedules, // Convert to zero-based index for JSON response
         ]);
 
     }

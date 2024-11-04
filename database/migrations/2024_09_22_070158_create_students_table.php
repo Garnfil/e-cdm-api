@@ -30,6 +30,7 @@ return new class extends Migration
             $table->string('avatar_path')->nullable();
             $table->string('role')->default('student');
             $table->enum('status', ['active', 'inactive', 'blocked', 'locked', 'dropped'])->default('active');
+            $table->softDeletes();
             $table->timestamps();
         });
     }
