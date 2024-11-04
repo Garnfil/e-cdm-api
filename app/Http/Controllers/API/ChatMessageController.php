@@ -4,6 +4,7 @@ namespace App\Http\Controllers\API;
 
 use App\Events\MessageSent;
 use App\Http\Controllers\Controller;
+use App\Models\ChatMessage;
 use App\Models\Classroom;
 use App\Models\Instructor;
 use App\Models\Student;
@@ -14,6 +15,28 @@ class ChatMessageController extends Controller
     public function index(Classroom $class)
     {
         return $class->messages()->with('user')->orderBy('created_at')->get();
+    }
+
+    public function classMessages(Request $request)
+    {
+        // Validate that class_id is present in the request
+        $request->validate([
+            'class_id' => 'required|integer|exists:classes,id', // assuming you have a classes table
+        ]);
+
+        // Retrieve and format messages for the specified class
+        $messages = ChatMessage::where('class_id', $request->class_id)->get()->map(function ($message) {
+            return [
+                'user' => $message->sender->firstname.' '.$message->sender->lastname,
+                'content' => $message->content,
+                'created_at' => $message->created_at->toDateTimeString(),
+            ];
+        });
+
+        return response()->json([
+            'status' => 'success',
+            'messages' => $messages,
+        ]);
     }
 
     public function store(Request $request, Classroom $class)
@@ -27,15 +50,16 @@ class ChatMessageController extends Controller
             return response()->json(['error' => 'Sender not found'], 404);
         }
 
-        // Create message
-        $message = $class->messages()->create([
+        $message = ChatMessage::create([
             'sender_id' => $sender->id,
             'sender_type' => get_class($sender),
             'content' => $request->content,
         ]);
 
+        $message->load('sender');
+
         // Broadcast event
-        broadcast(new MessageSent($message))->toOthers();
+        event(new MessageSent($message));
 
         return response()->json($message, 201);
     }

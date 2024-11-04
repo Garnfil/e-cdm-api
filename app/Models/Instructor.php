@@ -46,4 +46,9 @@ class Instructor extends Model
     {
         return $this->morphMany(DiscussionComment::class, 'user');
     }
+
+    public function messages()
+    {
+        return $this->morphMany(ChatMessage::class, 'sender');
+    }
 }

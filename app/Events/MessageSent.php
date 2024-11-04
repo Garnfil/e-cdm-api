@@ -5,10 +5,11 @@ namespace App\Events;
 use App\Models\ChatMessage;
 use Illuminate\Broadcasting\Channel;
 use Illuminate\Broadcasting\InteractsWithSockets;
+use Illuminate\Contracts\Broadcasting\ShouldBroadcastNow;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 
-class MessageSent
+class MessageSent implements ShouldBroadcastNow
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
@@ -22,22 +23,22 @@ class MessageSent
         $this->message = $message;
     }
 
-    /**
-     * Get the channels the event should broadcast on.
-     *
-     * @return array<int, \Illuminate\Broadcasting\Channel>
-     */
     public function broadcastOn()
     {
-        return new Channel('class.'.$this->message->class_id);
+        return new Channel('class.message.'.$this->message->class_id);
     }
 
     public function broadcastWith()
     {
         return [
-            'user' => $this->message->user->name,
+            'user' => $this->message->sender->firstname.' '.$this->message->sender->lastname,
             'content' => $this->message->content,
             'created_at' => $this->message->created_at->toDateTimeString(),
         ];
+    }
+
+    public function boradcastAs()
+    {
+        return 'new-class-message';
     }
 }

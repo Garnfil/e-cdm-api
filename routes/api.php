@@ -5,6 +5,7 @@ use App\Http\Controllers\API\AssignmentController;
 use App\Http\Controllers\API\AttendanceController;
 use App\Http\Controllers\API\Auth\InstructorAuthenticationController;
 use App\Http\Controllers\API\Auth\StudentAuthenticationController;
+use App\Http\Controllers\API\ChatMessageController;
 use App\Http\Controllers\API\ClassRoomController;
 use App\Http\Controllers\API\ClassScheduleController;
 use App\Http\Controllers\API\CourseController;
@@ -159,6 +160,8 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::post('class-schedules', [ClassScheduleController::class, 'store']);
     Route::get('instructors/{instructor_id}/class-schedules', [ClassScheduleController::class, 'instructorClassesSchedule']);
     Route::get('students/{student_id}/class-schedules', [ClassScheduleController::class, 'studentClassesSchedule']);
+
+    Route::get('messages/classes/{class_id}', [ChatMessageController::class, 'classMessages']);
 });
 
 Route::post('whiteboard/update/{sessionId}', [WhiteboardController::class, 'update']);
