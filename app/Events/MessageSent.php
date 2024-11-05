@@ -37,7 +37,7 @@ class MessageSent implements ShouldBroadcastNow
         ];
     }
 
-    public function boradcastAs()
+    public function broadcastAs()
     {
         return 'new-class-message';
     }
