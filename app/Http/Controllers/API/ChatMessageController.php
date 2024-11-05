@@ -47,6 +47,7 @@ class ChatMessageController extends Controller
         }
 
         $message = ChatMessage::create([
+            'class_id' => $class->id,
             'sender_id' => $sender->id,
             'sender_type' => get_class($sender),
             'content' => $request->content,
