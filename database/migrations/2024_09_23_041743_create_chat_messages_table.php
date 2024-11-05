@@ -1,5 +1,7 @@
 <?php
 
+use App\Models\Instructor;
+use App\Models\Student;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -15,7 +17,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('class_id')->constrained('classes')->onDelete('cascade');
             $table->unsignedBigInteger('sender_id');  // Can reference either student or instructor
-            $table->string('sender_type');            // To specify the type (Student or Instructor)
+            $table->enum('sender_type', [Student::class, Instructor::class]);            // To specify the type (Student or Instructor)
             $table->text('content');                  // The message content
             $table->timestamps();
 

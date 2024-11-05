@@ -161,6 +161,7 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::get('instructors/{instructor_id}/class-schedules', [ClassScheduleController::class, 'instructorClassesSchedule']);
     Route::get('students/{student_id}/class-schedules', [ClassScheduleController::class, 'studentClassesSchedule']);
 
+    Route::post('messages/classes/{class_id}', [ChatMessageController::class, 'store']);
     Route::get('messages/classes/{class_id}', [ChatMessageController::class, 'classMessages']);
 });
 
