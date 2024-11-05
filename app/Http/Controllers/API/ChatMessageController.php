@@ -35,8 +35,10 @@ class ChatMessageController extends Controller
         ]);
     }
 
-    public function store(Request $request, Classroom $class)
+    public function store(Request $request, $class_id)
     {
+        $classroom = Classroom::find($class_id);
+
         // Check sender type
         $sender = $request->user_type === 'student'
             ? Student::find($request->user_id)
@@ -47,7 +49,7 @@ class ChatMessageController extends Controller
         }
 
         $message = ChatMessage::create([
-            'class_id' => $class->id,
+            'class_id' => $classroom->id,
             'sender_id' => $sender->id,
             'sender_type' => get_class($sender),
             'content' => $request->content,
