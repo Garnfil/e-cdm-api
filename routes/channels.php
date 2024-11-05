@@ -20,3 +20,7 @@ Broadcast::channel('App.Models.User.{id}', function ($user, $id) {
 Broadcast::channel('whiteboard.{session_id}', function ($user, $session_id) {
     return true;
 });
+
+Broadcast::channel('class.message.{class_id}', function ($user, $class_id) {
+    return true;
+});
