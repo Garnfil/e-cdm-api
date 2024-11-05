@@ -19,15 +19,11 @@ class ChatMessageController extends Controller
 
     public function classMessages(Request $request)
     {
-        // Validate that class_id is present in the request
-        $request->validate([
-            'class_id' => 'required|integer|exists:classes,id', // assuming you have a classes table
-        ]);
 
         // Retrieve and format messages for the specified class
         $messages = ChatMessage::where('class_id', $request->class_id)->get()->map(function ($message) {
             return [
-                'user' => $message->sender->firstname.' '.$message->sender->lastname,
+                'user' => $message->sender,
                 'content' => $message->content,
                 'created_at' => $message->created_at->toDateTimeString(),
             ];
