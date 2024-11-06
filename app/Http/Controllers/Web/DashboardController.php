@@ -11,4 +11,9 @@ class DashboardController extends Controller
     {
         return view('welcome');
     }
+
+    public function profile(Request $request)
+    {
+        return view('admin-page.profile.profile');
+    }
 }
