@@ -67,7 +67,7 @@ class DiscussionForumController extends Controller
         $discussion->upvotes_count = $discussion->upvotesCount();
         $discussion->downvotes_count = $discussion->downvotesCount();
         $discussion->user_vote_type = $user_discussion_vote->vote_type ?? null;
-        $discussion->user_has_vote = $user_discussion_vote->exists() ? true : false;
+        $discussion->user_has_vote = $user_discussion_vote ? true : false;
 
         return response()->json([
             'status' => 'success',
