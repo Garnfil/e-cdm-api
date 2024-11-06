@@ -66,7 +66,7 @@ class DiscussionForumController extends Controller
         $discussion->user = $discussion->user();
         $discussion->upvotes_count = $discussion->upvotesCount();
         $discussion->downvotes_count = $discussion->downvotesCount();
-        $discussion->user_vote_type = $user_discussion_vote->vote_type;
+        $discussion->user_vote_type = $user_discussion_vote->vote_type ?? null;
         $discussion->user_has_vote = $user_discussion_vote->exists() ? true : false;
 
         return response()->json([
@@ -126,6 +126,8 @@ class DiscussionForumController extends Controller
             ]);
         } catch (Exception $exception) {
             DB::rollBack();
+
+            return response($exception);
             $exceptionHandlerService = new ExceptionHandlerService;
 
             return $exceptionHandlerService->__generateExceptionResponse($exception);
