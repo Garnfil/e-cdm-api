@@ -47,6 +47,8 @@ Route::post('student/register', [StudentAuthenticationController::class, 'regist
 
 Route::post('guardian/login', [GuardianAuthenticationController::class, 'login']);
 
+Route::get('school-events', [SchoolEventController::class, 'getAll']);
+
 Route::group(['middleware' => ['auth:sanctum']], function () {
 
     Route::prefix('students')->group(function () {
@@ -165,7 +167,6 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::post('messages/classes/{class_id}', [ChatMessageController::class, 'store']);
     Route::get('messages/classes/{class_id}', [ChatMessageController::class, 'classMessages']);
 
-    Route::get('school-events', [SchoolEventController::class, 'getAll']);
 });
 
 Route::post('whiteboard/update/{sessionId}', [WhiteboardController::class, 'update']);
