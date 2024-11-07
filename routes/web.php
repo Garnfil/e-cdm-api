@@ -16,6 +16,7 @@ use App\Http\Controllers\Web\InstituteController;
 use App\Http\Controllers\Web\InstructorController;
 use App\Http\Controllers\Web\QuizController;
 use App\Http\Controllers\Web\QuizQuestionController;
+use App\Http\Controllers\Web\SchoolEventController;
 use App\Http\Controllers\Web\SchoolWorkController;
 use App\Http\Controllers\Web\SectionController;
 use App\Http\Controllers\Web\StudentController;
@@ -34,9 +35,11 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    if (auth()->check()) {
+    if (auth()->check())
+    {
         return redirect()->route('admin.dashboard');
-    } else {
+    } else
+    {
         return redirect()->route('login.get');
     }
 });
@@ -70,6 +73,7 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'middleware' => ['auth']], 
     Route::resource('attendances', AttendanceController::class);
     Route::resource('discussions', DiscussionController::class);
     Route::resource('guardians', GuardianController::class);
+    Route::resource('school-events', SchoolEventController::class);
 
     Route::post('quiz-questions/store', [QuizQuestionController::class, 'store'])->name('quiz_questions.store');
 

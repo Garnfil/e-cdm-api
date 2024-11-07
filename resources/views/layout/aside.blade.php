@@ -130,5 +130,11 @@
                 <div data-i18n="Discussions">Discussions</div>
             </a>
         </li>
+        <li class="menu-item {{ Request::is('admin/school-events') ? 'active' : null }}">
+            <a href="{{ route('admin.school-events.index') }}" class="menu-link">
+                <i class="menu-icon tf-icons bx bx-calendar"></i>
+                <div data-i18n="School Events">School Events</div>
+            </a>
+        </li>
     </ul>
 </aside>

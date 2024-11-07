@@ -67,7 +67,8 @@ class StudentSubmissionController extends Controller
         $student_id = $request->student_id;
         $class_id = $request->class_id;
 
-        if ($request->has('submissions') && is_array($request->submissions)) {
+        if ($request->has('submissions') && is_array($request->submissions))
+        {
             // Collect all school_work_ids from submissions for a batch query
             $school_work_ids = collect($request->submissions)->pluck('school_work_id')->all();
 
@@ -77,7 +78,8 @@ class StudentSubmissionController extends Controller
                 ->get()
                 ->keyBy('school_work_id');
 
-            foreach ($request->submissions as $submissionData) {
+            foreach ($request->submissions as $submissionData)
+            {
                 $school_work_id = $submissionData['school_work_id'];
                 $score = $submissionData['score'];
 
@@ -85,9 +87,11 @@ class StudentSubmissionController extends Controller
                 $submission = $existingSubmissions->get($school_work_id);
 
                 // Update or create submission based on existence
-                if ($submission) {
+                if ($submission)
+                {
                     $submission->update(['score' => $score]);
-                } elseif ($score > 0) {  // Only create if score > 0
+                } elseif ($score > 0)
+                {  // Only create if score > 0
                     StudentSubmission::create([
                         'school_work_id' => $school_work_id,
                         'score' => $score,
@@ -109,11 +113,13 @@ class StudentSubmissionController extends Controller
 
     public function store(StoreRequest $request)
     {
-        try {
+        try
+        {
             DB::beginTransaction();
             $schoolWork = SchoolWork::find($request->school_work_id);
 
-            if (! $schoolWork) {
+            if (! $schoolWork)
+            {
                 throw new Exception('School Work Not Found', 404);
             }
 
@@ -127,19 +133,23 @@ class StudentSubmissionController extends Controller
                 'datetime_submitted' => Carbon::now(),
             ]);
 
-            if ($request->has('attachments') && is_array($request->attachments)) {
-                foreach ($request->attachments as $key => $attachment) {
+            if ($request->has('attachments') && is_array($request->attachments))
+            {
+                foreach ($request->attachments as $key => $attachment)
+                {
                     $attachment_name = $attachment['attachment'];
 
-                    if ($attachment['attachment_type'] == StudentSubmissionAttachment::ATTACHMENT_TYPE_FILE) {
+                    if ($attachment['attachment_type'] == StudentSubmissionAttachment::ATTACHMENT_TYPE_FILE)
+                    {
 
                         $path_extension = $attachment['attachment']->getClientOriginalExtension();
 
-                        if (! in_array($path_extension, ['pdf', 'png', 'jpg', 'jpeg', 'webp'])) {
+                        if (! in_array($path_extension, ['pdf', 'png', 'jpg', 'jpeg', 'webp']))
+                        {
                             throw new Exception('The requested attachment does not correspond to a recognized file type. The following file types are supported: pdf, png, jpg, jpeg, and webp.', 422);
                         }
 
-                        $attachment_name = Str::random(7).'-'.time().'.'.$path_extension;
+                        $attachment_name = Str::random(7) . '-' . time() . '.' . $path_extension;
 
                         $file_path = 'student_submission_attachments/';
                         Storage::disk('public')->putFileAs($file_path, $attachment['attachment'], $attachment_name);
@@ -162,7 +172,8 @@ class StudentSubmissionController extends Controller
                 'message' => 'Submitted Successfully',
             ]);
 
-        } catch (Exception $e) {
+        } catch (Exception $e)
+        {
             DB::rollBack();
 
             // return response($e, 400);
@@ -184,19 +195,23 @@ class StudentSubmissionController extends Controller
         $totalQuestions = count($answers);
 
         DB::beginTransaction();
-        try {
+        try
+        {
 
             $quiz = Quiz::find($quizId);
 
-            if (! $quiz) {
+            if (! $quiz)
+            {
                 throw new Exception('Quiz Not Found.', 404);
             }
 
-            foreach ($answers as $questionId => $answer) {
+            foreach ($answers as $questionId => $answer)
+            {
                 $question = QuizQuestion::find($questionId);
 
                 // For multiple choice questions
-                if ($question->type === 'choice') {
+                if ($question->type === 'choice')
+                {
                     $choice = QuizQuestionChoice::find($answer);
                     $isCorrect = $choice->is_correct;
 
@@ -210,13 +225,15 @@ class StudentSubmissionController extends Controller
                     ]);
 
                     // Increment score if the answer is correct
-                    if ($isCorrect) {
+                    if ($isCorrect)
+                    {
                         $totalScore += 1;
                     }
                 }
 
                 // For paragraph questions (manual grading might be needed)
-                if ($question->type === 'paragraph') {
+                if ($question->type === 'paragraph')
+                {
                     QuizStudentAnswer::create([
                         'quiz_id' => $quizId,
                         'student_id' => $studentId,
@@ -242,7 +259,8 @@ class StudentSubmissionController extends Controller
             DB::commit();
 
             return response()->json(['success' => 'Quiz submitted successfully']);
-        } catch (Exception $e) {
+        } catch (Exception $e)
+        {
             DB::rollBack();
             $exceptionHandlerService = new ExceptionHandlerService;
 
@@ -252,7 +270,8 @@ class StudentSubmissionController extends Controller
 
     public function gradeStudentSubmission(Request $request)
     {
-        try {
+        try
+        {
             /**
              * Request Inputs: score, student_submission_id
              */
@@ -277,8 +296,8 @@ class StudentSubmissionController extends Controller
                 'status' => 'success',
                 'message' => 'School Work Graded Successfully',
             ]);
-        } catch (Exception $e) {
-            return response($e);
+        } catch (Exception $e)
+        {
             DB::rollBack();
             $exceptionHandlerService = new ExceptionHandlerService;
 

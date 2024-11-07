@@ -16,6 +16,7 @@ use App\Http\Controllers\API\InstituteController;
 use App\Http\Controllers\API\ModuleController;
 use App\Http\Controllers\API\QuizController;
 use App\Http\Controllers\API\QuizQuestionController;
+use App\Http\Controllers\API\SchoolEventController;
 use App\Http\Controllers\API\SchoolWorkController;
 use App\Http\Controllers\API\SectionController;
 use App\Http\Controllers\API\StudentAssignmentController;
@@ -163,6 +164,8 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
 
     Route::post('messages/classes/{class_id}', [ChatMessageController::class, 'store']);
     Route::get('messages/classes/{class_id}', [ChatMessageController::class, 'classMessages']);
+
+    Route::get('school-events', [SchoolEventController::class, 'getAll']);
 });
 
 Route::post('whiteboard/update/{sessionId}', [WhiteboardController::class, 'update']);
