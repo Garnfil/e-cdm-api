@@ -26,6 +26,7 @@ use App\Http\Controllers\API\StudentQuizController;
 use App\Http\Controllers\API\StudentSchoolWorkGradeController;
 use App\Http\Controllers\API\StudentSubmissionController;
 use App\Http\Controllers\API\SubjectController;
+use App\Http\Controllers\API\VideoConferenceController;
 use App\Http\Controllers\API\WhiteboardController;
 use Illuminate\Support\Facades\Route;
 
@@ -166,6 +167,8 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
 
     Route::post('messages/classes/{class_id}', [ChatMessageController::class, 'store']);
     Route::get('messages/classes/{class_id}', [ChatMessageController::class, 'classMessages']);
+
+    Route::post('live-sessions', [VideoConferenceController::class, 'store']);
 
 });
 

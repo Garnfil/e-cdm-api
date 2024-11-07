@@ -8,4 +8,16 @@ use Illuminate\Database\Eloquent\Model;
 class VideoConferenceRoom extends Model
 {
     use HasFactory;
+    protected $table = "live_sessions";
+    protected $fillable = [
+        "title",
+        "description",
+        "session_code",
+        "scheduled_datetime",
+        "class_id",
+        "grace_period",
+        "start_datetime",
+        "end_datetime",
+        "status"
+    ];
 }
