@@ -278,6 +278,7 @@ class StudentSubmissionController extends Controller
                 'message' => 'School Work Graded Successfully',
             ]);
         } catch (Exception $e) {
+            return response($e);
             DB::rollBack();
             $exceptionHandlerService = new ExceptionHandlerService;
 
