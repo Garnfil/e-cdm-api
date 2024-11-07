@@ -27,10 +27,10 @@ class StudentController extends Controller
                     return $row->firstname.' '.$row->lastname;
                 })
                 ->addColumn('institute', function ($row) {
-                    return $row->institute->name;
+                    return $row->institute->name ?? 'No Institute Found';
                 })
                 ->addColumn('course', function ($row) {
-                    return $row->course->name;
+                    return $row->course->name ?? 'No Course Found';
                 })
                 ->addColumn('actions', function ($row) {
                     return '<div class="btn-group">
