@@ -12,6 +12,7 @@ class VideoConferenceRoom extends Model
     protected $fillable = [
         "title",
         "description",
+        "instructor_id",
         "session_code",
         "scheduled_datetime",
         "class_id",
