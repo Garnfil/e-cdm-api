@@ -1,5 +1,7 @@
 <?php
 
+use App\Models\Instructor;
+use App\Models\Student;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -25,7 +27,7 @@ return new class extends Migration {
             $table->foreignId('whiteboard_id')->constrained('whiteboard_sessions')->cascadeOnDelete();
             $table->string('user_id');
             $table->text('room_token');
-            $table->enum('user_type', ['App\Models\Student', 'App\Models\Instructor']);
+            $table->enum('user_type', [Student::class, Instructor::class]);
             $table->enum('user_role', ['admin', 'writer', 'reader']);
             $table->timestamps();
         });
