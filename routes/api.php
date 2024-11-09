@@ -172,7 +172,8 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::get('live-sessions/instructor-recent-classes', [VideoConferenceController::class, 'getRecentInstructorClassSessions']);
 
 });
-
+Route::post('whiteboard/generate-room', [WhiteboardController::class, 'generateRoom']);
+Route::post('whiteboard/generate-room-token', [WhiteboardController::class, 'generateRoomToken']);
 Route::post('whiteboard/update/{sessionId}', [WhiteboardController::class, 'update']);
 
 // Route::post('login', [AuthController::class, 'login']);

@@ -78,6 +78,7 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'middleware' => ['auth']], 
     Route::post('quiz-questions/store', [QuizQuestionController::class, 'store'])->name('quiz_questions.store');
 
     Route::post('school-works/attachments/upload', [SchoolWorkController::class, 'upload'])->name('school_works.attachments.upload');
+
 });
 
 Route::post('/whiteboard/update/{sessionId}', [WhiteboardController::class, 'update']);
