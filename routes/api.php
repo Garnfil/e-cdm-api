@@ -169,6 +169,7 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::get('messages/classes/{class_id}', [ChatMessageController::class, 'classMessages']);
 
     Route::post('live-sessions', [VideoConferenceController::class, 'store']);
+    Route::post('live-sessions/classes/{class_id}/recent', [VideoConferenceController::class, 'getRecentInstructorClassSessions']);
 
 });
 

@@ -27,4 +27,25 @@ class VideoConferenceController extends Controller
             "conference_session" => $conference_session,
         ]);
     }
+
+    public function getRecentInstructorClassSessions(Request $request)
+    {
+        $user = auth()->user();
+        if ($user->role != 'instructor')
+        {
+            return response([
+                'message' => 'Invalid User',
+            ], 401);
+        }
+
+        $conference_sessions = VideoConferenceRoom::where('instructor_id', $user->id)
+            ->where('class_id', $request->class_id)
+            ->where('status', 'ended')
+            ->get();
+
+        return response()->json([
+            'status' => 'success',
+            'conference_sessions' => $conference_sessions
+        ]);
+    }
 }
