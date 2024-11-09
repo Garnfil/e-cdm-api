@@ -171,12 +171,14 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::post('live-sessions', [VideoConferenceController::class, 'store']);
     Route::get('live-sessions/instructor-recent-classes', [VideoConferenceController::class, 'getRecentInstructorClassSessions']);
 
-});
-Route::post('whiteboard/generate-room', [WhiteboardController::class, 'generateRoom']);
-Route::post('whiteboard/generate-room-token', [WhiteboardController::class, 'generateRoomToken']);
-Route::post('whiteboard/update/{sessionId}', [WhiteboardController::class, 'update']);
-Route::post('whiteboard/join-whiteboard-session', [WhiteboardController::class, 'joinWhiteboardSession']);
+    Route::post('whiteboard/generate-room', [WhiteboardController::class, 'generateRoom']);
+    Route::post('whiteboard/generate-room-token', [WhiteboardController::class, 'generateRoomToken']);
+    Route::post('whiteboard/update/{sessionId}', [WhiteboardController::class, 'update']);
+    Route::post('whiteboard/join-whiteboard-session', [WhiteboardController::class, 'joinWhiteboardSession']);
 
-Route::get('whiteboard/{session_code}', [WhiteboardController::class, 'getUserWhiteboardSession']);
+    Route::get('whiteboard/{session_code}', [WhiteboardController::class, 'getUserWhiteboardSession']);
+});
+
+
 
 // Route::post('login', [AuthController::class, 'login']);
