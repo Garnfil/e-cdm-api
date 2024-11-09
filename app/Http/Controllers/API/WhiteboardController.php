@@ -55,6 +55,25 @@ class WhiteboardController extends Controller
         ]);
     }
 
+    public function getClassWhiteboards(Request $request)
+    {
+        $user = auth()->user();
+        if ($user->role != 'student')
+        {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Invalid User',
+            ], 400);
+        }
+
+        $whiteboards = WhiteboardSession::where('class_id', $request->class_id)->get();
+
+        return response()->json([
+            'status' => 'success',
+            'whiteboards' => $whiteboards,
+        ]);
+    }
+
     public function generateRoom(Request $request)
     {
         try
@@ -150,8 +169,6 @@ class WhiteboardController extends Controller
             'whiteboard' => $whiteboard,
             'whiteboard_user' => $whiteboard_user,
         ]);
-
-
     }
 
     public function generateRoomToken($room_uuid, $role = 'admin')

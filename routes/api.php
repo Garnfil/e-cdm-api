@@ -177,6 +177,7 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::post('whiteboards/join-whiteboard-session', [WhiteboardController::class, 'joinWhiteboardSession']);
 
     Route::get('whiteboards/instructors/{instructor_id}', [WhiteboardController::class, 'getInstructorWhiteboards']);
+    Route::get('whiteboards/classes/{class_id}', [WhiteboardController::class, 'getClassWhiteboards']);
     Route::get('whiteboards/{session_code}', [WhiteboardController::class, 'getUserWhiteboardSession']);
 });
 
