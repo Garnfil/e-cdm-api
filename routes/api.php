@@ -175,5 +175,8 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
 Route::post('whiteboard/generate-room', [WhiteboardController::class, 'generateRoom']);
 Route::post('whiteboard/generate-room-token', [WhiteboardController::class, 'generateRoomToken']);
 Route::post('whiteboard/update/{sessionId}', [WhiteboardController::class, 'update']);
+Route::post('whiteboard/join-whiteboard-session', [WhiteboardController::class, 'joinWhiteboardSession']);
+
+Route::get('whiteboard/{session_code}', [WhiteboardController::class, 'getUserWhiteboardSession']);
 
 // Route::post('login', [AuthController::class, 'login']);
