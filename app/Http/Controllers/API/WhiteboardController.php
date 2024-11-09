@@ -85,6 +85,8 @@ class WhiteboardController extends Controller
                     'user_role' => 'admin',
                 ]);
 
+                DB::commit();
+
                 return response()->json([
                     'status' => 'success',
                     'conference_session' => $session,
