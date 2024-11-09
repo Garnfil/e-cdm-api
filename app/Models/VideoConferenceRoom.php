@@ -21,4 +21,9 @@ class VideoConferenceRoom extends Model
         "end_datetime",
         "status"
     ];
+
+    public function classroom()
+    {
+        return $this->belongsTo(Classroom::class, 'class_id');
+    }
 }

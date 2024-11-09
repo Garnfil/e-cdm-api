@@ -40,6 +40,7 @@ class VideoConferenceController extends Controller
 
         $conference_sessions = VideoConferenceRoom::where('instructor_id', $user->id)
             ->where('status', 'ended')
+            ->with('classroom')
             ->get();
 
         return response()->json([
