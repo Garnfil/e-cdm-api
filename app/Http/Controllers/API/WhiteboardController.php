@@ -63,7 +63,7 @@ class WhiteboardController extends Controller
 
             $session_code = Str::random(10);
 
-            $session = WhiteboardSession::create([
+            $whiteboard = WhiteboardSession::create([
                 'session_code' => $session_code,
                 'class_id' => $request->class_id,
                 'instructor_id' => $request->instructor_id,
@@ -82,14 +82,14 @@ class WhiteboardController extends Controller
             {
                 $data = $response->json();
 
-                $session->update([
+                $whiteboard->update([
                     'agora_whiteboard_room_uuid' => $data['uuid'],
                 ]);
 
                 $room_token = $this->generateRoomToken($data['uuid']);
 
                 WhiteboardSessionUser::create([
-                    'whiteboard_id' => $session->id,
+                    'whiteboard_id' => $whiteboard->id,
                     'user_id' => $request->instructor_id,
                     'room_token' => $room_token,
                     'user_type' => 'App\Models\Instructor',
@@ -100,8 +100,8 @@ class WhiteboardController extends Controller
 
                 return response()->json([
                     'status' => 'success',
-                    'conference_session' => $session,
-                    'room_uuid' => $session->agora_whiteboard_room_uuid,
+                    'whiteboard' => $whiteboard,
+                    'room_uuid' => $whiteboard->agora_whiteboard_room_uuid,
                     'room_token' => $room_token,
                 ]);
                 // Process the response data as needed
@@ -164,7 +164,7 @@ class WhiteboardController extends Controller
             'Content-Type' => 'application/json',
             'region' => 'sg',
         ])->post("https://api.netless.link/v5/tokens/rooms/{$roomUUID}", [
-                    'lifespan' => 3600000,
+                    'lifespan' => 0,
                     'role' => $role,
                 ]);
 
