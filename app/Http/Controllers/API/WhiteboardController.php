@@ -44,6 +44,17 @@ class WhiteboardController extends Controller
         ]);
     }
 
+    public function getInstructorWhiteboards(Request $request)
+    {
+        $whiteboards = WhiteboardSession::where('instructor_id', $request->instructor_id)
+            ->get();
+
+        return response()->json([
+            'status' => 'success',
+            'whiteboards' => $whiteboards,
+        ]);
+    }
+
     public function generateRoom(Request $request)
     {
         try
