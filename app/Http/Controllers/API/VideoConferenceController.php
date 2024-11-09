@@ -39,7 +39,6 @@ class VideoConferenceController extends Controller
         }
 
         $conference_sessions = VideoConferenceRoom::where('instructor_id', $user->id)
-            ->where('class_id', $request->class_id)
             ->where('status', 'ended')
             ->get();
 
