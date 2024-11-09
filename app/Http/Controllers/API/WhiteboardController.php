@@ -4,6 +4,7 @@ namespace App\Http\Controllers\API;
 
 use App\Events\WhiteboardUpdated;
 use App\Http\Controllers\Controller;
+use App\Models\ClassStudent;
 use App\Models\Instructor;
 use App\Models\WhiteboardSession;
 use App\Models\WhiteboardSessionUser;
@@ -55,7 +56,7 @@ class WhiteboardController extends Controller
         ]);
     }
 
-    public function getClassWhiteboards(Request $request)
+    public function getStudentClassWhiteboards(Request $request)
     {
         $user = auth()->user();
         if ($user->role != 'student')
@@ -66,7 +67,9 @@ class WhiteboardController extends Controller
             ], 400);
         }
 
-        $whiteboards = WhiteboardSession::where('class_id', $request->class_id)->get();
+        $class_ids = ClassStudent::where('student_id', $user->id)->pluck('class_id')->toArray();
+
+        $whiteboards = WhiteboardSession::whereIn('class_id', $class_ids)->get();
 
         return response()->json([
             'status' => 'success',
