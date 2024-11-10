@@ -4,6 +4,7 @@ namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\VideoConference\StoreRequest;
+use App\Models\ClassStudent;
 use App\Models\VideoConferenceRoom;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
@@ -42,6 +43,17 @@ class VideoConferenceController extends Controller
             ->where('status', 'ended')
             ->with('classroom')
             ->get();
+
+        return response()->json([
+            'status' => 'success',
+            'conference_sessions' => $conference_sessions
+        ]);
+    }
+
+    public function getStudentClassConferenceSessions(Request $request)
+    {
+        $class_ids = ClassStudent::where('student_id', $request->student_id)->pluck('class_id')->toArray();
+        $conference_sessions = VideoConferenceRoom::whereIn('class_id', $class_ids)->get();
 
         return response()->json([
             'status' => 'success',

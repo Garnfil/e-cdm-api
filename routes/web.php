@@ -53,6 +53,9 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'middleware' => ['auth']], 
     Route::get('dashboard', [DashboardController::class, 'dashboard'])->name('dashboard');
     Route::get('profile', [DashboardController::class, 'profile'])->name('dashboard.profile');
 
+    Route::post('profile/change-password', [DashboardController::class, 'changePassword'])->name('dashboard.profile.change-password');
+    Route::post('profile', [DashboardController::class, 'updateAdminProfile'])->name('dashboard.profile.post');
+
     Route::resource('admins', AdminController::class);
 
     Route::get('students/all', [StudentController::class, 'all']);

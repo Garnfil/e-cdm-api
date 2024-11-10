@@ -41,8 +41,7 @@
 
                                 </div>
                                 <span class="fw-semibold d-block mb-1">Students</span>
-                                <h3 class="card-title mb-2">12,628</h3>
-                                <small class="text-success fw-semibold"><i class="bx bx-up-arrow-alt"></i> +72.80%</small>
+                                <h3 class="card-title mb-2">{{ number_format($total_students) }}</h3>
                             </div>
                         </div>
                     </div>
@@ -58,8 +57,7 @@
 
                                 </div>
                                 <span>Instructors</span>
-                                <h3 class="card-title text-nowrap mb-1">$4,679</h3>
-                                <small class="text-success fw-semibold"><i class="bx bx-up-arrow-alt"></i> +28.42%</small>
+                                <h3 class="card-title text-nowrap mb-1">{{ number_format($total_students) }}</h3>
                             </div>
                         </div>
                     </div>
@@ -214,38 +212,27 @@
                     </div>
                     <div class="card-body">
                         <ul class="p-0 m-0">
-                            <li class="d-flex mb-4 pb-1">
-                                <div class="avatar flex-shrink-0 me-3">
-                                    <div class="p-2 bg-primary text-white rounded d-flex justify-content-center">
-                                        <i class='bx bx-video-recording'></i>
+                            @foreach ($recent_conference_sessions as $conference_session)
+                                <li class="d-flex mb-4 pb-1">
+                                    <div class="avatar flex-shrink-0 me-3">
+                                        <div class="p-2 bg-primary text-white rounded d-flex justify-content-center">
+                                            <i class='bx bx-video-recording'></i>
+                                        </div>
                                     </div>
-                                </div>
-                                <div class="d-flex w-100 flex-wrap align-items-center justify-content-between gap-2">
-                                    <div class="me-2">
-                                        <small class="text-muted d-block mb-1">BSIT 4H - IT CAPSTONE</small>
-                                        <h6 class="mb-0">Oct 25, 2024 (10:00 A.M)</h6>
+                                    <div class="d-flex w-100 flex-wrap align-items-center justify-content-between gap-2">
+                                        <div class="me-2">
+                                            <small
+                                                class="text-muted d-block mb-1">{{ $conference_session->classroom->title }}</small>
+                                            <h6 class="mb-0">
+                                                {{ \Carbon\Carbon::parse($conference_session->end_datetime)->format('M d, Y h:i a') }}
+                                            </h6>
+                                        </div>
+                                        <div class="user-progress d-flex align-items-center gap-1">
+                                            <h6 class="mb-0">45 Students</h6>
+                                        </div>
                                     </div>
-                                    <div class="user-progress d-flex align-items-center gap-1">
-                                        <h6 class="mb-0">45 Students</h6>
-                                    </div>
-                                </div>
-                            </li>
-                            <li class="d-flex mb-4 pb-1">
-                                <div class="avatar flex-shrink-0 me-3">
-                                    <div class="p-2 bg-primary text-white rounded d-flex justify-content-center">
-                                        <i class='bx bx-video-recording'></i>
-                                    </div>
-                                </div>
-                                <div class="d-flex w-100 flex-wrap align-items-center justify-content-between gap-2">
-                                    <div class="me-2">
-                                        <small class="text-muted d-block mb-1">BSIT 4H - SUBJECT TWO</small>
-                                        <h6 class="mb-0">Oct 25, 2024 (01:00 P.M)</h6>
-                                    </div>
-                                    <div class="user-progress d-flex align-items-center gap-1">
-                                        <h6 class="mb-0">45 Students</h6>
-                                    </div>
-                                </div>
-                            </li>
+                                </li>
+                            @endforeach
                         </ul>
                     </div>
                 </div>

@@ -15,7 +15,7 @@ return new class extends Migration {
             $table->string('email');
             $table->string('username');
             $table->string('password');
-            $table->string('avatar');
+            $table->string('avatar')->nullable();
             $table->string('firstname')->nullable();
             $table->string('lastname')->nullable();
             $table->string('middlename')->nullable();

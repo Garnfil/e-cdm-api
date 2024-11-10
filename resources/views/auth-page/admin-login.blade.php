@@ -82,6 +82,12 @@
               <h4 class="mb-2">Welcome to Admin Portal of E-CDM! </h4>
               <p class="mb-4">Please sign-in to your account.</p>
 
+              @if (Session::get('fail'))
+<div class="alert alert-danger">
+                    {{ Session::get('fail') }}
+                  </div>
+@endif
+
               <form id="formAuthentication" class="mb-3" action="{{ route('login.post') }}" method="POST">
                 @csrf
                 <div class="mb-3">
