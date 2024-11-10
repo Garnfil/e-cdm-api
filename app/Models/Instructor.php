@@ -17,6 +17,7 @@ class Instructor extends Model
         'email',
         'username',
         'password',
+        'avatar',
         'firstname',
         'lastname',
         'middlename',
@@ -42,7 +43,7 @@ class Instructor extends Model
         return $this->belongsTo(Course::class, 'course_id');
     }
 
-    public function comments(): MorphMany
+    public function comments() : MorphMany
     {
         return $this->morphMany(DiscussionComment::class, 'user');
     }
