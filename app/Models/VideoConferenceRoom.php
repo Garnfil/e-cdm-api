@@ -31,4 +31,9 @@ class VideoConferenceRoom extends Model
     {
         return $this->belongsTo(Instructor::class, 'instructor_id');
     }
+
+    public function joined_students()
+    {
+        return $this->hasMany(JoinedStudent::class, 'session_id');
+    }
 }
