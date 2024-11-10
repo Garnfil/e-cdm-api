@@ -26,4 +26,9 @@ class VideoConferenceRoom extends Model
     {
         return $this->belongsTo(Classroom::class, 'class_id');
     }
+
+    public function instructor()
+    {
+        return $this->belongsTo(Instructor::class, 'instructor_id');
+    }
 }

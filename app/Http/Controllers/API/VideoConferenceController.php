@@ -53,7 +53,7 @@ class VideoConferenceController extends Controller
     public function getStudentClassConferenceSessions(Request $request)
     {
         $class_ids = ClassStudent::where('student_id', $request->student_id)->pluck('class_id')->toArray();
-        $conference_sessions = VideoConferenceRoom::whereIn('class_id', $class_ids)->get();
+        $conference_sessions = VideoConferenceRoom::whereIn('class_id', $class_ids)->with('instructor', 'classroom')->get();
 
         return response()->json([
             'status' => 'success',
