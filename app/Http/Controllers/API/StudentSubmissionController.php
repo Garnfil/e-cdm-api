@@ -46,6 +46,7 @@ class StudentSubmissionController extends Controller
 
     public function submitFinalGrade(Request $request)
     {
+        return response($request->all());
         $school_work_grade = StudentSchoolWorkGrade::where('class_id', $request->class_id)
             ->where('student_id', $request->student_id)
             ->first();
