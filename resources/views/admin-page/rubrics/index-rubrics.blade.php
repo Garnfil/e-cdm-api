@@ -4,27 +4,30 @@
     <div class="container-xxl my-4">
         <section class="section-header d-flex justify-content-between align-items-center">
             <div class="title-section">
-                <h4 class="fw-medium mb-2">Activities</h4>
-                <h6 class="fw-medium text-primary"><a href="#" class="text-muted fw-light">Dashboard /</a> Activities
+                <h4 class="fw-medium mb-2">Rubrics</h4>
+                <h6 class="fw-medium text-primary"><a href="#" class="text-muted fw-light">Dashboard /</a> Rubrics
                 </h6>
             </div>
             <div class="action-section btn-group">
-                <a href="{{ route('admin.activities.create') }}" class="btn btn-primary"><i class="bx bx-plus"></i> Add
-                    Activity</a>
+                <a href="{{ route('admin.rubrics.create') }}" class="btn btn-primary"><i class="bx bx-plus"></i>Add Rubric</a>
             </div>
         </section>
 
         <div class="card">
             <div class="card-body">
                 <div class="table-responsive text-wrap">
-                    <table class="table  table-striped w-100" id="activities-table">
+                    <table class="table table-striped w-100" id="rubrics-table">
                         <thead>
                             <tr>
                                 <th>Id</th>
-                                <th>Title</th>
                                 <th>Class</th>
-                                <th>Instructor</th>
-                                <th>Due DateTime</th>
+                                <th>Assessment Type</th>
+                                <th>Assignment %</th>
+                                <th>Quiz %</th>
+                                <th>Activity %</th>
+                                <th>Exam %</th>
+                                <th>Attendance %</th>
+                                <th>Other Performance %</th>
                                 <th>Actions</th>
                             </tr>
                         </thead>
@@ -39,7 +42,7 @@
             let table;
 
             function loadTable() {
-                table = $('#activities-table').DataTable({
+                table = $('#rubrics-table').DataTable({
                     processing: true,
                     pageLength: 10,
                     responsive: true,
@@ -48,7 +51,7 @@
                     ordering: true,
                     searching: false,
                     ajax: {
-                        url: "{{ route('admin.activities.index') }}",
+                        url: "{{ route('admin.rubrics.index') }}",
                         data: function(d) {
                             d.search = $('#search-field').val(),
                                 d.type = $('#type-field').val(),
@@ -60,20 +63,36 @@
                             name: 'id'
                         },
                         {
-                            data: 'title',
-                            name: 'title'
+                            data: 'classroom',
+                            name: 'classroom'
                         },
                         {
-                            data: 'class',
-                            name: 'class'
+                            data: 'assessment_type',
+                            name: 'assessment_type'
                         },
                         {
-                            data: 'instructor',
-                            name: 'instructor'
+                            data: 'assignment_percentage',
+                            name: 'assignment_percentage'
                         },
                         {
-                            data: 'due_datetime',
-                            name: 'due_datetime'
+                            data: 'quiz_percentage',
+                            name: 'quiz_percentage'
+                        },
+                        {
+                            data: 'exam_percentage',
+                            name: 'exam_percentage'
+                        },
+                        {
+                            data: 'activity_percentage',
+                            name: 'activity_percentage'
+                        },
+                        {
+                            data: 'attendance_percentage',
+                            name: 'attendance_percentage'
+                        },
+                        {
+                            data: 'other_performance_percentage',
+                            name: 'other_performance_percentage'
                         },
                         {
                             data: 'actions',
@@ -103,7 +122,7 @@
                 let id = $(this).attr("id");
                 Swal.fire({
                     title: 'Are you sure?',
-                    text: "Remove tour from list",
+                    text: "Remove whiteboard session from list",
                     icon: 'warning',
                     showCancelButton: true,
                     confirmButtonColor: '#0b4c11',
@@ -112,22 +131,20 @@
                 }).then((result) => {
                     if (result.isConfirmed) {
                         $.ajax({
-                            url: "#",
+                            url: `/admin/whiteboard-sessions/${id}`,
                             method: "DELETE",
                             data: {
                                 _token: "{{ csrf_token() }}",
                                 id: id
                             },
                             success: function(response) {
-                                if (response.status) {
-                                    Swal.fire('Removed!', response.message, 'success').then(
-                                        result => {
-                                            if (result.isConfirmed) {
-                                                toastr.success(response.message, 'Success');
-                                                location.reload();
-                                            }
-                                        })
-                                }
+                                Swal.fire('Removed!', response.message, 'success').then(
+                                    result => {
+                                        if (result.isConfirmed) {
+                                            toastr.success(response.message, 'Success');
+                                            location.reload();
+                                        }
+                                    })
                             }
                         })
                     }

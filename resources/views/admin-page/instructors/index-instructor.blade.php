@@ -105,7 +105,7 @@
                     text: "Remove tour from list",
                     icon: 'warning',
                     showCancelButton: true,
-                    confirmButtonColor: '#3085d6',
+                    confirmButtonColor: '#0b4c11',
                     cancelButtonColor: '#d33',
                     confirmButtonText: 'Yes, remove it!'
                 }).then((result) => {

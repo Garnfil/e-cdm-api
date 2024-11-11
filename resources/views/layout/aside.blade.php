@@ -88,6 +88,13 @@
             </a>
         </li>
 
+        <li class="menu-item {{ Request::is('admin/rubrics') ? 'active' : null }}">
+            <a href="{{ route('admin.rubrics.index') }}" class="menu-link">
+                <i class="menu-icon tf-icons bx bx-box"></i>
+                <div data-i18n="Rubrics">Rubrics</div>
+            </a>
+        </li>
+
         <li
             class="menu-item {{ Request::is('admin/assignments', 'admin/activities', 'admin/quizzes', 'admin/exams') ? 'active' : null }}">
             <a href="javascript:void(0);" class="menu-link menu-toggle">
@@ -135,6 +142,54 @@
                 <i class="menu-icon tf-icons bx bx-calendar"></i>
                 <div data-i18n="School Events">School Events</div>
             </a>
+        </li>
+        <li class="menu-item {{ Request::is('admin/video-conference-sessions') ? 'active' : null }}">
+            <a href="{{ route('admin.video-conference-sessions.index') }}" class="menu-link">
+                <i class="menu-icon tf-icons bx bx-collection"></i>
+                <div data-i18n="Video Conference Sessions">Video Conference Sessions</div>
+            </a>
+        </li>
+        <li class="menu-item {{ Request::is('admin/whiteboard-sessions') ? 'active' : null }}">
+            <a href="{{ route('admin.whiteboard-sessions.index') }}" class="menu-link">
+                <i class="menu-icon tf-icons bx bx-collection"></i>
+                <div data-i18n="Whiteboard Sessions">Whiteboard Sessions</div>
+            </a>
+        </li>
+        <li class="menu-item {{ Request::is('admin/whiteboard-sessions') ? 'active' : null }}">
+            <a href="{{ route('admin.whiteboard-sessions.index') }}" class="menu-link">
+                <i class="menu-icon tf-icons bx bx-file"></i>
+                <div data-i18n="Class Grades">Class Grades</div>
+            </a>
+        </li>
+
+        <li
+            class="menu-item {{ Request::is('admin/assignments', 'admin/activities', 'admin/quizzes', 'admin/exams') ? 'active' : null }}">
+            <a href="javascript:void(0);" class="menu-link menu-toggle">
+                <i class="menu-icon tf-icons bx bx-chart"></i>
+                <div data-i18n="Analytics">Analytics</div>
+            </a>
+            <ul class="menu-sub">
+                <li class="menu-item {{ Request::is('admin/assignments') ? 'active' : null }}">
+                    <a href="{{ route('admin.assignments.index') }}" class="menu-link">
+                        <div data-i18n="Students Analytics">Students Analytics</div>
+                    </a>
+                </li>
+                <li class="menu-item {{ Request::is('admin/activities') ? 'active' : null }}">
+                    <a href="{{ route('admin.activities.index') }}" class="menu-link">
+                        <div data-i18n="Class Analytics">Class Analytics</div>
+                    </a>
+                </li>
+                <li class="menu-item {{ Request::is('admin/quizzes') ? 'active' : null }}">
+                    <a href="{{ route('admin.quizzes.index') }}" class="menu-link">
+                        <div data-i18n="Quizzes">Quizzes</div>
+                    </a>
+                </li>
+                <li class="menu-item {{ Request::is('admin/exams') ? 'active' : null }}">
+                    <a href="{{ route('admin.exams.index') }}" class="menu-link">
+                        <div data-i18n="Exams">Exams</div>
+                    </a>
+                </li>
+            </ul>
         </li>
     </ul>
 </aside>

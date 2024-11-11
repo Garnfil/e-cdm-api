@@ -15,4 +15,9 @@ class JoinedStudent extends Model
         "joined_start_time",
         "status"
     ];
+
+    public function student()
+    {
+        return $this->belongsTo(Student::class, 'student_id');
+    }
 }

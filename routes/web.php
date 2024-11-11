@@ -1,6 +1,5 @@
 <?php
 
-use App\Http\Controllers\API\WhiteboardController;
 use App\Http\Controllers\Web\ActivityController;
 use App\Http\Controllers\Web\AdminController;
 use App\Http\Controllers\Web\AssignmentController;
@@ -16,11 +15,14 @@ use App\Http\Controllers\Web\InstituteController;
 use App\Http\Controllers\Web\InstructorController;
 use App\Http\Controllers\Web\QuizController;
 use App\Http\Controllers\Web\QuizQuestionController;
+use App\Http\Controllers\Web\RubricController;
 use App\Http\Controllers\Web\SchoolEventController;
 use App\Http\Controllers\Web\SchoolWorkController;
 use App\Http\Controllers\Web\SectionController;
 use App\Http\Controllers\Web\StudentController;
 use App\Http\Controllers\Web\SubjectController;
+use App\Http\Controllers\Web\VideoConferenceController;
+use App\Http\Controllers\Web\WhiteboardController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -35,11 +37,9 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    if (auth()->check())
-    {
+    if (auth()->check()) {
         return redirect()->route('admin.dashboard');
-    } else
-    {
+    } else {
         return redirect()->route('login.get');
     }
 });
@@ -77,11 +77,12 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'middleware' => ['auth']], 
     Route::resource('discussions', DiscussionController::class);
     Route::resource('guardians', GuardianController::class);
     Route::resource('school-events', SchoolEventController::class);
+    Route::resource('video-conference-sessions', VideoConferenceController::class);
+    Route::resource('whiteboard-sessions', WhiteboardController::class);
+    Route::resource('rubrics', RubricController::class);
 
     Route::post('quiz-questions/store', [QuizQuestionController::class, 'store'])->name('quiz_questions.store');
-
     Route::post('school-works/attachments/upload', [SchoolWorkController::class, 'upload'])->name('school_works.attachments.upload');
 
 });
 
-Route::post('/whiteboard/update/{sessionId}', [WhiteboardController::class, 'update']);

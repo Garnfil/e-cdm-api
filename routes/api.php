@@ -190,5 +190,3 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::get('whiteboards/student-classes', [WhiteboardController::class, 'getStudentClassWhiteboards']);
     Route::get('whiteboards/{session_code}', [WhiteboardController::class, 'getUserWhiteboardSession']);
 });
-
-// Route::post('login', [AuthController::class, 'login']);
