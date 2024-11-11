@@ -56,7 +56,7 @@ class AttendanceController extends Controller
 
     public function getAttendanceByCode(Request $request, $attendance_code)
     {
-        $attendance = Attendance::where('attendance_code', $attendance_code)->first();
+        $attendance = Attendance::with('classroom')->where('attendance_code', $attendance_code)->first();
 
         $student_ids = StudentAttendance::where('attendance_id', $attendance->id)->pluck('student_id')->toArray();
 

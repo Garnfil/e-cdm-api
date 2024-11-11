@@ -18,7 +18,7 @@ class Attendance extends Model
         'grace_period_minute',
     ];
 
-    public function class()
+    public function classroom()
     {
         return $this->belongsTo(Classroom::class, 'class_id');
     }
