@@ -20,7 +20,7 @@ class StudentSchoolWorkGradeController extends Controller
                 'activities_grade_percentage as activities_grade',
                 'quizzes_grade_percentage as quizzes_grade',
                 'exams_grade_percentage as exams_grade',
-                'atttendance_grade_percentage as attendance_grade',
+                'attendance_grade_percentage as attendance_grade',
                 'other_performances_grade_percentage as other_performances_grade'
             )
             ->first();

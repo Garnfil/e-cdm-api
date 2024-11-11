@@ -23,4 +23,14 @@ class StudentSchoolWorkGrade extends Model
         'atttendance_grade_percentage',
         'other_performances_grade_percentage',
     ];
+
+    public function student()
+    {
+        return $this->belongsTo(Student::class, 'student_id');
+    }
+
+    public function classroom()
+    {
+        return $this->belongsTo(Classroom::class, 'class_id');
+    }
 }
