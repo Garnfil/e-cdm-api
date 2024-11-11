@@ -45,7 +45,7 @@ class Student extends Model
         return $this->belongsTo(Course::class, 'course_id');
     }
 
-    public function comments(): MorphMany
+    public function comments() : MorphMany
     {
         return $this->morphMany(DiscussionComment::class, 'user');
     }
@@ -53,5 +53,10 @@ class Student extends Model
     public function messages()
     {
         return $this->morphMany(ChatMessage::class, 'sender');
+    }
+
+    public function student_final_grade()
+    {
+        return $this->hasONe(StudentFinalGrade::class, 'student_id');
     }
 }
