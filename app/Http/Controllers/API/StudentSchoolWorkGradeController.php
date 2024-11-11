@@ -16,6 +16,7 @@ class StudentSchoolWorkGradeController extends Controller
         $grades = StudentSchoolWorkGrade::where('student_id', $studentId)
             ->where('class_id', $classId)
             ->select(
+                'id',
                 'assignment_grade_percentage as assignment_grade',
                 'activities_grade_percentage as activities_grade',
                 'quizzes_grade_percentage as quizzes_grade',
@@ -53,6 +54,7 @@ class StudentSchoolWorkGradeController extends Controller
                 'exam' => $submittedCounts['exam'] ?? 0,
             ],
             'rubrics' => $rubrics,
+            'school_work_grades' => $grades,
         ]);
     }
 
