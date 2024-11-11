@@ -21,4 +21,9 @@ class ClassRubric extends Model
         'attendance_percentage',
         'other_performance_percentage',
     ];
+
+    public function classroom()
+    {
+        return $this->belongsTo(Classroom::class, 'class_id');
+    }
 }

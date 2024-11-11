@@ -4,6 +4,7 @@ namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
 use App\Models\Attendance;
+use App\Models\Student;
 use App\Models\StudentAttendance;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -34,7 +35,7 @@ class AttendanceController extends Controller
 
     public function store(Request $request)
     {
-        $attendance_code = Str::random(6).'-'.rand(10000, 100000);
+        $attendance_code = Str::random(6) . '-' . rand(10000, 100000);
         $attendance = Attendance::create(array_merge($request->all(), ['attendance_code' => $attendance_code]));
 
         return response()->json([
@@ -50,6 +51,21 @@ class AttendanceController extends Controller
         return response()->json([
             'status' => 'success',
             'attendance' => $attendance,
+        ]);
+    }
+
+    public function getAttendanceByCode(Request $request, $attendance_code)
+    {
+        $attendance = Attendance::where('attendance_code', $attendance_code)->first();
+
+        $student_ids = StudentAttendance::where('attendance_id', $attendance->id)->pluck('student_id')->toArray();
+
+        $students = Student::whereIn('id', $student_ids)->get();
+
+        return response()->json([
+            'status' => 'success',
+            'attendance' => $attendance,
+            'students' => $students,
         ]);
     }
 
@@ -84,10 +100,12 @@ class AttendanceController extends Controller
             ->whereRaw('DATE_ADD(attendance_datetime, INTERVAL grace_period_minute MINUTE) >= ?', [Carbon::now()])
             ->first();
 
-        if ($attendance) {
+        if ($attendance)
+        {
             $student_attendance = StudentAttendance::where('attendance_id', $attendance->id)->where('student_id', $student->id)->exists();
 
-            if ($student_attendance) {
+            if ($student_attendance)
+            {
                 return response()->json([
                     'status' => 'success',
                     'attendance' => null,

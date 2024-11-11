@@ -4,6 +4,7 @@ namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StudentSubmission\StoreRequest;
+use App\Models\ClassRubric;
 use App\Models\Quiz;
 use App\Models\QuizQuestion;
 use App\Models\QuizQuestionChoice;
@@ -279,6 +280,10 @@ class StudentSubmissionController extends Controller
             $submissionId = $request->student_submission_id ?? $request->submission_id;
 
             $student_submission = StudentSubmission::with('school_work')->find($submissionId);
+
+            $rubric = ClassRubric::where('id', $student_submission->school_work->class_id)->first();
+            if (! $rubric)
+                throw new Exception("No Class Rubric Found.");
 
             $schoolWorkPoints = $student_submission->school_work->schoolWorkPoints();
 

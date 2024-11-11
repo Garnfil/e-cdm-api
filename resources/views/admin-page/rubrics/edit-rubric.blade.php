@@ -4,8 +4,8 @@
     <div class="container-xxl my-4">
         <section class="section-header d-flex justify-content-between align-items-center">
             <div class="title-section">
-                <h4 class="fw-medium mb-2">Add Rubric</h4>
-                <h6 class="fw-medium text-primary"><a href="#" class="text-muted fw-light">Dashboard /</a> Add Rubric
+                <h4 class="fw-medium mb-2">Edit Rubric</h4>
+                <h6 class="fw-medium text-primary"><a href="#" class="text-muted fw-light">Dashboard /</a> Edit Rubric
                 </h6>
             </div>
             <div class="action-section btn-group">
@@ -19,22 +19,28 @@
             <div class="col-xl-6 col-md-12">
                 <div class="card">
                     <div class="card-body">
-                        <form action="{{ route('admin.rubrics.store') }}" method="POST">
+                        <form action="{{ route('admin.rubrics.update', $rubric->id) }}" method="POST">
                             @csrf
+                            @method('PUT')
                             <div class="mb-3">
                                 <label for="class-field" class="form-label">Class</label>
                                 <select name="class_id" id="class-field" class="select2 form-select">
                                     @foreach ($classes as $class)
-                                        <option value="{{ $class->id }}">{{ $class->title }}</option>
+                                        <option {{ $class->id == $rubric->class_id ? 'selected' : null }}
+                                            value="{{ $class->id }}">
+                                            {{ $class->title }}</option>
                                     @endforeach
                                 </select>
                             </div>
                             <div class="mb-3">
                                 <label for="assessment-type-field" class="form-label">Assessment Type</label>
                                 <select name="assessment_type" id="assessment-type-field" class="form-select">
-                                    <option value="prelim">Prelim</option>
-                                    <option value="midterm">Midterm</option>
-                                    <option value="final">Final</option>
+                                    <option {{ $rubric->assessment_type == 'prelim' ? 'selected' : null }} value="prelim">
+                                        Prelim</option>
+                                    <option {{ $rubric->assessment_type == 'midterm' ? 'selected' : null }} value="midterm">
+                                        Midterm</option>
+                                    <option {{ $rubric->assessment_type == 'final' ? 'selected' : null }} value="final">
+                                        Final</option>
                                 </select>
                             </div>
                             <div class="mb-3">
