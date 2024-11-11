@@ -10,6 +10,8 @@ use App\Models\QuizQuestion;
 use App\Models\QuizQuestionChoice;
 use App\Models\QuizStudentAnswer;
 use App\Models\SchoolWork;
+use App\Models\StudentFinalGrade;
+use App\Models\StudentSchoolWorkGrade;
 use App\Models\StudentSubmission;
 use App\Models\StudentSubmissionAttachment;
 use App\Services\ExceptionHandlerService;
@@ -23,6 +25,12 @@ use Illuminate\Support\Str;
 
 class StudentSubmissionController extends Controller
 {
+    public $gradeService;
+    public function __construct(GradeService $gradeService)
+    {
+        $this->gradeService = $gradeService;
+    }
+
     public function schoolWorkStudentSubmissions(Request $request, $school_work_id)
     {
         $studentSubmissions = StudentSubmission::where('school_work_id', $school_work_id)
@@ -33,6 +41,21 @@ class StudentSubmissionController extends Controller
         return response()->json([
             'status' => 'success',
             'student_submissions' => $studentSubmissions,
+        ]);
+    }
+
+    public function submitFinalGrade(Request $request)
+    {
+        $school_work_grade = StudentSchoolWorkGrade::where('class_id', $request->class_id)
+            ->where('student_id', $request->student_id)
+            ->first();
+
+        $student_final_grade = $this->gradeService->computeFinalGrade($school_work_grade->class_id, $school_work_grade->student_id);
+
+        return response()->json([
+            'status' => 'success',
+            'message' => "Final Grade Submitted",
+            'student_final_grade' => $student_final_grade,
         ]);
     }
 

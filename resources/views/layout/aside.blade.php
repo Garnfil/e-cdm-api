@@ -162,7 +162,7 @@
             </a>
         </li>
 
-        <li
+        {{-- <li
             class="menu-item {{ Request::is('admin/assignments', 'admin/activities', 'admin/quizzes', 'admin/exams') ? 'active' : null }}">
             <a href="javascript:void(0);" class="menu-link menu-toggle">
                 <i class="menu-icon tf-icons bx bx-chart"></i>
@@ -190,6 +190,6 @@
                     </a>
                 </li>
             </ul>
-        </li>
+        </li> --}}
     </ul>
 </aside>

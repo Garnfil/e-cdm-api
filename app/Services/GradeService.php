@@ -6,6 +6,7 @@ use App\Models\Activity;
 use App\Models\Assignment;
 use App\Models\ClassRubric;
 use App\Models\Exam;
+use App\Models\StudentFinalGrade;
 use App\Models\StudentSchoolWorkGrade;
 use App\Models\StudentSubmission;
 
@@ -22,7 +23,8 @@ class GradeService
             'exam' => 'exam_percentage',
         ];
 
-        if (isset($types[$type])) {
+        if (isset($types[$type]))
+        {
             return $this->computeGrade($type, $student_id, $class_id, $rubric, $types[$type]);
         }
 
@@ -65,7 +67,8 @@ class GradeService
         $percentage = $rubric->$percentageField / 100;
         $weightedGrade = $percentageScore * $percentage;
 
-        switch ($type) {
+        switch ($type)
+        {
             case 'assignment':
                 $percentage_label = 'assignment_grade_percentage';
                 break;
@@ -97,5 +100,25 @@ class GradeService
         ]);
 
         return $weightedGrade;
+    }
+
+    public function computeFinalGrade($class_id, $student_id)
+    {
+        $school_work_grade = StudentSchoolWorkGrade::where('class_id', $class_id)
+            ->where('student_id', $student_id)
+            ->first();
+
+        $initial_final_grade = $school_work_grade->assignment_grade_percentage + $school_work_grade->quizzes_grade_percentage + $school_work_grade->activities_grade_percentage + $school_work_grade->exams_grade_percentage + $school_work_grade->atttendance_grade_percentage + $school_work_grade->other_performances_grade_percentage;
+
+        $student_final_grade = StudentFinalGrade::updateOrCreate([
+            'student_school_works_grade_id' => $school_work_grade->id,
+            'class_id' => $class_id,
+            'student_id' => $student_id,
+        ], [
+            'assessment_type' => $school_work_grade->assessment_category,
+            'final_grade' => $initial_final_grade,
+        ]);
+
+        return $student_final_grade;
     }
 }

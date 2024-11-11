@@ -9,6 +9,7 @@ use App\Http\Controllers\API\ChatMessageController;
 use App\Http\Controllers\API\ClassRoomController;
 use App\Http\Controllers\API\ClassScheduleController;
 use App\Http\Controllers\API\CourseController;
+use App\Http\Controllers\API\DataReportController;
 use App\Http\Controllers\API\DiscussionForumController;
 use App\Http\Controllers\API\ExamController;
 use App\Http\Controllers\API\GuardianAuthenticationController;
@@ -93,6 +94,7 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::get('attendances/{attendance_code}', [AttendanceController::class, 'getAttendanceByCode']);
     Route::post('attendances', [AttendanceController::class, 'store']);
 
+    Route::post('student-school-works/submit-final-grade', [StudentSubmissionController::class, 'submitFinalGrade']);
     Route::post('student-school-works/submissions-with-grade/{school_work_type}', [StudentSubmissionController::class, 'storeWithGrade']);
     Route::post('student-school-works/submissions/{submission_id}/graded', [StudentSubmissionController::class, 'gradeStudentSubmission']);
     Route::post('student-school-works/submissions', [StudentSubmissionController::class, 'store']);
@@ -190,4 +192,6 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::get('whiteboards/instructors/{instructor_id}', [WhiteboardController::class, 'getInstructorWhiteboards']);
     Route::get('whiteboards/student-classes', [WhiteboardController::class, 'getStudentClassWhiteboards']);
     Route::get('whiteboards/{session_code}', [WhiteboardController::class, 'getUserWhiteboardSession']);
+
+    Route::get('reports/student-performance', [DataReportController::class, 'getStudentPerformance']);
 });
