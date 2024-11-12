@@ -47,6 +47,9 @@ Route::get('/', function () {
 Route::get('admin/login', [AuthController::class, 'login'])->name('login.get');
 Route::post('admin/login', [AuthController::class, 'saveLogin'])->name('login.post');
 
+Route::get('verify-email', [AuthController::class, 'verifyEmail'])->name('verify-email');
+Route::view('email-verification-success', 'misc.verification-success')->name('email-verification-success');
+
 Route::group(['prefix' => 'admin', 'as' => 'admin.', 'middleware' => ['auth']], function () {
     Route::post('logout', [AuthController::class, 'logout'])->name('logout');
 

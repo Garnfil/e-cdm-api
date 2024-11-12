@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Web;
 
 use App\Http\Controllers\Controller;
 use App\Models\Admin;
+use App\Models\Student;
+use Carbon\Carbon;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -38,6 +40,18 @@ class AuthController extends Controller
         } catch (Exception $exception) {
             return back()->with('fail', $exception->getMessage());
         }
+
+    }
+
+    public function verifyEmail(Request $request)
+    {
+        $student = Student::where('email', $request->email)->firstOrFail();
+
+        $student->update([
+            'email_verified_at' => Carbon::now(),
+        ]);
+
+        return redirect()->route('email-verification-success');
 
     }
 

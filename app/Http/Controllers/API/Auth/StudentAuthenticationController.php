@@ -5,11 +5,13 @@ namespace App\Http\Controllers\API\Auth;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\StudentAuth\LoginRequest;
 use App\Http\Requests\Auth\StudentAuth\RegisterRequest;
+use App\Mail\EmailVerification;
 use App\Models\Student;
 use App\Services\ExceptionHandlerService;
 use Exception;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Mail;
 
 class StudentAuthenticationController extends Controller
 {
@@ -34,6 +36,8 @@ class StudentAuthenticationController extends Controller
 
             $student = Student::create(array_merge($data, ['password' => Hash::make($request->password)]));
 
+            Mail::to($student->email)->send(new EmailVerification($student->email));
+
             DB::commit();
 
             return response()->json([
@@ -44,7 +48,11 @@ class StudentAuthenticationController extends Controller
         } catch (Exception $exception) {
             DB::rollBack();
 
-            return $this->exceptionHandler->__generateExceptionResponse($exception);
+            return response()->json([
+                'status' => 'error',
+                'message' => $exception->getMessage(),
+            ], 400);
+            // return $this->exceptionHandler->__generateExceptionResponse($exception);
         }
     }
 
@@ -58,6 +66,10 @@ class StudentAuthenticationController extends Controller
                 throw new Exception('Invalid Credentials', '400');
             }
 
+            if (! $student->email_verified_at) {
+                throw new Exception('Your email is not yet verified. Please check your email and confirm first.', '400');
+            }
+
             $token = $student->createToken('STUDENT TOKEN')->plainTextToken;
 
             return response()->json([
@@ -66,9 +78,11 @@ class StudentAuthenticationController extends Controller
             ]);
 
         } catch (Exception $exception) {
-            dd($exception);
-
-            return $this->exceptionHandler->__generateExceptionResponse($exception);
+            return response()->json([
+                'status' => 'error',
+                'message' => $exception->getMessage(),
+            ], 400);
+            // return $this->exceptionHandler->__generateExceptionResponse($exception);
         }
     }
 }

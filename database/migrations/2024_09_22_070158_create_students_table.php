@@ -4,12 +4,11 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration
-{
+return new class extends Migration {
     /**
      * Run the migrations.
      */
-    public function up(): void
+    public function up() : void
     {
         Schema::create('students', function (Blueprint $table) {
             $table->id();
@@ -28,6 +27,7 @@ return new class extends Migration
             $table->string('gender')->nullable();
             $table->string('current_address')->nullable();
             $table->string('avatar_path')->nullable();
+            $table->timestamp('email_verified_at')->nullable();
             $table->string('role')->default('student');
             $table->enum('status', ['active', 'inactive', 'blocked', 'locked', 'dropped'])->default('active');
             $table->softDeletes();
@@ -38,7 +38,7 @@ return new class extends Migration
     /**
      * Reverse the migrations.
      */
-    public function down(): void
+    public function down() : void
     {
         Schema::dropIfExists('students');
     }
