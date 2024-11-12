@@ -4,6 +4,7 @@ namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
 use App\Models\ClassRubric;
+use App\Models\Student;
 use App\Models\StudentFinalGrade;
 use App\Models\StudentSchoolWorkGrade;
 use App\Models\StudentSubmission;
@@ -66,10 +67,14 @@ class StudentSchoolWorkGradeController extends Controller
 
     public function getStudentClassFinalGrades(Request $request)
     {
-        $student_final_grades = StudentFinalGrade::where('student_id', $request->student_id)->get();
+        $student_final_grades = StudentFinalGrade::where('student_id', $request->student_id)
+            ->get();
+
+        $student = Student::where('id', $request->student_id)->first();
 
         return response()->json([
             'status' => 'success',
+            'student' => $student,
             'final_grades' => $student_final_grades,
         ]);
     }
