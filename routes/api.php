@@ -13,6 +13,7 @@ use App\Http\Controllers\API\DataReportController;
 use App\Http\Controllers\API\DiscussionForumController;
 use App\Http\Controllers\API\ExamController;
 use App\Http\Controllers\API\GuardianAuthenticationController;
+use App\Http\Controllers\API\GuardianController;
 use App\Http\Controllers\API\InstituteController;
 use App\Http\Controllers\API\ModuleController;
 use App\Http\Controllers\API\ProfileController;
@@ -194,4 +195,6 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::get('whiteboards/{session_code}', [WhiteboardController::class, 'getUserWhiteboardSession']);
 
     Route::get('reports/student-performance', [DataReportController::class, 'getStudentPerformance']);
+
+    Route::get('guardians/{guardian_id}/children', [GuardianController::class, 'getGuardianChildren']);
 });
