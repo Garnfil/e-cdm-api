@@ -68,6 +68,7 @@ class StudentSchoolWorkGradeController extends Controller
     public function getStudentClassFinalGrades(Request $request)
     {
         $student_final_grades = StudentFinalGrade::where('student_id', $request->student_id)
+            ->with('classroom')
             ->get();
 
         $student = Student::where('id', $request->student_id)

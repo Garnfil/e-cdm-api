@@ -18,4 +18,9 @@ class StudentFinalGrade extends Model
         'assessment_type',
         'final_grade',
     ];
+
+    public function classroom()
+    {
+        return $this->belongsTo(Classroom::class, 'classroom_id');
+    }
 }
