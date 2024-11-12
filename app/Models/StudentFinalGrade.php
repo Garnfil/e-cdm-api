@@ -21,6 +21,6 @@ class StudentFinalGrade extends Model
 
     public function classroom()
     {
-        return $this->belongsTo(Classroom::class, 'classroom_id');
+        return $this->belongsTo(Classroom::class, 'class_id');
     }
 }
