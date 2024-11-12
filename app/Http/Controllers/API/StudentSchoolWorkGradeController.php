@@ -70,7 +70,9 @@ class StudentSchoolWorkGradeController extends Controller
         $student_final_grades = StudentFinalGrade::where('student_id', $request->student_id)
             ->get();
 
-        $student = Student::where('id', $request->student_id)->first();
+        $student = Student::where('id', $request->student_id)
+            ->with('institute', 'course')
+            ->first();
 
         return response()->json([
             'status' => 'success',
