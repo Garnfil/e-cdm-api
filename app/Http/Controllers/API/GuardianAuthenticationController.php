@@ -20,14 +20,17 @@ class GuardianAuthenticationController extends Controller
 
     public function login(LoginRequest $request)
     {
-        try {
+        try
+        {
             $guardian = Guardian::where('email', $request->email)->first();
 
-            if (! $guardian) {
+            if (! $guardian)
+            {
                 throw new Exception('Guardian Not Found', '404');
             }
 
-            if (! Hash::check($request->password, $guardian->password)) {
+            if (! Hash::check($request->password, $guardian->password))
+            {
                 throw new Exception('Invalid Credentials', '400');
             }
 
@@ -38,7 +41,8 @@ class GuardianAuthenticationController extends Controller
                 'user' => $guardian,
             ]);
 
-        } catch (Exception $exception) {
+        } catch (Exception $exception)
+        {
             return $this->exceptionHandler->__generateExceptionResponse($exception);
         }
     }

@@ -18,13 +18,15 @@ class SchoolWorkController extends Controller
     {
         $school_work = SchoolWork::with('attachments')->find($id);
 
-        if (! $school_work) {
+        if (! $school_work)
+        {
             return response()->json([
                 'message' => 'No School Work Found',
             ], 404);
         }
 
-        switch ($school_work->type) {
+        switch ($school_work->type)
+        {
             case 'assignment':
                 $school_work->load('assignment');
                 break;
@@ -51,27 +53,32 @@ class SchoolWorkController extends Controller
 
     public function uploadSingleAttachment(Request $request)
     {
-        try {
+        try
+        {
             $school_work = SchoolWork::where('id', $request->school_work_id)->first();
-            if (! $school_work) {
+            if (! $school_work)
+            {
                 throw new Exception('School Work Not Found', 404);
             }
 
-            if ($request->hasFile('attachment') && $request->attachment_type == SchoolWorkAttachment::ATTACHMENT_TYPE_FILE) {
+            if ($request->hasFile('attachment') && $request->attachment_type == SchoolWorkAttachment::ATTACHMENT_TYPE_FILE)
+            {
                 // dd(true);
                 $attachment = $request->file('attachment');
 
                 $path_extension = $attachment->getClientOriginalExtension();
 
-                if (! in_array($path_extension, ['pdf', 'png', 'jpg', 'jpeg', 'webp'])) {
+                if (! in_array($path_extension, ['pdf', 'png', 'jpg', 'jpeg', 'webp']))
+                {
                     throw new Exception('The requested attachment does not correspond to a recognized file type. The following file types are supported: pdf, png, jpg, jpeg, and webp.', 422);
                 }
 
-                $attachment_name = Str::random(7).'-'.time().'.'.$attachment->getClientOriginalExtension();
+                $attachment_name = Str::random(7) . '-' . time() . '.' . $attachment->getClientOriginalExtension();
 
                 $file_path = 'school_work_attachments/';
                 Storage::disk('public')->putFileAs($file_path, $attachment, $attachment_name);
-            } else {
+            } else
+            {
                 $attachment_name = $request->attachment;
             }
 
@@ -88,7 +95,8 @@ class SchoolWorkController extends Controller
                 'message' => 'School Work Attachment Added Successfully',
             ]);
 
-        } catch (Exception $exception) {
+        } catch (Exception $exception)
+        {
             DB::rollBack();
             $exceptionHandlerService = new ExceptionHandlerService;
 
@@ -101,12 +109,14 @@ class SchoolWorkController extends Controller
     {
         $schoolWorkAttachment = SchoolWorkAttachment::where('id', $attachment_id)->first();
 
-        if ($schoolWorkAttachment->attachment_type == SchoolWorkAttachment::ATTACHMENT_TYPE_FILE) {
+        if ($schoolWorkAttachment->attachment_type == SchoolWorkAttachment::ATTACHMENT_TYPE_FILE)
+        {
             // Define the file path
-            $file_path = 'school_work_attachments/'.$schoolWorkAttachment->attachment_name;
+            $file_path = 'school_work_attachments/' . $schoolWorkAttachment->attachment_name;
 
             // Check if the file exists in the 'public' disk
-            if (Storage::disk('public')->exists($file_path)) {
+            if (Storage::disk('public')->exists($file_path))
+            {
                 // Delete the file
                 Storage::disk('public')->delete($file_path);
             }
@@ -134,7 +144,9 @@ class SchoolWorkController extends Controller
 
         $today = now();
 
-        $school_works = SchoolWork::where('class_id', $class_id)
+        $school_works = SchoolWork::when($class_id, function ($q) use ($class_id) {
+            return $q->where('class_id', $class_id);
+        })
             ->where('due_datetime', '>', $today)
             ->whereDoesntHave('student_submissions', function ($query) use ($student_id) {
                 $query->where('student_id', $student_id)
