@@ -10,6 +10,7 @@ use App\Http\Controllers\Web\CourseController;
 use App\Http\Controllers\Web\DashboardController;
 use App\Http\Controllers\Web\DiscussionController;
 use App\Http\Controllers\Web\ExamController;
+use App\Http\Controllers\Web\FingerprintController;
 use App\Http\Controllers\Web\GuardianController;
 use App\Http\Controllers\Web\InstituteController;
 use App\Http\Controllers\Web\InstructorController;
@@ -59,6 +60,7 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'middleware' => ['auth']], 
     Route::post('profile/change-password', [DashboardController::class, 'changePassword'])->name('dashboard.profile.change-password');
     Route::post('profile', [DashboardController::class, 'updateAdminProfile'])->name('dashboard.profile.post');
 
+    Route::post('admins/fingerprint/enroll', [FingerprintController::class, 'enroll'])->name('admins.fingerprint.enroll');
     Route::resource('admins', AdminController::class);
 
     Route::get('students/all', [StudentController::class, 'all']);
