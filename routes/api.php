@@ -53,6 +53,10 @@ Route::post('guardian/login', [GuardianAuthenticationController::class, 'login']
 
 Route::get('school-events', [SchoolEventController::class, 'getAll']);
 
+Route::get('courses', [CourseController::class, 'getAll']);
+Route::get('institutes', [InstituteController::class, 'getAll']);
+
+
 Route::group(['middleware' => ['auth:sanctum']], function () {
 
     Route::post('student/profile/{id}', [ProfileController::class, 'updateStudentProfile']);
@@ -165,11 +169,9 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::get('subjects/active', [SubjectController::class, 'get']);
     Route::get('subjects/{id}', [SubjectController::class, 'show']);
 
-    Route::get('courses', [CourseController::class, 'getAll']);
     Route::get('courses/active', [CourseController::class, 'get']);
     Route::get('courses/{id}', [CourseController::class, 'show']);
 
-    Route::get('institutes', [InstituteController::class, 'getAll']);
     Route::get('institutes/active', [InstituteController::class, 'get']);
     Route::get('institutes/{id}', [InstituteController::class, 'show']);
 
