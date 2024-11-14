@@ -110,6 +110,7 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
 
     Route::get('students/{student_id}/classes/{class_id?}/school-works/todos', [SchoolWorkController::class, 'todoSchoolWorks']);
     Route::get('students/{student_id}/classes/{class_id}/school-works/completed', [SchoolWorkController::class, 'completedSchoolWorks']);
+    Route::get('students/{student_id}/classes/{class_id}/school-works/missing', [SchoolWorkController::class, 'missingSchoolWorks']);
     Route::get('students/{student_id}/classes/{class_id}/school-work-grades', [StudentSchoolWorkGradeController::class, 'getStudentSchoolWorkGrades']);
     Route::get('students/{student_id}/classes/school-work-grades', [StudentSchoolWorkGradeController::class, 'getStudentAllClassGrades']);
     Route::get('students/{student_id}/classes/final-grades', [StudentSchoolWorkGradeController::class, 'getStudentClassFinalGrades']);
