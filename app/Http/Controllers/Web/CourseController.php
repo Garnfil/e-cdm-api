@@ -81,7 +81,10 @@ class CourseController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        $course = Course::findOrFail($id);
+        $course->update($request->except('_token', '_method'));
+
+        return redirect()->route('admin.courses.index')->withSuccess('Course Updated Successfully');
     }
 
     /**

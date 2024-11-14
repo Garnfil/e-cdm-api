@@ -22,6 +22,7 @@
                     <div class="card-body">
                         <form action="{{ route('admin.courses.update', $course->id) }}" method="POST">
                             @csrf
+                            @method("PUT")
                             <div class="row">
                                 <div class="col-xl-12">
                                     <div class="mb-3">
