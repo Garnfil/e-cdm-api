@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\VideoConference\StoreRequest;
 use App\Models\ClassStudent;
 use App\Models\VideoConferenceRoom;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 
@@ -18,7 +19,9 @@ class VideoConferenceController extends Controller
 
         $conference_session = VideoConferenceRoom::create(array_merge($data, [
             'session_code' => $session_code,
-            'scheduled_datetime' => $request->start_datetime,
+            'scheduled_datetime' => Carbon::now(),
+            'start_datetime' => Carbon::now(),
+            'end_datetime' => Carbon::now()->addHour(),
             'status' => 'active',
         ]));
 

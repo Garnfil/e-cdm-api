@@ -24,8 +24,6 @@ class StoreRequest extends FormRequest
         return [
             "class_id" => ['required', 'exists:classes,id'],
             "title" => ['required'],
-            "start_datetime" => ['required'],
-            "end_datetime" => ['required'],
             "instructor_id" => ['required', 'exists:instructors,id'],
             "description" => ['nullable'],
         ];
