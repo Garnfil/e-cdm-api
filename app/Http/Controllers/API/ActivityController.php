@@ -126,5 +126,13 @@ class ActivityController extends Controller
         }
     }
 
-    public function destroy($id) {}
+    public function destroy(string $id)
+    {
+        $activity = Activity::findOrFail($id)->delete();
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Activity Deleted Successfully'
+        ]);
+    }
 }

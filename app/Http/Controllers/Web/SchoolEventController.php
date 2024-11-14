@@ -26,7 +26,7 @@ class SchoolEventController extends Controller
                 ->addColumn('actions', function ($row) {
                     return '<div class="btn-group">
                         <a href="' . route('admin.school-events.edit', $row->id) . '" class="btn btn-primary btn-sm"><i class="bx bx-edit text-white"></i></a>
-                        <a id="' . $row->id . '" class="btn btn-danger btn-sm remove-btn"><i class="bx bx-trash text-white"></i></a>
+                        <a id="' . $row->id . '" class="btn btn-danger btn-sm remove-btn" id="'. $row->id .'"><i class="bx bx-trash text-white"></i></a>
                     </div>';
                 })
                 ->rawColumns(['actions'])

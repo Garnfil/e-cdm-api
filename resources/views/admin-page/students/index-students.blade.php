@@ -116,7 +116,7 @@
                 }).then((result) => {
                     if (result.isConfirmed) {
                         $.ajax({
-                            url: "#",
+                            url: `/admin/students/${id}`,
                             method: "DELETE",
                             data: {
                                 _token: "{{ csrf_token() }}",

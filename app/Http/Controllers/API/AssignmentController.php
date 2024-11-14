@@ -131,5 +131,14 @@ class AssignmentController extends Controller
         }
     }
 
-    public function destroy($id) {}
+    public function destroy(string $id)
+    {
+        $course = Assignment::find($id);
+        $course->delete();
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Course Deleted Successfully'
+        ]);
+    }
 }

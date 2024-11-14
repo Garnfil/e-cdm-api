@@ -19,6 +19,9 @@
             <div class="col-xl-6 col-md-12">
                 <div class="card">
                     <div class="card-body">
+                        <div class="alert alert-warning border-1" style="border-color: black !important; color: #000;">
+                            Make sure that the total percentage meet 100%
+                        </div>
                         <form action="{{ route('admin.rubrics.update', $rubric->id) }}" method="POST">
                             @csrf
                             @method('PUT')

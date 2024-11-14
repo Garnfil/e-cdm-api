@@ -34,7 +34,7 @@ class ClassController extends Controller
                 })->addColumn('actions', function ($row) {
                     return '<div class="btn-group">
                         <a href="'.route('admin.classes.edit', $row->id).'" class="btn btn-primary btn-sm"><i class="bx bx-edit text-white"></i></a>
-                        <a class="btn btn-danger btn-sm"><i class="bx bx-trash text-white"></i></a>
+                        <a class="btn btn-danger btn-sm remove-btn" id="'. $row->id .'"><i class="bx bx-trash text-white"></i></a>
                     </div>';
                 })
                 ->rawColumns(['actions'])
@@ -127,6 +127,12 @@ class ClassController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $class = Classroom::find($id);
+        $class->delete();
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Class Deleted Successfully'
+        ]);
     }
 }

@@ -25,7 +25,7 @@ class SubjectController extends Controller
                 })->addColumn('actions', function ($row) {
                     return '<div class="btn-group">
                         <a href="'.route('admin.subjects.edit', $row->id).'" class="btn btn-primary btn-sm"><i class="bx bx-edit text-white"></i></a>
-                        <a class="btn btn-danger btn-sm"><i class="bx bx-trash text-white"></i></a>
+                        <a class="btn btn-danger remove-btn" id="'. $row->id .'"><i class="bx bx-trash text-white"></i></a>
                     </div>';
                 })
                 ->rawColumns(['actions'])
@@ -94,6 +94,12 @@ class SubjectController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $class = Subject::find($id);
+        $class->delete();
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Subject Deleted Successfully'
+        ]);
     }
 }

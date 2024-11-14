@@ -105,6 +105,12 @@ class RubricController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $class = ClassRubric::find($id);
+        $class->delete();
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Rubric Deleted Successfully'
+        ]);
     }
 }

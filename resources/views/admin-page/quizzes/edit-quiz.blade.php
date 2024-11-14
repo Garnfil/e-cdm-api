@@ -22,12 +22,12 @@
                     Quiz Details
                 </button>
             </li>
-            <li class="nav-item">
+            <!-- <li class="nav-item">
                 <button type="button" class="nav-link" role="tab" data-bs-toggle="tab"
                     data-bs-target="#navs-top-profile" aria-controls="navs-top-profile" aria-selected="false">
                     Quiz Form
                 </button>
-            </li>
+            </li> -->
 
         </ul>
         <div class="tab-content px-0">

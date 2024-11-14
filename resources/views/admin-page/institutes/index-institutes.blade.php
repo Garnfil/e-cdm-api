@@ -93,7 +93,7 @@
                 let id = $(this).attr("id");
                 Swal.fire({
                     title: 'Are you sure?',
-                    text: "Remove tour from list",
+                    text: "Remove from list",
                     icon: 'warning',
                     showCancelButton: true,
                     confirmButtonColor: '#0b4c11',
@@ -102,7 +102,7 @@
                 }).then((result) => {
                     if (result.isConfirmed) {
                         $.ajax({
-                            url: "#",
+                            url: `/admin/institutes/${id}`,
                             method: "DELETE",
                             data: {
                                 _token: "{{ csrf_token() }}",

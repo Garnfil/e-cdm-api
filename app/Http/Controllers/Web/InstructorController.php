@@ -34,8 +34,8 @@ class InstructorController extends Controller
                 ->addColumn('actions', function ($row) {
                     return '<div class="btn-group">
                             <a href="'.route('admin.instructors.edit', $row->id).'" class="btn btn-primary btn-sm"><i class="bx bx-edit text-white"></i></a>
-                            <a class="btn btn-danger btn-sm"><i class="bx bx-trash text-white"></i></a>
-                        </div>';
+                            <a class="btn btn-danger btn-sm remove-btn" id="'. $row->id .'"><i class="bx bx-trash text-white"></i></a>
+                        </div>'; 
                 })
                 ->rawColumns(['actions'])
                 ->make(true);
@@ -107,7 +107,12 @@ class InstructorController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $instructor = Instructor::findOrFail($id)->delete();
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Instructor Deleted Successfully'
+        ]);
     }
 
     public function all(Request $request)
