@@ -16,6 +16,15 @@
 
         <div class="card">
             <div class="card-body">
+                @if ($errors->any())
+                    <div class="alert alert-danger">
+                        <ul>
+                            @foreach ($errors->all() as $error)
+                                <li>{{ $error }}</li>
+                            @endforeach
+                        </ul>
+                    </div>
+                @endif
                 <form action="{{ route('admin.admins.store') }}" method="post">
                     @csrf
                     <div class="row">
@@ -83,20 +92,11 @@
                         <div class="col-xl-4">
                             <div class="mb-3">
                                 <label for="address-field" class="form-label">Address</label>
-                                <input type="text" class="form-control" name="address" id="address-field">
+                                <input type="text" class="form-control" name="address" id="address-field"
+                                    value="{{ old('address') }}">
                             </div>
                         </div>
-                        <div class="col-xl-4">
-                            <div class="mb-3">
-                                <label for="admin-role-select-field" class="form-label">Admin Role</label>
-                                <select name="admin_role" id="admin-role-select-field" class="form-select">
-                                    <option value="super_admin">Super Admin</option>
-                                    <option value="admin">Admin</option>
-                                    <option value="user_manager">User Manager</option>
-                                    <option value="dean">Dean</option>
-                                </select>
-                            </div>
-                        </div>
+
                         <div class="col-xl-4">
                             <div class="mb-3">
                                 <label for="status-field" class="form-label">status</label>
@@ -114,7 +114,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="btn btn-primary">Save Admin</div>
+                    <button type="submit" class="btn btn-primary">Save Admin</button>
                 </form>
             </div>
         </div>

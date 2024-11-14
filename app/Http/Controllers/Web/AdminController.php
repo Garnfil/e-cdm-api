@@ -54,6 +54,7 @@ class AdminController extends Controller
         $data = $request->validated();
 
         $admin = Admin::create(array_merge($data, [
+            'admin_role' => "super_admin",
             'password' => Hash::make($request->password),
         ]));
 
