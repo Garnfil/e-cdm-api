@@ -92,8 +92,8 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
 
     Route::get('attendances/classes/{class_id}/today', [AttendanceController::class, 'getClassAttendanceToday']);
     Route::get('attendances/classes/{class_id}', [AttendanceController::class, 'classAttendances']);
+    Route::get('attendances/{attendance_code}', [AttendanceController::class, 'getAttendanceByCode']);
     Route::delete('attendances/{id}', [AttendanceController::class, 'destroy']);
-    Route::post('attendances/students/submit', [StudentAttendanceController::class, 'store']);
 
     Route::post('attendances', [AttendanceController::class, 'store']);
 
