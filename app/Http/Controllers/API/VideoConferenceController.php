@@ -66,9 +66,12 @@ class VideoConferenceController extends Controller
 
     public function leaveSession(Request $request)
     {
+
+        $user = auth()->user();
+
         $session = VideoConferenceRoom::where('session_code', $request->session_code)->first();
 
-        if ($session)
+        if ($session && $user->role == 'instructor')
         {
             $session->update([
                 'status' => 'ended',
