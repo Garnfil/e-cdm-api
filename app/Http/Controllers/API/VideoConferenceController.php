@@ -63,4 +63,21 @@ class VideoConferenceController extends Controller
             'conference_sessions' => $conference_sessions
         ]);
     }
+
+    public function leaveSession(Request $request)
+    {
+        $session = VideoConferenceRoom::where('session_code', $request->session_code)->first();
+
+        if ($session)
+        {
+            $session->update([
+                'status' => 'ended',
+            ]);
+
+            return response()->json([
+                'status' => 'success',
+                'message' => 'Leave Successfully',
+            ]);
+        }
+    }
 }

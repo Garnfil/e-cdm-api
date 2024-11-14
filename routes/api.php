@@ -185,6 +185,7 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::post('messages/classes/{class_id}', [ChatMessageController::class, 'store']);
     Route::get('messages/classes/{class_id}', [ChatMessageController::class, 'classMessages']);
 
+    Route::post('live-sessions/leave-session', [VideoConferenceController::class, 'leaveSession']);
     Route::post('live-sessions', [VideoConferenceController::class, 'store']);
     Route::get('live-sessions/students/{student_id}/classes', [VideoConferenceController::class, 'getStudentClassConferenceSessions']);
     Route::get('live-sessions/instructor-recent-classes', [VideoConferenceController::class, 'getRecentInstructorClassSessions']);
