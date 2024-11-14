@@ -47,9 +47,11 @@ class StudentController extends Controller
     {
         $student = Student::find($id);
 
-        if ($student) {
+        if ($student)
+        {
             return response()->json(['status' => 'success', 'student' => $student], 200);
-        } else {
+        } else
+        {
             return response()->json(['error' => 'Student not found'], 404);
         }
     }
@@ -68,11 +70,13 @@ class StudentController extends Controller
     {
         $student = Student::find($id);
 
-        if ($student) {
+        if ($student)
+        {
             $student->update($request->validated());
 
             return response()->json(['status' => 'success', 'student' => $student], 200);
-        } else {
+        } else
+        {
             return response()->json(['error' => 'Student not found'], 404);
         }
     }
@@ -82,12 +86,19 @@ class StudentController extends Controller
     {
         $student = Student::find($id);
 
-        if ($student) {
+        if ($student)
+        {
             $student->delete();
 
             return response()->json(['message' => 'Student deleted successfully'], 200);
-        } else {
+        } else
+        {
             return response()->json(['error' => 'Student not found'], 404);
         }
+    }
+
+    public function getTotalClassesAndCompletedWorks(Request $request)
+    {
+
     }
 }

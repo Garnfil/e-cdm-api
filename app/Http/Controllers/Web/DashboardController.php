@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Profile\AdminUpdateRequest;
 use App\Http\Requests\Profile\ChangeUserPasswordRequest;
 use App\Models\Admin;
+use App\Models\Course;
+use App\Models\DiscussionPost;
 use App\Models\Instructor;
 use App\Models\Student;
 use App\Models\VideoConferenceRoom;
@@ -23,7 +25,11 @@ class DashboardController extends Controller
         $total_students = Student::count();
         $total_instructors = Instructor::count();
         $recent_conference_sessions = VideoConferenceRoom::with('classroom')->latest('end_datetime')->limit(5)->get();
-        return view('welcome', compact('total_students', 'total_instructors', 'recent_conference_sessions'));
+
+        $courses = Course::with('subjects')->get();
+        $total_discussions_count = DiscussionPost::count();
+
+        return view('welcome', compact('total_students', 'total_instructors', 'recent_conference_sessions', 'courses', 'total_discussions_count'));
     }
 
     public function profile(Request $request)

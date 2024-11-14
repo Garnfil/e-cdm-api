@@ -95,6 +95,8 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::get('attendances/{attendance_code}', [AttendanceController::class, 'getAttendanceByCode']);
     Route::post('attendances', [AttendanceController::class, 'store']);
 
+    Route::get('students/{student_id}/total-classes-and-completed-works', [StudentController::class, 'getTotalClassesAndCompletedWorks']);
+
     Route::post('student-school-works/submit-final-grade', [StudentSubmissionController::class, 'submitFinalGrade']);
     Route::post('student-school-works/submissions-with-grade/{school_work_type}', [StudentSubmissionController::class, 'storeWithGrade']);
     Route::post('student-school-works/submissions/{submission_id}/graded', [StudentSubmissionController::class, 'gradeStudentSubmission']);

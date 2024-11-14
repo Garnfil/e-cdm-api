@@ -14,7 +14,6 @@
                                     make a difference. Let's keep everything running smoothly together!
                                 </p>
 
-                                <a href="javascript:;" class="btn btn-sm btn-outline-primary">View Badges</a>
                             </div>
                         </div>
                         <div class="col-sm-5 text-center text-sm-left">
@@ -74,8 +73,7 @@
                 <div class="card h-100">
                     <div class="card-header d-flex align-items-center justify-content-between pb-0">
                         <div class="card-title mb-0">
-                            <h5 class="m-0 me-2">Subjects Statistics</h5>
-                            <small class="text-muted">42.82k Total Sales</small>
+                            <h5 class="m-0 me-2">Course Statistics</h5>
                         </div>
                         <div class="dropdown">
                             <button class="btn p-0" type="button" id="orederStatistics" data-bs-toggle="dropdown"
@@ -92,71 +90,31 @@
                     <div class="card-body">
                         <div class="d-flex justify-content-between align-items-center mb-3">
                             <div class="d-flex flex-column align-items-center gap-1">
-                                <h2 class="mb-2">8,258</h2>
-                                <span>Total Orders</span>
+                                <h2 class="mb-2">{{ count($courses) }}</h2>
+                                <span>Total Courses</span>
                             </div>
-                            <div id="orderStatisticsChart"></div>
+                            {{-- <div id="orderStatisticsChart"></div> --}}
                         </div>
                         <ul class="p-0 m-0">
-                            <li class="d-flex mb-4 pb-1">
-                                <div class="avatar flex-shrink-0 me-3">
-                                    <span class="avatar-initial rounded bg-label-primary"><i
-                                            class="bx bx-mobile-alt"></i></span>
-                                </div>
-                                <div class="d-flex w-100 flex-wrap align-items-center justify-content-between gap-2">
-                                    <div class="me-2">
-                                        <h6 class="mb-0">Electronic</h6>
-                                        <small class="text-muted">Mobile, Earbuds, TV</small>
+                            @foreach ($courses as $course)
+                                <li class="d-flex mb-4 pb-1">
+                                    <div class="avatar flex-shrink-0 me-3">
+                                        <span class="avatar-initial rounded bg-label-primary"><i
+                                                class="bx bx-mobile-alt"></i></span>
                                     </div>
-                                    <div class="user-progress">
-                                        <small class="fw-semibold">82.5k</small>
+                                    <div class="d-flex w-100 flex-wrap align-items-center justify-content-between gap-2">
+                                        <div class="me-2">
+                                            <h6 class="mb-0">{{ substr($course->name, 0, 30) . '...' }}</h6>
+                                            <small class="text-muted">{{ $course->code }}</small>
+                                        </div>
+                                        <div class="user-progress">
+                                            <small class="fw-semibold">{{ $course->subjects->count() }}</small>
+                                        </div>
                                     </div>
-                                </div>
-                            </li>
-                            <li class="d-flex mb-4 pb-1">
-                                <div class="avatar flex-shrink-0 me-3">
-                                    <span class="avatar-initial rounded bg-label-success"><i
-                                            class="bx bx-closet"></i></span>
-                                </div>
-                                <div class="d-flex w-100 flex-wrap align-items-center justify-content-between gap-2">
-                                    <div class="me-2">
-                                        <h6 class="mb-0">Fashion</h6>
-                                        <small class="text-muted">T-shirt, Jeans, Shoes</small>
-                                    </div>
-                                    <div class="user-progress">
-                                        <small class="fw-semibold">23.8k</small>
-                                    </div>
-                                </div>
-                            </li>
-                            <li class="d-flex mb-4 pb-1">
-                                <div class="avatar flex-shrink-0 me-3">
-                                    <span class="avatar-initial rounded bg-label-info"><i class="bx bx-home-alt"></i></span>
-                                </div>
-                                <div class="d-flex w-100 flex-wrap align-items-center justify-content-between gap-2">
-                                    <div class="me-2">
-                                        <h6 class="mb-0">Decor</h6>
-                                        <small class="text-muted">Fine Art, Dining</small>
-                                    </div>
-                                    <div class="user-progress">
-                                        <small class="fw-semibold">849k</small>
-                                    </div>
-                                </div>
-                            </li>
-                            <li class="d-flex">
-                                <div class="avatar flex-shrink-0 me-3">
-                                    <span class="avatar-initial rounded bg-label-secondary"><i
-                                            class="bx bx-football"></i></span>
-                                </div>
-                                <div class="d-flex w-100 flex-wrap align-items-center justify-content-between gap-2">
-                                    <div class="me-2">
-                                        <h6 class="mb-0">Sports</h6>
-                                        <small class="text-muted">Football, Cricket Kit</small>
-                                    </div>
-                                    <div class="user-progress">
-                                        <small class="fw-semibold">99</small>
-                                    </div>
-                                </div>
-                            </li>
+                                </li>
+                            @endforeach
+
+
                         </ul>
                     </div>
                 </div>
@@ -170,8 +128,8 @@
                         <ul class="nav nav-pills" role="tablist">
                             <li class="nav-item">
                                 <button type="button" class="nav-link active" role="tab" data-bs-toggle="tab"
-                                    data-bs-target="#navs-tabs-line-card-income"
-                                    aria-controls="navs-tabs-line-card-income" aria-selected="true">
+                                    data-bs-target="#navs-tabs-line-card-income" aria-controls="navs-tabs-line-card-income"
+                                    aria-selected="true">
                                     Discussions
                                 </button>
                             </li>
@@ -187,11 +145,8 @@
                                     <div>
                                         <small class="text-muted d-block">Total Discussion Posts</small>
                                         <div class="d-flex align-items-center">
-                                            <h6 class="mb-0 me-1">459</h6>
-                                            <small class="text-success fw-semibold">
-                                                <i class="bx bx-chevron-up"></i>
-                                                42.9%
-                                            </small>
+                                            <h6 class="mb-0 me-1">{{ $total_discussions_count }}</h6>
+
                                         </div>
                                     </div>
                                 </div>

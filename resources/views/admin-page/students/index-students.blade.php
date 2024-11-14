@@ -107,7 +107,7 @@
                 let id = $(this).attr("id");
                 Swal.fire({
                     title: 'Are you sure?',
-                    text: "Remove tour from list",
+                    text: "Remove student from list",
                     icon: 'warning',
                     showCancelButton: true,
                     confirmButtonColor: '#0b4c11',

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Web;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Student\StoreRequest;
 use App\Models\Course;
 use App\Models\Institute;
 use App\Models\Section;
@@ -18,13 +19,14 @@ class StudentController extends Controller
      */
     public function index(Request $request)
     {
-        if ($request->ajax()) {
+        if ($request->ajax())
+        {
             $students = Student::query();
 
             return DataTables::of($students)
                 ->addIndexColumn()
                 ->addColumn('name', function ($row) {
-                    return $row->firstname.' '.$row->lastname;
+                    return $row->firstname . ' ' . $row->lastname;
                 })
                 ->addColumn('institute', function ($row) {
                     return $row->institute->name ?? 'No Institute Found';
@@ -34,8 +36,8 @@ class StudentController extends Controller
                 })
                 ->addColumn('actions', function ($row) {
                     return '<div class="btn-group">
-                        <a href="'.route('admin.students.edit', $row->id).'" class="btn btn-primary btn-sm"><i class="bx bx-edit text-white"></i></a>
-                        <a class="btn btn-danger btn-sm"><i class="bx bx-trash text-white"></i></a>
+                        <a href="' . route('admin.students.edit', $row->id) . '" class="btn btn-primary btn-sm"><i class="bx bx-edit text-white"></i></a>
+                        <a class="btn btn-danger btn-sm remove-btn" id="' . $row->id . '"><i class="bx bx-trash text-white"></i></a>
                     </div>';
                 })
                 ->rawColumns(['actions'])
@@ -60,9 +62,17 @@ class StudentController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(StoreRequest $request)
     {
         $data = $request->except('_token', 'password');
+
+        // Check if the student id was already exist.
+        $existing_student = Student::where('student_id', $request->student_id)->exists();
+        if ($existing_student)
+        {
+            return back()->withErrors('The Student ID was already exists');
+        }
+
 
         $students = Student::create(array_merge($data, [
             'password' => Hash::make($request->password),
@@ -110,14 +120,26 @@ class StudentController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $student = Student::find($id);
+        if (! $student)
+            return response([
+                'status' => 'failed',
+                'message' => 'No Student Found'
+            ], 400);
+
+        $student->delete();
+        return response([
+            'status' => 'success',
+            'message' => 'Student Deleted Successfully'
+        ]);
     }
 
     public function all(Request $request)
     {
         $students = Student::query();
 
-        if ($request->query('id')) {
+        if ($request->query('id'))
+        {
             $students = $students->where('id', $request->query('id'));
         }
 
