@@ -26,7 +26,7 @@ class DashboardController extends Controller
         $total_instructors = Instructor::count();
         $recent_conference_sessions = VideoConferenceRoom::with('classroom')->latest('end_datetime')->limit(5)->get();
 
-        $courses = Course::with('subjects')->get();
+        $courses = Course::with('subjects')->limit(5)->get();
         $total_discussions_count = DiscussionPost::count();
 
         return view('welcome', compact('total_students', 'total_instructors', 'recent_conference_sessions', 'courses', 'total_discussions_count'));
