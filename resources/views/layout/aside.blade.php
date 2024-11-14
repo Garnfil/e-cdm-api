@@ -155,12 +155,12 @@
                 <div data-i18n="Whiteboard Sessions">Whiteboard Sessions</div>
             </a>
         </li>
-        <li class="menu-item {{ Request::is('admin/whiteboard-sessions') ? 'active' : null }}">
+        <!-- <li class="menu-item {{ Request::is('admin/whiteboard-sessions') ? 'active' : null }}">
             <a href="{{ route('admin.whiteboard-sessions.index') }}" class="menu-link">
                 <i class="menu-icon tf-icons bx bx-file"></i>
                 <div data-i18n="Class Grades">Class Grades</div>
             </a>
-        </li>
+        </li> -->
 
         {{-- <li
             class="menu-item {{ Request::is('admin/assignments', 'admin/activities', 'admin/quizzes', 'admin/exams') ? 'active' : null }}">
