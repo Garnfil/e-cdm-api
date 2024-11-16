@@ -27,6 +27,7 @@ return new class extends Migration {
             $table->string('gender')->nullable();
             $table->string('current_address')->nullable();
             $table->string('avatar_path')->nullable();
+            $table->boolean('is_first_login')->default(1);
             $table->timestamp('email_verified_at')->nullable();
             $table->string('role')->default('student');
             $table->enum('status', ['active', 'inactive', 'blocked', 'locked', 'dropped'])->default('active');
