@@ -55,6 +55,7 @@ Route::get('school-events', [SchoolEventController::class, 'getAll']);
 
 Route::get('courses', [CourseController::class, 'getAll']);
 Route::get('institutes', [InstituteController::class, 'getAll']);
+Route::get('sections', [SectionController::class, 'getAll']);
 
 
 Route::group(['middleware' => ['auth:sanctum']], function () {
@@ -161,7 +162,6 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
         Route::delete('/{id}', [ModuleController::class, 'destroy']);
     });
 
-    Route::get('sections', [SectionController::class, 'getAll']);
     Route::get('sections/active', [SectionController::class, 'get']);
     Route::get('sections/{id}', [SectionController::class, 'show']);
 
