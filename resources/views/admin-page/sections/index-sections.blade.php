@@ -63,10 +63,6 @@
                             name: 'name'
                         },
                         {
-                            data: 'course',
-                            name: 'course'
-                        },
-                        {
                             data: 'year_level',
                             name: 'year_level'
                         },
