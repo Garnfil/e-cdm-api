@@ -22,7 +22,6 @@
                             <tr>
                                 <th>Id</th>
                                 <th>Name</th>
-                                <th>Course</th>
                                 <th>Year Level</th>
                                 <th>Actions</th>
                             </tr>
