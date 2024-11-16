@@ -13,9 +13,14 @@ class SectionController extends Controller
     public function getAll(Request $request)
     {
         $year_level = $request->query('year_level');
+        $course_id = $request->query('course_id');
         $sections = Section::when($year_level, function ($q) use ($year_level) {
             return $q->where('year_level', $year_level);
-        })->get();
+        })
+            ->when($course_id, function ($q) use ($course_id) {
+                return $q->where('course_id', $course_id);
+            })
+            ->get();
 
         return response()->json([
             'status' => 'success',
