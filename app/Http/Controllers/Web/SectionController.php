@@ -22,7 +22,7 @@ class SectionController extends Controller
             return DataTables::of($sections)
                 ->addIndexColumn()
                 ->editColumn('name', function ($row) {
-                    return $row->name . ' - ' . $row->course->name;
+                    return $row->name . ' - ' . ($row->course->name ?? null);
                 })
                 ->addColumn('actions', function ($row) {
                     return '<div class="btn-group">
