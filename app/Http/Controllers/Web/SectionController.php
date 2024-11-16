@@ -15,7 +15,8 @@ class SectionController extends Controller
      */
     public function index(Request $request)
     {
-        if ($request->ajax()) {
+        if ($request->ajax())
+        {
             $sections = Section::query();
 
             return DataTables::of($sections)
@@ -25,8 +26,8 @@ class SectionController extends Controller
                 })
                 ->addColumn('actions', function ($row) {
                     return '<div class="btn-group">
-                        <a href="'.route('admin.sections.edit', $row->id).'" class="btn btn-primary btn-sm"><i class="bx bx-edit text-white"></i></a>
-                        <a class="btn btn-danger remove-btn" id="'. $row->id .'"><i class="bx bx-trash text-white"></i></a>
+                        <a href="' . route('admin.sections.edit', $row->id) . '" class="btn btn-primary btn-sm"><i class="bx bx-edit text-white"></i></a>
+                        <a class="btn btn-danger remove-btn" id="' . $row->id . '"><i class="bx bx-trash text-white"></i></a>
                     </div>';
                 })
                 ->rawColumns(['actions'])
@@ -53,7 +54,7 @@ class SectionController extends Controller
     {
         $data = $request->except('_token');
 
-        $section = Section::create($data);
+        $section = Section::create(array_merge($data, ['status' => 'active']));
 
         return redirect()->route('admin.sections.index')->withSuccess('Section Added Successfully');
     }
