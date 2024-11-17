@@ -30,6 +30,7 @@ class Student extends Model
         'gender',
         'current_address',
         'avatar_path',
+        'is_first_login',
         'email_verified_at',
         'status',
     ];

@@ -135,6 +135,7 @@ class StudentController extends Controller
                 'year_level' => $request->year_level,
                 'birthdate' => $request->birthdate,
                 'section_id' => $section->id ?? null,
+                'is_first_login' => 0,
             ]);
 
             $guardian = Guardian::where('email', $request->guardian_email)
