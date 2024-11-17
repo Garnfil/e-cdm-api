@@ -24,13 +24,15 @@ class StudentAuthenticationController extends Controller
 
     public function register(RegisterRequest $request)
     {
-        try {
+        try
+        {
             DB::beginTransaction();
             $data = $request->validated();
 
             // Check if the student id was already exist.
             $existing_student = Student::where('student_id', $request->student_id)->exists();
-            if ($existing_student) {
+            if ($existing_student)
+            {
                 throw new Exception('The Student ID was already exists', 422);
             }
 
@@ -45,7 +47,8 @@ class StudentAuthenticationController extends Controller
                 'message' => 'The Registration is successfully submitted.',
             ]);
 
-        } catch (Exception $exception) {
+        } catch (Exception $exception)
+        {
             DB::rollBack();
 
             return response()->json([
@@ -58,15 +61,23 @@ class StudentAuthenticationController extends Controller
 
     public function login(LoginRequest $request)
     {
-        try {
+        try
+        {
             $student = Student::where('email', $request->email)
-                ->where('student_id', $request->student_id)->firstOrFail();
+                ->where('student_id', $request->student_id)->first();
 
-            if (! Hash::check($request->password, $student->password)) {
+            if (! $student)
+            {
+                throw new Exception('No Student Found. Please check your student id and email.', 404);
+            }
+
+            if (! Hash::check($request->password, $student->password))
+            {
                 throw new Exception('Invalid Credentials', '400');
             }
 
-            if (! $student->email_verified_at) {
+            if (! $student->email_verified_at)
+            {
                 throw new Exception('Your email is not yet verified. Please check your email and confirm first.', '400');
             }
 
@@ -77,7 +88,8 @@ class StudentAuthenticationController extends Controller
                 'user' => $student,
             ]);
 
-        } catch (Exception $exception) {
+        } catch (Exception $exception)
+        {
             return response()->json([
                 'status' => 'error',
                 'message' => $exception->getMessage(),
