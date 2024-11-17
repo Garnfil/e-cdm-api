@@ -29,6 +29,8 @@ class RegisterRequest extends FormRequest
             'student_id' => ['required'],
             'email' => ['required', 'email'],
             'password' => ['required', 'min:8'],
+            'institute_id' => ['required', 'exists:institutes,id'],
+            'course_id' => ['required', 'exists:courses,id'],
         ];
     }
 }

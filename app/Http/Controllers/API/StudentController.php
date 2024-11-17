@@ -139,7 +139,6 @@ class StudentController extends Controller
             ]);
 
             $guardian = Guardian::where('email', $request->guardian_email)
-                ->where('phone_number', $request->guardian_contactno)
                 ->first();
 
             if (! $guardian)
