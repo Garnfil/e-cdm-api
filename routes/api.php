@@ -60,6 +60,8 @@ Route::get('sections', [SectionController::class, 'getAll']);
 
 Route::group(['middleware' => ['auth:sanctum']], function () {
 
+    Route::post('student/info-register', [StudentController::class, 'studentInfoRegistration']);
+
     Route::post('student/profile/{id}', [ProfileController::class, 'updateStudentProfile']);
     Route::post('instructor/profile/{id}', [ProfileController::class, 'updateInstructorProfile']);
     Route::post('admin/profile/{id}', [ProfileController::class, 'updateAdminProfile']);

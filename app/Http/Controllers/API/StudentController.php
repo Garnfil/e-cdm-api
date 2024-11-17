@@ -5,7 +5,11 @@ namespace App\Http\Controllers\API;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Student\StudentRequest;
 use App\Models\ClassStudent;
+use App\Models\Guardian;
+use App\Models\Section;
 use App\Models\Student;
+use App\Models\StudentGuardian;
+use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 
@@ -99,6 +103,57 @@ class StudentController extends Controller
 
     public function getTotalClassesAndCompletedWorks(Request $request)
     {
+
+    }
+
+    public function studentInfoRegistration(Request $request)
+    {
+        try
+        {
+            $user = auth()->user();
+            if ($user->role != 'student')
+            {
+                throw new Exception("Invalid User", 404);
+            }
+
+            $student = Student::where('id', $user->id)->first();
+            if (! $student)
+            {
+                throw new Exception("Student Not Found", 404);
+            }
+
+            $section = Section::find($request->section_id);
+
+            $student->update([
+                'year_level' => $request->year_level,
+                'birthdate' => $request->birthdate,
+                'section_id' => $section->id ?? null,
+            ]);
+
+            $guardian = Guardian::where('email', $request->guardian_email)
+                ->where('phone_number', $request->guardian_contactno)
+                ->first();
+
+            if ($guardian)
+            {
+                StudentGuardian::updateOrCreate([
+                    'student_id' => $student->id,
+                    'guardian_id' => $guardian->id
+                ], []);
+            }
+
+            return response()->json([
+                'status' => 'success',
+                'message' => 'Student Info Registered Successfully'
+            ]);
+
+        } catch (Exception $exception)
+        {
+            return response()->json([
+                'status' => 'failed',
+                'message' => $exception->getMessage(),
+            ], 404);
+        }
 
     }
 }
