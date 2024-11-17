@@ -35,16 +35,7 @@
                                         </select>
                                     </div>
                                 </div>
-                                <div class="col-xl-12">
-                                    <div class="mb-3">
-                                        <label for="subject-field" class="form-label">Subject</label>
-                                        <select name="subject_id" id="subject-field" class="form-select">
-                                            @foreach ($subjects as $subject)
-                                                <option value="{{ $subject->id }}">{{ $subject->title }}</option>
-                                            @endforeach
-                                        </select>
-                                    </div>
-                                </div>
+
                                 <div class="col-xl-12">
                                     <div class="mb-3">
                                         <label for="section-field" class="form-label">section</label>
@@ -62,6 +53,17 @@
                                             @foreach ($instructors as $instructor)
                                                 <option value="{{ $instructor->id }}">{{ $instructor->firstname }}
                                                     {{ $instructor->lastname }}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-xl-12">
+                                    <div class="mb-3">
+                                        <label for="subject-field" class="form-label">Subject</label>
+                                        <select name="subject_id" id="subject-field" class="form-select">
+                                            @foreach ($subjects as $subject)
+                                                <option value="{{ $subject->id }}">{{ $subject->title }} -
+                                                    {{ $subject->course->name }}</option>
                                             @endforeach
                                         </select>
                                     </div>
