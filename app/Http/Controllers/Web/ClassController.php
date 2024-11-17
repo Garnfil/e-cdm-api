@@ -18,7 +18,8 @@ class ClassController extends Controller
      */
     public function index(Request $request)
     {
-        if ($request->ajax()) {
+        if ($request->ajax())
+        {
             $classes = Classroom::query();
 
             return DataTables::of($classes)
@@ -30,11 +31,11 @@ class ClassController extends Controller
                     return $row->section->name;
                 })
                 ->addColumn('instructor', function ($row) {
-                    return $row->instructor->firstname.' '.$row->instructor->lastname;
+                    return $row->instructor->firstname . ' ' . $row->instructor->lastname;
                 })->addColumn('actions', function ($row) {
                     return '<div class="btn-group">
-                        <a href="'.route('admin.classes.edit', $row->id).'" class="btn btn-primary btn-sm"><i class="bx bx-edit text-white"></i></a>
-                        <a class="btn btn-danger btn-sm remove-btn" id="'. $row->id .'"><i class="bx bx-trash text-white"></i></a>
+                        <a href="' . route('admin.classes.edit', $row->id) . '" class="btn btn-primary btn-sm"><i class="bx bx-edit text-white"></i></a>
+                        <a class="btn btn-danger btn-sm remove-btn" id="' . $row->id . '"><i class="bx bx-trash text-white"></i></a>
                     </div>';
                 })
                 ->rawColumns(['actions'])
@@ -66,7 +67,7 @@ class ClassController extends Controller
         $section = Section::where('id', $request->section_id)->first();
         $subject = Subject::where('id', $request->subject_id)->first();
 
-        $title = $section->name.' - '.$subject->title;
+        $title = $section->name . ' - ' . $subject->title;
 
         $classCode = Str::random(12);
 
@@ -75,7 +76,8 @@ class ClassController extends Controller
             'subject_id' => $request->subject_id,
         ])->exists();
 
-        if ($existingClassroom) {
+        if ($existingClassroom)
+        {
             return back()->with('failed', 'This class was already exist.');
         }
 
@@ -102,8 +104,9 @@ class ClassController extends Controller
     public function edit(string $id)
     {
         $class = Classroom::findOrFail($id);
-        $subjects = Subject::get();
-        $sections = Section::get();
+
+        $subjects = Subject::where('course_id', $class->instructor->course_id)->get();
+        $sections = Section::where('course_id', $class->instructor->course_id)->get();
         $instructors = Instructor::get();
 
         return view('admin-page.classes.edit-class', compact('class', 'subjects', 'sections', 'instructors'));
@@ -115,9 +118,25 @@ class ClassController extends Controller
     public function update(Request $request, string $id)
     {
         $data = $request->except('_token', '_method');
+        $section = Section::where('id', $request->section_id)->first();
+        $subject = Subject::where('id', $request->subject_id)->first();
+
+        $title = $section->name . ' - ' . $subject->title;
         $class = Classroom::findOrFail($id);
 
-        $class->update($data);
+        $existingClassroom = Classroom::where([
+            'section_id' => $request->section_id,
+            'subject_id' => $request->subject_id,
+        ])->exists();
+
+        if ($existingClassroom)
+        {
+            return back()->with('failed', 'This class was already exist.');
+        }
+
+        $class->update(array_merge($data, [
+            'title' => $title,
+        ]));
 
         return back()->withSuccess('Class Updated Successfully');
     }

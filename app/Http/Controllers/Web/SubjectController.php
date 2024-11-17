@@ -15,7 +15,8 @@ class SubjectController extends Controller
      */
     public function index(Request $request)
     {
-        if ($request->ajax()) {
+        if ($request->ajax())
+        {
             $subjects = Subject::query();
 
             return DataTables::of($subjects)
@@ -24,8 +25,8 @@ class SubjectController extends Controller
                     return $row->course->name;
                 })->addColumn('actions', function ($row) {
                     return '<div class="btn-group">
-                        <a href="'.route('admin.subjects.edit', $row->id).'" class="btn btn-primary btn-sm"><i class="bx bx-edit text-white"></i></a>
-                        <a class="btn btn-danger remove-btn" id="'. $row->id .'"><i class="bx bx-trash text-white"></i></a>
+                        <a href="' . route('admin.subjects.edit', $row->id) . '" class="btn btn-primary btn-sm"><i class="bx bx-edit text-white"></i></a>
+                        <a class="btn btn-danger remove-btn" id="' . $row->id . '"><i class="bx bx-trash text-white"></i></a>
                     </div>';
                 })
                 ->rawColumns(['actions'])
@@ -100,6 +101,19 @@ class SubjectController extends Controller
         return response()->json([
             'status' => 'success',
             'message' => 'Subject Deleted Successfully'
+        ]);
+    }
+
+    public function all(Request $request)
+    {
+        $course_id = $request->query('course_id');
+        $subjects = Subject::when($course_id, function ($q) use ($course_id) {
+            return $q->where('course_id', $course_id);
+        })->get();
+
+        return response()->json([
+            'status' => 'success',
+            'subjects' => $subjects,
         ]);
     }
 }

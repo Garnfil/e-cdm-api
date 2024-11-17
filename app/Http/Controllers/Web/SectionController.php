@@ -104,4 +104,17 @@ class SectionController extends Controller
             'message' => 'Quiz Deleted Successfully'
         ]);
     }
+
+    public function all(Request $request)
+    {
+        $course_id = $request->query('course_id');
+        $sections = Section::when($course_id, function ($q) use ($course_id) {
+            return $q->where('course_id', $course_id);
+        })->get();
+
+        return response()->json([
+            'status' => 'success',
+            'sections' => $sections,
+        ]);
+    }
 }

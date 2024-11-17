@@ -17,6 +17,7 @@ use DB;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
+use PhpParser\Node\Stmt\TryCatch;
 
 class ClassRoomController extends Controller
 {
@@ -27,7 +28,9 @@ class ClassRoomController extends Controller
         $this->exceptionHandler = $exceptionHandlerService;
     }
 
-    public function getAll(Request $request) {}
+    public function getAll(Request $request)
+    {
+    }
 
     public function get(Request $request)
     {
@@ -64,7 +67,8 @@ class ClassRoomController extends Controller
 
     public function store(StoreRequest $request)
     {
-        try {
+        try
+        {
             $user = auth()->user();
 
             DB::beginTransaction();
@@ -73,7 +77,7 @@ class ClassRoomController extends Controller
             $section = Section::where('id', $request->section_id)->first();
             $subject = Subject::where('id', $request->subject_id)->first();
 
-            $title = $section->name.' - '.$subject->title;
+            $title = $section->name . ' - ' . $subject->title;
 
             $classCode = Str::random(12);
 
@@ -83,7 +87,8 @@ class ClassRoomController extends Controller
             ])->exists();
 
             // Check if the classroom already exist.
-            if ($existingClassroom) {
+            if ($existingClassroom)
+            {
                 throw new Exception('Classroom already exists.', 422);
             }
 
@@ -101,7 +106,8 @@ class ClassRoomController extends Controller
                 'class' => $class,
             ]);
 
-        } catch (Exception $exception) {
+        } catch (Exception $exception)
+        {
             DB::rollBack();
             // dd($exception);
 
@@ -111,7 +117,8 @@ class ClassRoomController extends Controller
 
     public function update(Request $request)
     {
-        try {
+        try
+        {
             DB::beginTransaction();
             $data = $request->all();
             $class = ClassRoom::where('id', $request->id)->firstOrFail();
@@ -126,7 +133,8 @@ class ClassRoomController extends Controller
                 'class' => $class,
             ]);
 
-        } catch (Exception $exception) {
+        } catch (Exception $exception)
+        {
             DB::rollBack();
 
             return $this->exceptionHandler->__generateExceptionResponse($exception);
@@ -143,9 +151,13 @@ class ClassRoomController extends Controller
         ]);
     }
 
-    public function updateCoverPhoto(Request $request) {}
+    public function updateCoverPhoto(Request $request)
+    {
+    }
 
-    public function destroy(Request $request) {}
+    public function destroy(Request $request)
+    {
+    }
 
     public function getClassStudents(Request $request, $class_id)
     {
@@ -175,7 +187,8 @@ class ClassRoomController extends Controller
         // $school_works->merge($modules)
 
         $school_works->each(function ($school_work) {
-            switch ($school_work->type) {
+            switch ($school_work->type)
+            {
                 case 'assignment':
                     $school_work->load('assignment');
                     break;
@@ -210,7 +223,8 @@ class ClassRoomController extends Controller
             ->get();
 
         $school_works->each(function ($school_work) {
-            switch ($school_work->type) {
+            switch ($school_work->type)
+            {
                 case 'assignment':
                     $school_work->points = $school_work->schoolWorkPoints();
                     $school_work->load('assignment');
@@ -252,7 +266,8 @@ class ClassRoomController extends Controller
     {
         $class = Classroom::where('class_code', $request->class_code)->first();
 
-        if (! $class) {
+        if (! $class)
+        {
             return response()->json([
                 'status' => 'failed',
                 'message' => 'Class Code Invalid',
@@ -268,6 +283,40 @@ class ClassRoomController extends Controller
             'status' => 'success',
             'message' => 'Joined Class Successfully',
         ]);
+
+    }
+
+    public function getStudentAvailableClasses(Request $request)
+    {
+        try
+        {
+            $user = auth()->user();
+            if ($user->role != 'student')
+            {
+                throw new Exception("Invalid User", 401);
+            }
+
+            $student_class_ids = ClassStudent::where('student_id', $user->id)->pluck('class_id')->toArray();
+
+            $classes = Classroom::whereHas('section', function ($q) use ($user) {
+                return $q->where('course_id', $user->course_id)->where('name', $user->section);
+            })
+                ->whereNotIn('id', $student_class_ids)
+                ->with('instructor')
+                ->get();
+
+            return response()->json([
+                'status' => 'success',
+                'classes' => $classes,
+            ]);
+
+        } catch (Exception $exception)
+        {
+            return response()->json([
+                'status' => 'failed',
+                'message' => $exception->getMessage(),
+            ], 400);
+        }
 
     }
 }

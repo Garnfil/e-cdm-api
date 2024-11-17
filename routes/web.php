@@ -38,9 +38,11 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    if (auth()->check()) {
+    if (auth()->check())
+    {
         return redirect()->route('admin.dashboard');
-    } else {
+    } else
+    {
         return redirect()->route('login.get');
     }
 });
@@ -71,8 +73,13 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'middleware' => ['auth']], 
 
     Route::resource('institutes', InstituteController::class);
     Route::resource('courses', CourseController::class);
+
+    Route::get('sections/all', [SectionController::class, 'all']);
     Route::resource('sections', SectionController::class);
+
+    Route::get('subjects/all', [SubjectController::class, 'all']);
     Route::resource('subjects', SubjectController::class);
+
     Route::resource('classes', ClassController::class);
     Route::resource('assignments', AssignmentController::class);
     Route::resource('activities', ActivityController::class);

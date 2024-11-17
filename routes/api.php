@@ -81,6 +81,7 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::get('classes', [ClassRoomController::class, 'getAll']);
     Route::post('classes', [ClassRoomController::class, 'store']);
     Route::get('classes/students/{student_id}', [ClassRoomController::class, 'getStudentClasses']);
+    Route::get('classes/student-available-classes', [ClassRoomController::class, 'getStudentAvailableClasses']);
     Route::get('classes/active', [ClassRoomController::class, 'get']);
     Route::post('classes/join', [ClassRoomController::class, 'classJoinStudent']);
     Route::get('classes/{class_id}/school-works', [ClassRoomController::class, 'getClassSchoolWorks']);
