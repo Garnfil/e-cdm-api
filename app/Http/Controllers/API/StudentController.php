@@ -3,7 +3,9 @@
 namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Student\StudentInfoRequest;
 use App\Http\Requests\Student\StudentRequest;
+use App\Mail\GuardianAcoountMail;
 use App\Models\ClassStudent;
 use App\Models\Guardian;
 use App\Models\Section;
@@ -11,7 +13,10 @@ use App\Models\Student;
 use App\Models\StudentGuardian;
 use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Str;
 
 class StudentController extends Controller
 {
@@ -106,10 +111,12 @@ class StudentController extends Controller
 
     }
 
-    public function studentInfoRegistration(Request $request)
+    public function studentInfoRegistration(StudentInfoRequest $request)
     {
         try
         {
+            DB::beginTransaction();
+
             $user = auth()->user();
             if ($user->role != 'student')
             {
@@ -134,13 +141,31 @@ class StudentController extends Controller
                 ->where('phone_number', $request->guardian_contactno)
                 ->first();
 
-            if ($guardian)
+            if (! $guardian)
             {
-                StudentGuardian::updateOrCreate([
-                    'student_id' => $student->id,
-                    'guardian_id' => $guardian->id
-                ], []);
+                $password = Str::random(10);
+                $details = [
+                    'email' => $request->guardian_email,
+                    'password' => $password
+                ];
+
+                $guardian = Guardian::create([
+                    'firstname' => $request->guardian_firstname,
+                    'lastname' => $request->guardian_lastname,
+                    'email' => $request->guardian_email,
+                    'phone_number' => $request->guardian_contactno,
+                    'password' => Hash::make($password),
+                ]);
+
+                Mail::to($request->guardian_email)->send(new GuardianAcoountMail($details));
             }
+
+            StudentGuardian::updateOrCreate([
+                'student_id' => $student->id,
+                'guardian_id' => $guardian->id,
+            ], []);
+
+            DB::commit();
 
             return response()->json([
                 'status' => 'success',
@@ -149,10 +174,11 @@ class StudentController extends Controller
 
         } catch (Exception $exception)
         {
+            DB::rollBack();
             return response()->json([
                 'status' => 'failed',
                 'message' => $exception->getMessage(),
-            ], 404);
+            ], 400);
         }
 
     }
