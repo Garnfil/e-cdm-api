@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Web;
 
 use App\Http\Controllers\Controller;
 use App\Models\Classroom;
+use App\Models\ClassSchoolWork;
 use App\Models\Exam;
 use App\Models\Instructor;
 use App\Models\SchoolWork;
@@ -18,15 +19,16 @@ class ExamController extends Controller
      */
     public function index(Request $request)
     {
-        if ($request->ajax()) {
+        if ($request->ajax())
+        {
             $exams = SchoolWork::where('type', 'exam')
                 ->whereHas('exam')
-                ->with('activity', 'class', 'instructor');
+                ->with('activity', 'school_work_class', 'instructor');
 
             return DataTables::of($exams)
                 ->addIndexColumn()
                 ->addColumn('class', function ($row) {
-                    return $row->class->title;
+                    return $row->school_work_class->classroom->title;
                 })
                 ->addColumn('instructor', function ($row) {
                     return $row->instructor->firstname . ' ' . $row->instructor->lastname;
@@ -37,7 +39,7 @@ class ExamController extends Controller
                 ->addColumn('actions', function ($row) {
                     return '<div class="btn-group">
                         <a href="' . route('admin.exams.edit', $row->id) . '" class="btn btn-primary btn-sm"><i class="bx bx-edit text-white"></i></a>
-                        <a class="btn btn-danger btn-sm remove-btn" id="'. $row->id .'"><i class="bx bx-trash text-white"></i></a>
+                        <a class="btn btn-danger btn-sm remove-btn" id="' . $row->id . '"><i class="bx bx-trash text-white"></i></a>
                     </div>';
                 })
                 ->rawColumns(['actions'])
@@ -63,11 +65,10 @@ class ExamController extends Controller
      */
     public function store(Request $request)
     {
-        $class = Classroom::find($request->class_id);
+        $classes = Classroom::whereIn('id', $request->class_ids)->get();
 
         $school_work = SchoolWork::create([
             'title' => $request->title,
-            'class_id' => $request->class_id,
             'instructor_id' => $request->instructor_id,
             'description' => $request->description,
             'type' => 'exam',
@@ -75,13 +76,27 @@ class ExamController extends Controller
             'due_datetime' => $request->due_datetime,
         ]);
 
-        $exam = Exam::create([
-            'school_work_id' => $school_work->id,
-            'notes' => $request->notes,
-            'points' => $request->points,
-            'exam_type' => "long",
-            'assessment_type' => $class->current_assessment_category,
-        ]);
+        if (is_array($request->class_ids))
+        {
+            foreach ($request->class_ids as $key => $class_id)
+            {
+                ClassSchoolWork::updateOrCreate([
+                    'class_id' => $class_id,
+                    'school_work_id' => $school_work->id
+                ], []);
+            }
+        }
+
+        foreach ($classes as $key => $classroom)
+        {
+            $exam = Exam::create([
+                'school_work_id' => $school_work->id,
+                'notes' => $request->notes,
+                'points' => $request->points,
+                'exam_type' => 'long',
+                'assessment_type' => $classroom->current_assessment_category,
+            ]);
+        }
 
         return redirect()->route('admin.exams.index')->withSuccess('Exam Added Successfully');
     }
@@ -111,7 +126,34 @@ class ExamController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        $school_work = SchoolWork::with('attachments', 'exam')->findOrFail($id);
+
+        $school_work->update([
+            'title' => $request->title,
+            'instructor_id' => $request->instructor_id,
+            'description' => $request->description,
+            'status' => $request->status,
+            'due_datetime' => $request->due_datetime,
+        ]);
+
+        if (is_array($request->class_ids))
+        {
+            foreach ($request->class_ids as $key => $class_id)
+            {
+                ClassSchoolWork::updateOrCreate([
+                    'class_id' => $class_id,
+                    'school_work_id' => $school_work->id
+                ], []);
+            }
+        }
+
+        $school_work->exam->update([
+            'school_work_id' => $school_work->id,
+            'notes' => $request->notes,
+            'points' => $request->points,
+        ]);
+
+        return back()->withSuccess('Exam Updated Successfully');
     }
 
     /**

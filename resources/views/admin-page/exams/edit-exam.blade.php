@@ -32,8 +32,8 @@
                                 </div>
                                 <div class="col-xl-4">
                                     <div class="mb-3">
-                                        <label for="class-field" class="form-label">Class</label>
-                                        <select name="class_id" id="class-field" class="form-select">
+                                        <label for="classes-field" class="form-label">Classes</label>
+                                        <select name="class_ids[]" id="classes-field" class="form-select" multiple>
                                             @foreach ($classes as $class)
                                                 <option {{ $class->id == $exam->class_id ? 'selected' : null }}
                                                     value="{{ $class->id }}">{{ $class->title }}</option>
@@ -182,6 +182,8 @@
                     $('#file-attachment-field').removeClass('d-block');
                 }
             }
+
+            $('#classes-field').select2();
         </script>
     @endpush
 @endsection

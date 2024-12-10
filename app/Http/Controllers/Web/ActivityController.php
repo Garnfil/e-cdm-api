@@ -89,7 +89,7 @@ class ActivityController extends Controller
 
         foreach ($classes as $key => $classroom)
         {
-            $assignment = Activity::create([
+            $activity = Activity::create([
                 'school_work_id' => $school_work->id,
                 'activity_type' => 'practical',
                 'notes' => $request->notes,
