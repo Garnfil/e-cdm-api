@@ -11,11 +11,11 @@ class SchoolWork extends Model
 
     protected $table = 'school_works';
 
-    protected $fillable = ['class_id', 'instructor_id', 'title', 'description', 'file_paths', 'type', 'status', 'due_datetime'];
+    protected $fillable = ['instructor_id', 'title', 'description', 'file_paths', 'type', 'status', 'due_datetime'];
 
-    public function class_school_work()
+    public function school_work_class()
     {
-        return $this->belongsTo(ClassSchoolWork::class, 'class_id', 'class_id');
+        return $this->hasOne(ClassSchoolWork::class, 'school_work_id');
     }
 
     public function instructor()
