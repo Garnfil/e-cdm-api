@@ -5,6 +5,7 @@ namespace App\Http\Controllers\API;
 use App\Http\Controllers\Controller;
 use App\Models\Assignment;
 use App\Models\Classroom;
+use App\Models\ClassSchoolWork;
 use App\Models\SchoolWork;
 use App\Models\SchoolWorkAttachment;
 use App\Services\ExceptionHandlerService;
@@ -45,16 +46,11 @@ class AssignmentController extends Controller
 
     public function store(Request $request)
     {
-        try {
+        try
+        {
             DB::beginTransaction();
 
-            $class = Classroom::where('id', $request->class_id)->exists();
-            if (! $class) {
-                throw new Exception('Invalid Class.', 400);
-            }
-
             $schoolWork = SchoolWork::create([
-                'class_id' => $request->class_id,
                 'instructor_id' => $request->instructor_id,
                 'title' => $request->title,
                 'description' => $request->description,
@@ -63,6 +59,17 @@ class AssignmentController extends Controller
                 'due_datetime' => $request->due_datetime,
             ]);
 
+            if (is_array($request->class_ids))
+            {
+                foreach ($request->class_ids as $key => $class_id)
+                {
+                    ClassSchoolWork::create([
+                        'class_id' => $class_id,
+                        'school_work_id' => $schoolWork->id,
+                    ]);
+                }
+            }
+
             $assignment = Assignment::create([
                 'school_work_id' => $schoolWork->id,
                 'notes' => $request->notes,
@@ -70,11 +77,14 @@ class AssignmentController extends Controller
                 'assessment_type' => $request->assessment_type,
             ]);
 
-            if ($request->has('attachments') && is_array($request->attachments)) {
-                foreach ($request->attachments as $key => $attachment) {
+            if ($request->has('attachments') && is_array($request->attachments))
+            {
+                foreach ($request->attachments as $key => $attachment)
+                {
                     $file_name = null;
-                    if (! is_string($attachment)) {
-                        $file_name = time().'-'.Str::random(5).'.'.$attachment->getClientOriginalExtension();
+                    if (! is_string($attachment))
+                    {
+                        $file_name = time() . '-' . Str::random(5) . '.' . $attachment->getClientOriginalExtension();
                         $file_path = 'school_works_attachments/';
                         Storage::disk('public')->putFileAs($file_path, $attachment, $file_name);
                     }
@@ -95,7 +105,8 @@ class AssignmentController extends Controller
                 'status' => 'success',
                 'assignment' => $assignment->load('school_work'),
             ]);
-        } catch (Exception $exception) {
+        } catch (Exception $exception)
+        {
             DB::rollBack();
 
             return $this->exceptionHandlerService->__generateExceptionResponse($exception);
@@ -104,7 +115,8 @@ class AssignmentController extends Controller
 
     public function update(Request $request, $id)
     {
-        try {
+        try
+        {
             DB::beginTransaction();
             $assignment = Assignment::with('school_work')->find($id);
 
@@ -124,7 +136,8 @@ class AssignmentController extends Controller
                 'status' => 'success',
                 'message' => 'Assignment Updated Successfully',
             ]);
-        } catch (Exception $exception) {
+        } catch (Exception $exception)
+        {
             DB::rollBack();
 
             return $this->exceptionHandlerService->__generateExceptionResponse($exception);
