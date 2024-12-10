@@ -134,7 +134,7 @@ class StudentController extends Controller
             $student->update([
                 'year_level' => $request->year_level,
                 'birthdate' => $request->birthdate,
-                'section_id' => $section->id ?? null,
+                'section' => $section->name ?? null,
                 'is_first_login' => 0,
             ]);
 

@@ -4,6 +4,7 @@ namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
 use App\Models\Activity;
+use App\Models\ClassSchoolWork;
 use App\Models\SchoolWork;
 use App\Models\SchoolWorkAttachment;
 use App\Services\ExceptionHandlerService;
@@ -44,11 +45,11 @@ class ActivityController extends Controller
 
     public function store(Request $request)
     {
-        try {
+        try
+        {
             DB::beginTransaction();
 
             $schoolWork = SchoolWork::create([
-                'class_id' => $request->class_id,
                 'instructor_id' => $request->instructor_id,
                 'title' => $request->title,
                 'description' => $request->description,
@@ -56,6 +57,17 @@ class ActivityController extends Controller
                 'status' => $request->status,
                 'due_datetime' => $request->due_datetime,
             ]);
+
+            if (is_array($request->class_ids))
+            {
+                foreach ($request->class_ids as $key => $class_id)
+                {
+                    ClassSchoolWork::create([
+                        'class_id' => $class_id,
+                        'school_work_id' => $schoolWork->id,
+                    ]);
+                }
+            }
 
             $activity = Activity::create([
                 'school_work_id' => $schoolWork->id,
@@ -65,11 +77,14 @@ class ActivityController extends Controller
                 'activity_type' => $request->activity_type ?? 'practical',
             ]);
 
-            if ($request->has('attachments') && is_array($request->attachments)) {
-                foreach ($request->attachments as $key => $attachment) {
+            if ($request->has('attachments') && is_array($request->attachments))
+            {
+                foreach ($request->attachments as $key => $attachment)
+                {
                     $file_name = null;
-                    if (! is_string($attachment)) {
-                        $file_name = time().'-'.Str::random(5).'.'.$attachment->getClientOriginalExtension();
+                    if (! is_string($attachment))
+                    {
+                        $file_name = time() . '-' . Str::random(5) . '.' . $attachment->getClientOriginalExtension();
                         $file_path = 'school_works_attachments/';
                         Storage::disk('public')->putFileAs($file_path, $attachment, $file_name);
                     }
@@ -90,16 +105,23 @@ class ActivityController extends Controller
                 'status' => 'success',
                 'activity' => $activity->load('school_work'),
             ]);
-        } catch (Exception $exception) {
+        } catch (Exception $exception)
+        {
             DB::rollBack();
 
             return $this->exceptionHandlerService->__generateExceptionResponse($exception);
         }
     }
 
+    public function storeInMultipleSections(Request $request)
+    {
+
+    }
+
     public function update(Request $request, $id)
     {
-        try {
+        try
+        {
             DB::beginTransaction();
             $activity = Activity::with('school_work')->find($id);
 
@@ -119,7 +141,8 @@ class ActivityController extends Controller
                 'status' => 'success',
                 'message' => 'Activity Updated Successfully',
             ]);
-        } catch (Exception $exception) {
+        } catch (Exception $exception)
+        {
             DB::rollBack();
 
             return $this->exceptionHandlerService->__generateExceptionResponse($exception);

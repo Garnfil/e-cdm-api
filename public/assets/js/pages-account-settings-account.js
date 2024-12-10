@@ -18,6 +18,26 @@ document.addEventListener('DOMContentLoaded', function (e) {
       fileInput.onchange = () => {
         if (fileInput.files[0]) {
           accountUserImage.src = window.URL.createObjectURL(fileInput.files[0]);
+
+          const formData = new FormData();
+          formData.append('profileImage', fileInput.files[0]);
+
+
+          $.ajax({
+            url: '/api/upload-profile-image', // Replace with your server-side endpoint
+            type: 'POST',
+            data: formData,
+            processData: false,
+            contentType: false,
+            success: function (response) {
+              $('#uploadStatus').text('Upload successful!');
+              console.log('Response:', response);
+            },
+            error: function (xhr, status, error) {
+              $('#uploadStatus').text('Failed to upload image.');
+              console.error('Error:', error);
+            }
+          });
         }
       };
       resetFileInput.onclick = () => {

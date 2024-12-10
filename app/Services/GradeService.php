@@ -5,6 +5,7 @@ namespace App\Services;
 use App\Models\Activity;
 use App\Models\Assignment;
 use App\Models\ClassRubric;
+use App\Models\ClassSchoolWork;
 use App\Models\Exam;
 use App\Models\StudentFinalGrade;
 use App\Models\StudentSchoolWorkGrade;
@@ -51,9 +52,11 @@ class GradeService
         $model = $models[$type];
         $schoolWorkType = $submissionType[$type];
 
+        $school_work_ids = ClassSchoolWork::where('class_id', $class_id)->pluck('school_work_id')->toArray();
+
         // Get total points directly from the database
-        $totalPoints = $model::whereHas('school_work', function ($q) use ($class_id) {
-            $q->where('class_id', $class_id);
+        $totalPoints = $model::whereHas('school_work', function ($q) use ($school_work_ids) {
+            $q->whereIn('id', $school_work_ids);
         })->sum('points');
 
         // Get student score directly from the database

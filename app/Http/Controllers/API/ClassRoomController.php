@@ -4,7 +4,9 @@ namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ClassRoom\StoreRequest;
+use App\Models\ClassModule;
 use App\Models\Classroom;
+use App\Models\ClassSchoolWork;
 use App\Models\ClassStudent;
 use App\Models\Module;
 use App\Models\SchoolWork;
@@ -175,16 +177,18 @@ class ClassRoomController extends Controller
     {
         $auth = auth()->user()->role;
         $request_type = $request->query('type');
-        $school_works = SchoolWork::where('class_id', $class_id)
+        $school_work_ids = ClassSchoolWork::where('class_id')->pluck('school_work_id')->toArray();
+
+        $school_works = SchoolWork::whereIn('id', $school_work_ids)
             ->when($request_type, function ($q) use ($request_type) {
                 $q->where('type', $request_type);
             })
             ->latest()
             ->get();
 
-        $modules = Module::where('class_id', $class_id)->get();
+        $module_ids = ClassModule::where('class_id')->pluck('module_id')->toArray();
 
-        // $school_works->merge($modules)
+        $modules = Module::whereIn('id', $module_ids)->get();
 
         $school_works->each(function ($school_work) {
             switch ($school_work->type)
@@ -218,7 +222,10 @@ class ClassRoomController extends Controller
     {
         $request_type = $request->query('type');
 
-        $school_works = SchoolWork::select('id', 'class_id', 'title', 'type')->where('class_id', $class_id)
+        $school_work_ids = ClassSchoolWork::where('class_id')->pluck('school_work_id')->toArray();
+
+        $school_works = SchoolWork::select('id', 'class_id', 'title', 'type')
+            ->whereIn('id', $school_work_ids)
             ->where('type', $request_type)
             ->get();
 

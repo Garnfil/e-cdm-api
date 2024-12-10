@@ -142,8 +142,9 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::post('student-assignments', [StudentAssignmentController::class, 'store']);
     Route::get('student-assignments/submitted/assignments/{assignment_id}', [StudentAssignmentController::class, 'submittedStudentAssignments']);
 
-    Route::get('activities', [ActivityController::class, 'get']);
+    Route::post('activities/multiple-sections', [ActivityController::class, 'storeInMultipleSections']);
     Route::post('activities', [ActivityController::class, 'store']);
+    Route::get('activities', [ActivityController::class, 'get']);
     Route::put('activities/{id}', [ActivityController::class, 'update']);
     Route::get('activities/{id}', [ActivityController::class, 'show']);
 

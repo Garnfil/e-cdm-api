@@ -4,12 +4,11 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration
-{
+return new class extends Migration {
     /**
      * Run the migrations.
      */
-    public function up(): void
+    public function up() : void
     {
         Schema::create('rubrics', function (Blueprint $table) {
             $table->id();
@@ -26,13 +25,19 @@ return new class extends Migration
 
         Schema::create('school_works', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('class_id')->constrained('classes');
             $table->foreignId('instructor_id')->constrained('instructors');
             $table->string('title');
             $table->text('description');
             $table->enum('type', ['quiz', 'activity', 'assignment', 'exam']);
             $table->enum('status', ['drafted', 'scheduled', 'posted']);
             $table->dateTime('due_datetime');
+            $table->timestamps();
+        });
+
+        Schema::create('class_school_works', function (Blueprint $table) {
+            $table->id();
+            $table->foreignId('class_id')->constrained('classes')->cascadeOnDelete();
+            $table->foreignId('school_work_id')->constrained('instructors')->cascadeOnDelete();
             $table->timestamps();
         });
 
@@ -177,7 +182,7 @@ return new class extends Migration
     /**
      * Reverse the migrations.
      */
-    public function down(): void
+    public function down() : void
     {
         Schema::dropIfExists('rubrics');
         Schema::dropIfExists('school_works');

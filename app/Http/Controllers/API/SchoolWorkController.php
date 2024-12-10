@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
+use App\Models\ClassSchoolWork;
 use App\Models\SchoolWork;
 use App\Models\SchoolWorkAttachment;
 use App\Services\ExceptionHandlerService;
@@ -144,8 +145,10 @@ class SchoolWorkController extends Controller
 
         $today = now();
 
-        $school_works = SchoolWork::when($class_id, function ($q) use ($class_id) {
-            return $q->where('class_id', $class_id);
+        $school_work_ids = ClassSchoolWork::where('class_id', $class_id)->pluck('school_work_id')->toArray();
+
+        $school_works = SchoolWork::when($class_id, function ($q) use ($school_work_ids) {
+            return $q->whereIn('id', $school_work_ids);
         })
             ->where('due_datetime', '>', $today)
             ->whereDoesntHave('student_submissions', function ($query) use ($student_id) {
@@ -165,7 +168,9 @@ class SchoolWorkController extends Controller
         $student_id = $request->student_id;
         $class_id = $request->class_id;
 
-        $school_works = SchoolWork::where('class_id', $class_id)
+        $school_work_ids = ClassSchoolWork::where('class_id', $class_id)->pluck('school_work_id')->toArray();
+
+        $school_works = SchoolWork::whereIn('id', $school_work_ids)
             ->whereHas('student_submissions', function ($query) use ($student_id) {
                 $query->where('student_id', $student_id)
                     ->whereNotNull('datetime_submitted');
@@ -183,7 +188,9 @@ class SchoolWorkController extends Controller
         $student_id = $request->student_id;
         $class_id = $request->class_id;
 
-        $school_works = SchoolWork::where('class_id', $class_id)
+        $school_work_ids = ClassSchoolWork::where('class_id', $class_id)->pluck('school_work_id')->toArray();
+
+        $school_works = SchoolWork::whereIn('id', $school_work_ids)
             ->whereDoesntHave('student_submissions', function ($query) use ($student_id) {
                 $query->where('student_id', $student_id)
                     ->whereNotNull('datetime_submitted');
