@@ -177,7 +177,7 @@ class ClassRoomController extends Controller
     {
         $auth = auth()->user()->role;
         $request_type = $request->query('type');
-        $school_work_ids = ClassSchoolWork::where('class_id')->pluck('school_work_id')->toArray();
+        $school_work_ids = ClassSchoolWork::where('class_id', $class_id)->pluck('school_work_id')->toArray();
 
         $school_works = SchoolWork::whereIn('id', $school_work_ids)
             ->when($request_type, function ($q) use ($request_type) {
