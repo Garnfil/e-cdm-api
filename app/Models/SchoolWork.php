@@ -15,7 +15,7 @@ class SchoolWork extends Model
 
     public function class_school_work()
     {
-        return $this->belongsTo(ClassSchoolWork::class, 'class_id');
+        return $this->belongsTo(ClassSchoolWork::class, 'class_id', 'class_id');
     }
 
     public function instructor()
