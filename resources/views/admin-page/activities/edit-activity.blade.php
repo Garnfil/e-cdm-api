@@ -23,25 +23,27 @@
                             @csrf
                             @method('PUT')
                             <div class="row">
-                                <div class="col-xl-4">
+                                <div class="col-xl-12">
                                     <div class="mb-3">
                                         <label for="title-field" class="form-label">Title</label>
                                         <input type="text" class="form-control" name="title" id="title-field"
                                             value="{{ $activity->title }}">
                                     </div>
                                 </div>
-                                <div class="col-xl-4">
+                                <div class="col-xl-6">
                                     <div class="mb-3">
-                                        <label for="class-field" class="form-label">Class</label>
-                                        <select name="class_id" id="class-field" class="form-select">
+                                        <label for="classes-field" class="form-label">Classes</label>
+                                        <select name="class_ids[]" id="classes-field" class="form-select" multiple>
+                                            <option value="">--- SELECT CLASS ---</option>
                                             @foreach ($classes as $class)
-                                                <option {{ $class->id == $activity->class_id ? 'selected' : null }}
+                                                <option
+                                                    {{ $class->id == $activity->school_work_class->class_id ? 'selected' : null }}
                                                     value="{{ $class->id }}">{{ $class->title }}</option>
                                             @endforeach
                                         </select>
                                     </div>
                                 </div>
-                                <div class="col-xl-4">
+                                <div class="col-xl-6">
                                     <div class="mb-3">
                                         <label for="instructor-field" class="form-label">Instructor</label>
                                         <select name="instructor_id" id="instructor-field" class="form-select">
@@ -189,6 +191,8 @@
                     $('#file-attachment-field').removeClass('d-block');
                 }
             }
+
+            $('#classes-field').select2();
         </script>
     @endpush
 @endsection

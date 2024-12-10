@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Web;
 use App\Http\Controllers\Controller;
 use App\Models\Activity;
 use App\Models\Classroom;
+use App\Models\ClassSchoolWork;
 use App\Models\Instructor;
 use App\Models\SchoolWork;
 use Carbon\Carbon;
@@ -64,11 +65,10 @@ class ActivityController extends Controller
      */
     public function store(Request $request)
     {
-        $class = Classroom::find($request->class_id);
+        $classes = Classroom::whereIn('id', $request->class_ids)->get();
 
         $school_work = SchoolWork::create([
             'title' => $request->title,
-            'class_id' => $request->class_id,
             'instructor_id' => $request->instructor_id,
             'description' => $request->description,
             'type' => 'activity',
@@ -76,13 +76,28 @@ class ActivityController extends Controller
             'due_datetime' => $request->due_datetime,
         ]);
 
-        $assignment = Activity::create([
-            'school_work_id' => $school_work->id,
-            'activity_type' => 'practical',
-            'notes' => $request->notes,
-            'points' => $request->points,
-            'assessment_type' => $class->current_assessment_category,
-        ]);
+        if (is_array($request->class_ids))
+        {
+            foreach ($request->class_ids as $key => $class_id)
+            {
+                ClassSchoolWork::updateOrCreate([
+                    'class_id' => $class_id,
+                    'school_work_id' => $school_work->id
+                ], []);
+            }
+        }
+
+        foreach ($classes as $key => $classroom)
+        {
+            $assignment = Activity::create([
+                'school_work_id' => $school_work->id,
+                'activity_type' => 'practical',
+                'notes' => $request->notes,
+                'points' => $request->points,
+                'assessment_type' => $classroom->current_assessment_category,
+            ]);
+        }
+
 
         return redirect()->route('admin.activities.index')->withSuccess('Activity Added Successfully');
     }
@@ -100,7 +115,7 @@ class ActivityController extends Controller
      */
     public function edit(string $id)
     {
-        $activity = SchoolWork::with('attachments')->findOrFail($id);
+        $activity = SchoolWork::with('attachments', 'school_work_class')->findOrFail($id);
         $classes = Classroom::get();
         $instructors = Instructor::get();
 
@@ -112,11 +127,20 @@ class ActivityController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        $school_work = SchoolWork::with('attachments', 'activity')->findOrFail($id);
+        $school_work = SchoolWork::findOrFail($id);
+        if (is_array($request->class_ids))
+        {
+            foreach ($request->class_ids as $key => $class_id)
+            {
+                ClassSchoolWork::updateOrCreate([
+                    'class_id' => $class_id,
+                    'school_work_id' => $school_work->id
+                ], []);
+            }
+        }
 
         $school_work->update([
             'title' => $request->title,
-            'class_id' => $request->class_id,
             'instructor_id' => $request->instructor_id,
             'description' => $request->description,
             'status' => $request->status,

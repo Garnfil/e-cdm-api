@@ -29,8 +29,8 @@
                                 </div>
                                 <div class="col-xl-4">
                                     <div class="mb-3">
-                                        <label for="class-field" class="form-label">Class</label>
-                                        <select name="class_id" id="class-field" class="form-select">
+                                        <label for="classes-field" class="form-label">Class</label>
+                                        <select name="class_ids[]" id="classes-field" class="form-select" multiple>
                                             @foreach ($classes as $class)
                                                 <option value="{{ $class->id }}">{{ $class->title }}</option>
                                             @endforeach
@@ -105,4 +105,10 @@
             </div> --}}
         </div>
     </div>
+
+    @push('scripts')
+        <script>
+            $('#classes-field').select2();
+        </script>
+    @endpush
 @endsection
