@@ -22,7 +22,7 @@ class ActivityController extends Controller
         {
             $activities = SchoolWork::where('type', 'activity')
                 ->whereHas('activity')
-                ->with('activity', 'class', 'instructor');
+                ->with('activity', 'class_school_work.classroom', 'instructor');
 
             return DataTables::of($activities)
                 ->addIndexColumn()
