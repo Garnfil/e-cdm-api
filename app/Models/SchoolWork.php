@@ -13,9 +13,9 @@ class SchoolWork extends Model
 
     protected $fillable = ['class_id', 'instructor_id', 'title', 'description', 'file_paths', 'type', 'status', 'due_datetime'];
 
-    public function class()
+    public function class_school_work()
     {
-        return $this->belongsTo(Classroom::class, 'class_id');
+        return $this->belongsTo(ClassSchoolWork::class, 'class_id');
     }
 
     public function instructor()
@@ -56,7 +56,8 @@ class SchoolWork extends Model
     public function schoolWorkPoints()
     {
         $points = 0;
-        switch ($this->type) {
+        switch ($this->type)
+        {
             case 'assignment':
                 $points = $this->assignment->points;
                 break;

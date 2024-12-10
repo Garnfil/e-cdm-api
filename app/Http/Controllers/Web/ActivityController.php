@@ -18,7 +18,8 @@ class ActivityController extends Controller
      */
     public function index(Request $request)
     {
-        if ($request->ajax()) {
+        if ($request->ajax())
+        {
             $activities = SchoolWork::where('type', 'activity')
                 ->whereHas('activity')
                 ->with('activity', 'class', 'instructor');
@@ -26,18 +27,18 @@ class ActivityController extends Controller
             return DataTables::of($activities)
                 ->addIndexColumn()
                 ->addColumn('class', function ($row) {
-                    return $row->class->title;
+                    return $row->class_school_work->classroom->title ?? '';
                 })
                 ->addColumn('instructor', function ($row) {
-                    return $row->instructor->firstname.' '.$row->instructor->lastname;
+                    return $row->instructor->firstname . ' ' . $row->instructor->lastname;
                 })
                 ->editColumn('due_datetime', function ($row) {
                     return Carbon::parse($row->due_datetime)->format('F d, Y h:i A');
                 })
                 ->addColumn('actions', function ($row) {
                     return '<div class="btn-group">
-                        <a href="'.route('admin.activities.edit', $row->id).'" class="btn btn-primary btn-sm"><i class="bx bx-edit text-white"></i></a>
-                        <a class="btn btn-danger btn-sm remove-btn" id="'. $row->id .'"><i class="bx bx-trash text-white"></i></a>
+                        <a href="' . route('admin.activities.edit', $row->id) . '" class="btn btn-primary btn-sm"><i class="bx bx-edit text-white"></i></a>
+                        <a class="btn btn-danger btn-sm remove-btn" id="' . $row->id . '"><i class="bx bx-trash text-white"></i></a>
                     </div>';
                 })
                 ->rawColumns(['actions'])
