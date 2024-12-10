@@ -37,7 +37,7 @@ return new class extends Migration {
         Schema::create('class_school_works', function (Blueprint $table) {
             $table->id();
             $table->foreignId('class_id')->constrained('classes')->cascadeOnDelete();
-            $table->foreignId('school_work_id')->constrained('instructors')->cascadeOnDelete();
+            $table->foreignId('school_work_id')->constrained('school_works')->cascadeOnDelete();
             $table->timestamps();
         });
 
