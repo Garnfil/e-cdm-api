@@ -31,7 +31,7 @@ class StoreRequest extends FormRequest
             'notes' => ['nullable'],
             'points' => ['required'],
             'assessment_type' => ['nullable', 'in:prelim,midterm,finals'],
-            'quiz_type' => ['required', 'in:long,short'],
+            'quiz_type' => ['required'],
             'due_datetime' => ['required'],
         ];
     }
