@@ -35,7 +35,8 @@
                                         <label for="classes-field" class="form-label">Classes</label>
                                         <select name="class_ids[]" id="classes-field" class="form-select" multiple>
                                             @foreach ($classes as $class)
-                                                <option {{ $class->id == $exam->class_id ? 'selected' : null }}
+                                                <option
+                                                    {{ $class->id == $exam->school_work_class->class_id ? 'selected' : null }}
                                                     value="{{ $class->id }}">{{ $class->title }}</option>
                                             @endforeach
                                         </select>

@@ -15,28 +15,33 @@ class SchoolWorkController extends Controller
 {
     public function upload(Request $request)
     {
-        try {
+        try
+        {
             DB::beginTransaction();
 
             $school_work = SchoolWork::where('id', $request->school_work_id)->first();
-            if (! $school_work) {
+            if (! $school_work)
+            {
                 throw new Exception('School Work Not Found', 404);
             }
 
-            if ($request->hasFile('attachment') && $request->attachment_type == SchoolWorkAttachment::ATTACHMENT_TYPE_FILE) {
+            if ($request->hasFile('attachment') && $request->attachment_type == SchoolWorkAttachment::ATTACHMENT_TYPE_FILE)
+            {
                 $attachment = $request->file('attachment');
 
                 $path_extension = $attachment->getClientOriginalExtension();
 
-                if (! in_array($path_extension, ['pdf', 'png', 'jpg', 'jpeg', 'webp'])) {
+                if (! in_array($path_extension, ['pdf', 'png', 'jpg', 'jpeg', 'webp']))
+                {
                     throw new Exception('The requested attachment does not correspond to a recognized file type. The following file types are supported: pdf, png, jpg, jpeg, and webp.', 422);
                 }
 
-                $attachment_name = Str::random(7).'-'.time().'.'.$attachment->getClientOriginalExtension();
+                $attachment_name = Str::random(7) . '-' . time() . '.' . $attachment->getClientOriginalExtension();
 
                 $file_path = 'school_work_attachments/';
                 Storage::disk('public')->putFileAs($file_path, $attachment, $attachment_name);
-            } else {
+            } else
+            {
                 $attachment_name = $request->attachment;
             }
 
@@ -52,7 +57,8 @@ class SchoolWorkController extends Controller
 
             return back()->withSuccess('Upload Successfully');
 
-        } catch (Exception $exception) {
+        } catch (Exception $exception)
+        {
             DB::rollBack();
 
             return back()->with('fail', $exception->getMessage());

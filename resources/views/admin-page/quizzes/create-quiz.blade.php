@@ -29,8 +29,8 @@
                                 </div>
                                 <div class="col-xl-4">
                                     <div class="mb-3">
-                                        <label for="class-field" class="form-label">Class</label>
-                                        <select name="class_id" id="class-field" class="form-select">
+                                        <label for="classes-field" class="form-label">Classes</label>
+                                        <select name="class_ids[]" id="classes-field" class="form-select" multiple>
                                             @foreach ($classes as $class)
                                                 <option value="{{ $class->id }}">{{ $class->title }}</option>
                                             @endforeach
@@ -98,29 +98,20 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="col-xl-6">
-                                            <div class="form-check mt-3">
-                                                <input class="form-check-input" type="checkbox" value="1"
-                                                    id="has-quiz-form-checkbox" name="has_quiz_form" />
-                                                <label class="form-check-label" for="has-quiz-form-checkbox"> Has Quiz
-                                                    Form? </label>
-                                            </div>
-                                        </div>
                                     </div>
                                 </div>
                             </div>
-                            <button class="btn btn-primary">Save Assignment <i class='bx bxs-download'></i></button>
+                            <button class="btn btn-primary">Save Quiz <i class='bx bxs-download'></i></button>
                         </form>
                     </div>
                 </div>
             </div>
-            {{-- <div class="col-xl-4">
-                <div class="card">
-                    <div class="card-body">
-
-                    </div>
-                </div>
-            </div> --}}
         </div>
     </div>
+
+    @push('scripts')
+        <script>
+            $('#classes-field').select2();
+        </script>
+    @endpush
 @endsection

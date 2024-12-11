@@ -23,11 +23,11 @@
                 </button>
             </li>
             <!-- <li class="nav-item">
-                <button type="button" class="nav-link" role="tab" data-bs-toggle="tab"
-                    data-bs-target="#navs-top-profile" aria-controls="navs-top-profile" aria-selected="false">
-                    Quiz Form
-                </button>
-            </li> -->
+                                                                <button type="button" class="nav-link" role="tab" data-bs-toggle="tab"
+                                                                    data-bs-target="#navs-top-profile" aria-controls="navs-top-profile" aria-selected="false">
+                                                                    Quiz Form
+                                                                </button>
+                                                            </li> -->
 
         </ul>
         <div class="tab-content px-0">
@@ -49,10 +49,11 @@
                                         </div>
                                         <div class="col-xl-4">
                                             <div class="mb-3">
-                                                <label for="class-field" class="form-label">Class</label>
-                                                <select name="class_id" id="class-field" class="form-select">
+                                                <label for="classes-field" class="form-label">Classes</label>
+                                                <select name="class_ids[]" id="classes-field" class="form-select" multiple>
                                                     @foreach ($classes as $class)
-                                                        <option {{ $quiz->class_id == $class->id ? 'selected' : null }}
+                                                        <option
+                                                            {{ $quiz->school_work_class->class_id == $class->id ? 'selected' : null }}
                                                             value="{{ $class->id }}">{{ $class->title }}</option>
                                                     @endforeach
                                                 </select>
@@ -360,6 +361,8 @@
             function removeQuestion(questionIndex) {
                 document.getElementsByName(`questions[${questionIndex}][question_text]`)[0].parentElement.remove();
             }
+
+            $('#classes-field').select2();
         </script>
     @endpush
 @endsection

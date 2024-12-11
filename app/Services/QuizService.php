@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Models\ClassSchoolWork;
 use App\Models\Quiz;
 use App\Models\SchoolWork;
 use App\Models\SchoolWorkAttachment;
@@ -12,15 +13,17 @@ use Illuminate\Support\Str;
 
 class QuizService
 {
-    public function __construct() {}
+    public function __construct()
+    {
+    }
 
     public function createAndUpload($request)
     {
-        try {
+        try
+        {
             DB::beginTransaction();
 
             $schoolWork = SchoolWork::create([
-                'class_id' => $request->class_id,
                 'instructor_id' => $request->instructor_id,
                 'title' => $request->title,
                 'description' => $request->description,
@@ -29,11 +32,25 @@ class QuizService
                 'due_datetime' => $request->due_datetime,
             ]);
 
-            if ($request->has('attachments') && is_array($request->attachments)) {
-                foreach ($request->attachments as $key => $attachment) {
+            if (is_array($request->class_ids))
+            {
+                foreach ($request->class_ids as $key => $class_id)
+                {
+                    ClassSchoolWork::create([
+                        'class_id' => $class_id,
+                        'school_work_id' => $schoolWork->id,
+                    ]);
+                }
+            }
+
+            if ($request->has('attachments') && is_array($request->attachments))
+            {
+                foreach ($request->attachments as $key => $attachment)
+                {
                     $file_name = null;
-                    if (! is_string($attachment)) {
-                        $file_name = time().'-'.Str::random(5).'.'.$attachment->getClientOriginalExtension();
+                    if (! is_string($attachment))
+                    {
+                        $file_name = time() . '-' . Str::random(5) . '.' . $attachment->getClientOriginalExtension();
                         $file_path = 'school_works_attachments/';
                         Storage::disk('public')->putFileAs($file_path, $attachment, $file_name);
                     }
@@ -63,7 +80,8 @@ class QuizService
                 'schoolWork' => $schoolWork,
                 'quiz' => $quiz->load('school_work'),
             ];
-        } catch (Exception $e) {
+        } catch (Exception $e)
+        {
             DB::rollBack();
             throw $e;
         }
@@ -71,9 +89,11 @@ class QuizService
 
     public function update($request)
     {
-        try {
+        try
+        {
 
-        } catch (Exception $exception) {
+        } catch (Exception $exception)
+        {
             DB::rollBack();
             throw $exception;
         }
