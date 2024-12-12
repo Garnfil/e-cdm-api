@@ -44,14 +44,17 @@ class ChatMessageController extends Controller
             ? Student::find($request->user_id)
             : Instructor::find($request->user_id);
 
-        if (! $sender) {
+        $sender_class = $request->user_type === 'student' ? 'App\Models\Student' : 'App\Models\Instructor';
+
+        if (! $sender)
+        {
             return response()->json(['error' => 'Sender not found'], 404);
         }
 
         $message = ChatMessage::create([
             'class_id' => $classroom->id,
             'sender_id' => $sender->id,
-            'sender_type' => get_class($sender),
+            'sender_type' => $sender_class,
             'content' => $request->content,
         ]);
 
