@@ -16,7 +16,7 @@ return new class extends Migration
             $table->string('title');
             $table->text('content');
             $table->integer('user_id');
-            $table->enum('user_type', ['student', 'instructor']);
+            $table->enum('user_type', ["App\\\\Models\\\\Student", "App\\\\Models\\\\Instructor"]);
             $table->json('images')->nullable();
             $table->enum('visibility', ['public', 'private']);
             $table->foreignId('institute_id')->nullable()->constrained()->onDelete('cascade'); // Restriction to institute

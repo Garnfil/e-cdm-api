@@ -16,7 +16,7 @@ return new class extends Migration
             $table->foreignId('post_id')->nullable()->constrained('discussion_posts')->onDelete('cascade');
             $table->foreignId('comment_id')->nullable()->constrained('discussion_comments')->onDelete('cascade');
             $table->bigInteger('user_id');
-            $table->enum('user_type', ['App\Models\Student', 'App\Models\Instructor']);
+            $table->enum('user_type', ["App\\\\Models\\\\Student", "App\\\\Models\\\\Instructor"]);
             $table->enum('vote_type', allowed: ['upvote', 'downvote']); // Upvote or Downvote
             $table->timestamps();
         });

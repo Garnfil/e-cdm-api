@@ -15,7 +15,7 @@ class DiscussionSeeder extends Seeder
     {
         $post1 = DiscussionPost::create([
             'user_id' => 1,
-            'user_type' => 'student',
+            'user_type' => 'App\Models\Student',
             'title' => 'Public Post 1',
             'content' => 'This is a public discussion post available to everyone.',
             'visibility' => 'public',
@@ -24,7 +24,7 @@ class DiscussionSeeder extends Seeder
         // Public Post 2
         $post2 = DiscussionPost::create([
             'user_id' => 1,
-            'user_type' => 'instructor',
+            'user_type' => 'App\Models\Instructor',
             'title' => 'Public Post 2',
             'content' => 'Another public discussion post for everyone to see.',
             'visibility' => 'public',
@@ -33,7 +33,7 @@ class DiscussionSeeder extends Seeder
         // Private Post (Restricted by Institute)
         $post3 = DiscussionPost::create([
             'user_id' => 1,
-            'user_type' => 'student',
+            'user_type' => 'App\Models\Student',
             'title' => 'Private Post for Institute',
             'content' => 'This post is restricted to a specific institute.',
             'visibility' => 'private',
@@ -43,7 +43,7 @@ class DiscussionSeeder extends Seeder
         // Private Post (Restricted by Course)
         $post4 = DiscussionPost::create([
             'user_id' => 1,
-            'user_type' => 'instructor',
+            'user_type' => 'App\Models\Instructor',
             'title' => 'Private Post for Course',
             'content' => 'This post is restricted to a specific course.',
             'visibility' => 'private',
@@ -54,14 +54,14 @@ class DiscussionSeeder extends Seeder
         DiscussionComment::create([
             'post_id' => 1,
             'user_id' => 1,
-            'user_type' => 'Instructor',
+            'user_type' => 'App\Models\Instructor',
             'comment' => 'Great public post! Thanks for sharing.',
         ]);
 
         DiscussionComment::create([
             'post_id' => 1,
             'user_id' => 1,
-            'user_type' => 'Student',
+            'user_type' => 'App\Models\Student',
             'comment' => 'Interesting discussion on this topic!',
         ]);
     }

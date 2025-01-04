@@ -167,7 +167,7 @@
                     </div>
                     <div class="card-body">
                         <ul class="p-0 m-0">
-                            @foreach ($recent_conference_sessions as $conference_session)
+                            @forelse ($recent_conference_sessions as $conference_session)
                                 <li class="d-flex mb-4 pb-1">
                                     <div class="avatar flex-shrink-0 me-3">
                                         <div class="p-2 bg-primary text-white rounded d-flex justify-content-center">
@@ -187,7 +187,11 @@
                                         </div>
                                     </div>
                                 </li>
-                            @endforeach
+                            @empty
+                                <div class="text-center">
+                                    <img src="{{ URL::asset('assets/img/elements/nodata.gif') }}" alt="">
+                                </div>
+                            @endforelse
                         </ul>
                     </div>
                 </div>

@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('live_sessions', function (Blueprint $table) {
             $table->id();
             $table->string('title');
+            $table->foreignId('instructor_id')->constrained('instructors')->cascadeOnDelete();
             $table->text('description')->nullable();
             $table->string('session_code', 10)->unique();
             $table->datetime('scheduled_datetime');

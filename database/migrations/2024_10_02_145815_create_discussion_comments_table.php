@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('post_id')->constrained('discussion_posts')->onDelete('cascade');
             $table->integer('user_id');
-            $table->enum('user_type', ['Student', 'Instructor']);
+            $table->enum('user_type', ["App\\\\Models\\\\Student", "App\\\\Models\\\\Instructor"]);
             $table->text('comment');
             $table->timestamps();
         });

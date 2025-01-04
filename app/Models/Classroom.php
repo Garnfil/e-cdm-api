@@ -27,4 +27,9 @@ class Classroom extends Model
     {
         return $this->belongsTo(Instructor::class, 'instructor_id');
     }
+
+    public function rubric()
+    {
+        return $this->hasOne(ClassRubric::class, 'class_id');
+    }
 }

@@ -31,11 +31,11 @@ class ClassController extends Controller
                     return $row->section->name;
                 })
                 ->addColumn('instructor', function ($row) {
-                    return $row->instructor->firstname . ' ' . $row->instructor->lastname;
+                    return $row->instructor->firstname.' '.$row->instructor->lastname;
                 })->addColumn('actions', function ($row) {
                     return '<div class="btn-group">
-                        <a href="' . route('admin.classes.edit', $row->id) . '" class="btn btn-primary btn-sm"><i class="bx bx-edit text-white"></i></a>
-                        <a class="btn btn-danger btn-sm remove-btn" id="' . $row->id . '"><i class="bx bx-trash text-white"></i></a>
+                        <a href="'.route('admin.classes.edit', $row->id).'" class="btn btn-primary btn-sm"><i class="bx bx-edit text-white"></i></a>
+                        <a class="btn btn-danger btn-sm remove-btn" id="'.$row->id.'"><i class="bx bx-trash text-white"></i></a>
                     </div>';
                 })
                 ->rawColumns(['actions'])
@@ -67,7 +67,7 @@ class ClassController extends Controller
         $section = Section::where('id', $request->section_id)->first();
         $subject = Subject::where('id', $request->subject_id)->first();
 
-        $title = $section->name . ' - ' . $subject->title;
+        $title = $section->name.' - '.$subject->title;
 
         $classCode = Str::random(12);
 
@@ -78,7 +78,7 @@ class ClassController extends Controller
 
         if ($existingClassroom)
         {
-            return back()->with('failed', 'This class was already exist.');
+            return back()->with('fail', 'This class was already exist.');
         }
 
         $class = Classroom::create(array_merge($data, [
@@ -121,7 +121,7 @@ class ClassController extends Controller
         $section = Section::where('id', $request->section_id)->first();
         $subject = Subject::where('id', $request->subject_id)->first();
 
-        $title = $section->name . ' - ' . $subject->title;
+        $title = $section->name.' - '.$subject->title;
         $class = Classroom::findOrFail($id);
 
         $existingClassroom = Classroom::where([

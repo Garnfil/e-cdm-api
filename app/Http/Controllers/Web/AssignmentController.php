@@ -31,15 +31,15 @@ class AssignmentController extends Controller
                     return $row->school_work_class->classroom->title ?? 'N/A';
                 })
                 ->addColumn('instructor', function ($row) {
-                    return $row->instructor->firstname . ' ' . $row->instructor->lastname;
+                    return $row->instructor->firstname.' '.$row->instructor->lastname;
                 })
                 ->editColumn('due_datetime', function ($row) {
                     return Carbon::parse($row->due_datetime)->format('F d, Y h:i A');
                 })
                 ->addColumn('actions', function ($row) {
                     return '<div class="btn-group">
-                        <a href="' . route('admin.assignments.edit', $row->id) . '" class="btn btn-primary btn-sm"><i class="bx bx-edit text-white"></i></a>
-                        <a class="btn btn-danger btn-sm remove-btn" id="' . $row->id . '"><i class="bx bx-trash text-white"></i></a>
+                        <a href="'.route('admin.assignments.edit', $row->id).'" class="btn btn-primary btn-sm"><i class="bx bx-edit text-white"></i></a>
+                        <a class="btn btn-danger btn-sm remove-btn" id="'.$row->id.'"><i class="bx bx-trash text-white"></i></a>
                     </div>';
                 })
                 ->rawColumns(['actions'])
@@ -67,6 +67,11 @@ class AssignmentController extends Controller
     {
         $classes = Classroom::whereIn('id', $request->class_ids)->get();
 
+        foreach ($classes as $classroom)
+        {
+
+        }
+
         $school_work = SchoolWork::create([
             'title' => $request->title,
             'instructor_id' => $request->instructor_id,
@@ -76,19 +81,14 @@ class AssignmentController extends Controller
             'due_datetime' => $request->due_datetime,
         ]);
 
-        if (is_array($request->class_ids))
-        {
-            foreach ($request->class_ids as $key => $class_id)
-            {
-                ClassSchoolWork::updateOrCreate([
-                    'class_id' => $class_id,
-                    'school_work_id' => $school_work->id
-                ], []);
-            }
-        }
 
         foreach ($classes as $key => $classroom)
         {
+            ClassSchoolWork::updateOrCreate([
+                'class_id' => $classroom->id,
+                'school_work_id' => $school_work->id
+            ], []);
+
             $assignment = Assignment::create([
                 'school_work_id' => $school_work->id,
                 'notes' => $request->notes,

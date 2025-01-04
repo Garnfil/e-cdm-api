@@ -20,7 +20,7 @@
                     <div class="alert alert-danger">
                         <ul>
                             @foreach ($errors->all() as $error)
-                                <li>{{ $error }}</li>
+                                <li style="list-style-type: square;">{{ $error }}</li>
                             @endforeach
                         </ul>
                     </div>
@@ -31,49 +31,63 @@
                         <div class="row">
                             <div class="col-xl-4">
                                 <div class="mb-3">
-                                    <label for="" class="form-label">Student ID</label>
-                                    <input type="text" class="form-control" name="student_id">
+                                    <label for="" class="form-label">Student ID <span
+                                            class="text-danger">*</span></label>
+                                    <input type="text" class="form-control" name="student_id"
+                                        value="{{ old('student_id') }}">
                                 </div>
                             </div>
                             <div class="col-xl-4">
                                 <div class="mb-3">
-                                    <label for="" class="form-label">Email</label>
-                                    <input type="email" class="form-control" name="email">
+                                    <label for="" class="form-label">Email <span style="font-size: 10px;"
+                                            class="text-info info">(Email
+                                            should be
+                                            student.pnm.edu.ph)</span></label>
+                                    <input type="email" class="form-control" name="email" value="{{ old('email') }}">
                                 </div>
                             </div>
                             <div class="col-xl-4">
                                 <div class="mb-3">
-                                    <label for="" class="form-label">Password</label>
-                                    <input type="password" class="form-control" name="password">
+                                    <label for="" class="form-label">Password <span
+                                            class="text-danger">*</span></label>
+                                    <input type="password" class="form-control" name="password" value="">
                                 </div>
                             </div>
                             <div class="col-xl-4">
                                 <div class="mb-3">
-                                    <label for="" class="form-label">First Name</label>
-                                    <input type="text" class="form-control" name="firstname">
+                                    <label for="" class="form-label">First Name <span
+                                            class="text-danger">*</span></label>
+                                    <input type="text" class="form-control" name="firstname"
+                                        value="{{ old('firstname') }}">
                                 </div>
                             </div>
                             <div class="col-xl-4">
                                 <div class="mb-3">
-                                    <label for="" class="form-label">Last Name</label>
-                                    <input type="text" class="form-control" name="lastname">
+                                    <label for="" class="form-label">Last Name <span
+                                            class="text-danger">*</span></label>
+                                    <input type="text" class="form-control" name="lastname"
+                                        value="{{ old('lastname') }}">
                                 </div>
                             </div>
                             <div class="col-xl-4">
                                 <div class="mb-3">
                                     <label for="" class="form-label">Middle Name</label>
-                                    <input type="text" class="form-control" name="middlename">
+                                    <input type="text" class="form-control" name="middlename"
+                                        value="{{ old('middlename') }}">
                                 </div>
                             </div>
                             <div class="col-xl-4">
                                 <div class="mb-3">
-                                    <label for="" class="form-label">Year Level</label>
-                                    <input type="text" class="form-control" name="year_level">
+                                    <label for="" class="form-label">Year Level <span
+                                            class="text-danger">*</span></label>
+                                    <input type="text" class="form-control" name="year_level"
+                                        value="{{ old('year_level') }}">
                                 </div>
                             </div>
                             <div class="col-xl-4">
                                 <div class="mb-3">
-                                    <label for="" class="form-label">Section</label>
+                                    <label for="" class="form-label">Section <span
+                                            class="text-danger">*</span></label>
                                     <select name="section" id="section-field" class="form-select">
                                         @foreach ($sections as $section)
                                             <option value="{{ $section->id }}">{{ $section->name }}</option>
@@ -83,7 +97,8 @@
                             </div>
                             <div class="col-xl-4">
                                 <div class="mb-3">
-                                    <label for="" class="form-label">Institute</label>
+                                    <label for="" class="form-label">Institute <span
+                                            class="text-danger">*</span></label>
                                     <select name="institute_id" id="institute-field" class="form-select">
                                         @foreach ($institutes as $institute)
                                             <option value="{{ $institute->id }}">{{ $institute->name }}</option>
@@ -104,13 +119,15 @@
                             <div class="col-xl-4">
                                 <div class="mb-3">
                                     <label for="" class="form-label">Birthdate</label>
-                                    <input type="date" class="form-control" name="birthdate">
+                                    <input type="date" class="form-control" name="birthdate"
+                                        value="{{ old('birthdate') }}">
                                 </div>
                             </div>
                             <div class="col-xl-4">
                                 <div class="mb-3">
                                     <label for="" class="form-label">Age</label>
-                                    <input type="number" class="form-control" name="age">
+                                    <input type="number" class="form-control" name="age"
+                                        value="{{ old('age') }}">
                                 </div>
                             </div>
                             <div class="col-xl-4">

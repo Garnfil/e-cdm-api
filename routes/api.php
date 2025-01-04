@@ -15,6 +15,7 @@ use App\Http\Controllers\API\ExamController;
 use App\Http\Controllers\API\GuardianAuthenticationController;
 use App\Http\Controllers\API\GuardianController;
 use App\Http\Controllers\API\InstituteController;
+use App\Http\Controllers\API\InstructorAttendanceController;
 use App\Http\Controllers\API\ModuleController;
 use App\Http\Controllers\API\ProfileController;
 use App\Http\Controllers\API\QuizController;
@@ -57,6 +58,8 @@ Route::get('courses', [CourseController::class, 'getAll']);
 Route::get('institutes', [InstituteController::class, 'getAll']);
 Route::get('sections', [SectionController::class, 'getAll']);
 
+Route::get('instructor-attendances/notification', [InstructorAttendanceController::class, 'getFirstInstructorAttendance']);
+Route::post('instructor-attendances/update-notification', [InstructorAttendanceController::class, 'updateNotification']);
 
 Route::group(['middleware' => ['auth:sanctum']], function () {
 
