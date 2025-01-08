@@ -3,9 +3,11 @@
 namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
+use App\Models\Attendance;
 use App\Models\InstructorAttendance;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 
 class InstructorAttendanceController extends Controller
 {
@@ -34,6 +36,22 @@ class InstructorAttendanceController extends Controller
             'status' => 'success',
             'attendance' => $result
         ]);
+    }
+
+    public function store(Request $request) {
+
+        $user = auth()->user();
+
+        $attendance = InstructorAttendance::create($request->only('instructor_id', 'class_id', 'room', 'attendance_datetime'));
+
+        $attendance_code = Str::random(6) . '-' . rand(10000, 100000);
+        $student_attendance = Attendance::create(array_merge($request->only('class_id', 'attendance_datetime'), ['attendance_code' => $attendance_code]));
+
+        return response()->json([
+            'status' => 'success',
+            'attendance' => $attendance
+        ]);
+        
     }
 
     public function updateNotification(Request $request)

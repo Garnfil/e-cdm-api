@@ -16,7 +16,7 @@ return new class extends Migration
             $table->foreignId('instructor_id')->constrained('instructors')->cascadeOnDelete();
             $table->foreignId('class_id')->constrained('classes')->cascadeOnDelete();
             $table->string('room');
-            $table->date('attendance_date');
+            $table->dateTime('attendance_datetime');
             $table->boolean('is_read')->default(0);
             $table->timestamps();
         });

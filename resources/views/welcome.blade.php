@@ -189,7 +189,8 @@
                                 </li>
                             @empty
                                 <div class="text-center">
-                                    <img src="{{ URL::asset('assets/img/elements/nodata.gif') }}" alt="">
+                                    <img src="{{ URL::asset('assets/img/illustrations/no-data.png') }}"  alt="">
+                                    <h2 class="mt-4" style="font-size: 20px;">No Data Available</h2>
                                 </div>
                             @endforelse
                         </ul>

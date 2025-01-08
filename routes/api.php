@@ -59,6 +59,7 @@ Route::get('institutes', [InstituteController::class, 'getAll']);
 Route::get('sections', [SectionController::class, 'getAll']);
 
 Route::get('instructor-attendances/notification', [InstructorAttendanceController::class, 'getFirstInstructorAttendance']);
+Route::post('instructor-attendances', [InstructorAttendanceController::class, 'store']);
 Route::post('instructor-attendances/update-notification', [InstructorAttendanceController::class, 'updateNotification']);
 
 Route::group(['middleware' => ['auth:sanctum']], function () {
@@ -198,6 +199,7 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::get('messages/classes/{class_id}', [ChatMessageController::class, 'classMessages']);
 
     Route::post('live-sessions/leave-session', [VideoConferenceController::class, 'leaveSession']);
+    Route::post('live-sessions/joined-session', [VideoConferenceController::class, 'joinedSession']);
     Route::post('live-sessions', [VideoConferenceController::class, 'store']);
     Route::get('live-sessions/students/{student_id}/classes', [VideoConferenceController::class, 'getStudentClassConferenceSessions']);
     Route::get('live-sessions/instructor-recent-classes', [VideoConferenceController::class, 'getRecentInstructorClassSessions']);
@@ -206,6 +208,7 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::post('whiteboards/generate-room-token', [WhiteboardController::class, 'generateRoomToken']);
     Route::post('whiteboards/update/{sessionId}', [WhiteboardController::class, 'update']);
     Route::post('whiteboards/join-whiteboard-session', [WhiteboardController::class, 'joinWhiteboardSession']);
+    Route::delete('whiteboards/{whiteboard_id}', [WhiteboardController::class, 'destroy']);
 
     Route::get('whiteboards/instructors/{instructor_id}', [WhiteboardController::class, 'getInstructorWhiteboards']);
     Route::get('whiteboards/student-classes', [WhiteboardController::class, 'getStudentClassWhiteboards']);

@@ -17,8 +17,8 @@ return new class extends Migration
             $table->id();
             $table->foreignId('class_id')->constrained('classes')->onDelete('cascade');
             $table->unsignedBigInteger('sender_id');  // Can reference either student or instructor
-            $table->enum('sender_type', ['App\Models\Student', 'App\Models\Instructor']);            // To specify the type (Student or Instructor)
-            $table->text('content');                  // The message content
+            $table->enum('sender_type', ["App\\\\Models\\\\Student", "App\\\\Models\\\\Instructor"]);            // To specify the type (Student or Instructor)
+            $table->text('content');   // The message content           
             $table->timestamps();
 
             // Index for sender polymorphic relationship

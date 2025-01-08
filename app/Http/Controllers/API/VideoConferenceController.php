@@ -5,6 +5,8 @@ namespace App\Http\Controllers\API;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\VideoConference\StoreRequest;
 use App\Models\ClassStudent;
+use App\Models\JoinedStudent;
+use App\Models\Student;
 use App\Models\VideoConferenceRoom;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -80,6 +82,28 @@ class VideoConferenceController extends Controller
             return response()->json([
                 'status' => 'success',
                 'message' => 'Leave Successfully',
+            ]);
+        }
+    }
+
+    public function joinedSession(Request $request) {
+        $user = auth()->user();
+        $session = VideoConferenceRoom::where('session_code', $request->session_code)->first();
+
+        if($session && $user->role == 'student') {
+            $student = Student::where('id', $user->id)->first();
+
+            JoinedStudent::updateOrCreate([
+                'session_id' => $session->id,
+                'student_id' => $student->id,
+            ], [
+                'joined_start_time' => Carbon::now(),
+                'status' => 'present'
+            ]);
+
+            return response()->json([
+                'status' => 'success',
+                'message' => 'Joined Student Successfully'
             ]);
         }
     }

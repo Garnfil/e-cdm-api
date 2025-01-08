@@ -34,7 +34,7 @@ class ClassroomSeeder extends Seeder
             'instructor_id' => 1,
             'class_id' => $class_one->id,
             'room' => 'O-114',
-            'attendance_date' => Carbon::now(),
+            'attendance_datetime' => Carbon::now(),
         ]);
 
         $classCodeOne = Str::random(12);
@@ -54,7 +54,7 @@ class ClassroomSeeder extends Seeder
             'instructor_id' => 2,
             'class_id' => $class_two->id,
             'room' => 'N-124',
-            'attendance_date' => Carbon::now(),
+            'attendance_datetime' => Carbon::now(),
         ]);
     }
 }

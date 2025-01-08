@@ -14,7 +14,7 @@ class InstructorAttendance extends Model
         'instructor_id',
         'class_id',
         'room',
-        'attendnace_date',
+        'attendance_datetime',
         'is_read',
     ];
 

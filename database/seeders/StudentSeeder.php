@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use App\Models\Student;
+use Carbon\Carbon;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
 
@@ -27,6 +28,7 @@ class StudentSeeder extends Seeder
             'institute_id' => 1,
             'role' => 'student',
             'status' => 'active',
+            'email_verified_at' => Carbon::now(),
         ]);
     }
 }

@@ -137,6 +137,7 @@ class WhiteboardController extends Controller
         } catch (Exception $exception)
         {
             DB::rollBack();
+            dd($exception);
             return response()->json([
                 'error' => $exception,
             ], 400);
@@ -208,5 +209,15 @@ class WhiteboardController extends Controller
         event(new WhiteboardUpdated($data, $sessionId));
 
         return response()->json(['status' => 'Whiteboard updated', 'data' => $data]);
+    }
+
+    public function destroy(Request $request, $whiteboard_id) {
+        $whiteboard = WhiteboardSession::find($whiteboard_id);
+        $whiteboard->delete();
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Whiteboard Deleted Successfully'
+        ]);
     }
 }

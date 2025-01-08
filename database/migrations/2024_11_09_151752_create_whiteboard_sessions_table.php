@@ -27,7 +27,7 @@ return new class extends Migration {
             $table->foreignId('whiteboard_id')->constrained('whiteboard_sessions')->cascadeOnDelete();
             $table->string('user_id');
             $table->text('room_token');
-            $table->enum('user_type', [Student::class, Instructor::class]);
+            $table->enum('user_type', ["App\\\\Models\\\\Student", "App\\\\Models\\\\Instructor"]);
             $table->enum('user_role', ['admin', 'writer', 'reader']);
             $table->timestamps();
         });

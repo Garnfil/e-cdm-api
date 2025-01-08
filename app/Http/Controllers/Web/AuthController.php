@@ -27,10 +27,14 @@ class AuthController extends Controller
             ]);
 
             $login_type = filter_var($request->email_username, FILTER_VALIDATE_EMAIL) ? 'email' : 'username';
-            $admin = Admin::where($login_type, $request->email_username)->firstOrFail();
+            $admin = Admin::where($login_type, $request->email_username)->first();
+
+            if(!$admin) {
+                throw new Exception('Invalid Credentials.', 400);
+            }
 
             if (! Hash::check($request->password, $admin->password)) {
-                throw new Exception('Invalid Credentials', '400');
+                throw new Exception('Invalid Credentials.', '400');
             }
 
             Auth::login($admin);
