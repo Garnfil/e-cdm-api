@@ -222,11 +222,12 @@ class ClassRoomController extends Controller
     {
         $request_type = $request->query('type');
 
-        $school_work_ids = ClassSchoolWork::where('class_id')->pluck('school_work_id')->toArray();
+        $school_work_ids = ClassSchoolWork::where('class_id', $class_id)->pluck('school_work_id')->toArray();
 
         $school_works = SchoolWork::select('id', 'title', 'type')
             ->whereIn('id', $school_work_ids)
             ->where('type', $request_type)
+            ->with('school_work_class')
             ->get();
 
         $school_works->each(function ($school_work) {
