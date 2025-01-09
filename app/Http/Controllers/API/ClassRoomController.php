@@ -224,7 +224,7 @@ class ClassRoomController extends Controller
 
         $school_work_ids = ClassSchoolWork::where('class_id')->pluck('school_work_id')->toArray();
 
-        $school_works = SchoolWork::select('id', 'class_id', 'title', 'type')
+        $school_works = SchoolWork::select('id', 'title', 'type')
             ->whereIn('id', $school_work_ids)
             ->where('type', $request_type)
             ->get();
