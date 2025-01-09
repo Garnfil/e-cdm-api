@@ -94,7 +94,7 @@
                     <tr>
                         <td bgcolor="#ffffff" align="center" valign="top"
                             style="padding: 20px 20px 0px 20px; border-radius: 4px 4px 0px 0px; color: #111111; font-family: 'Google Sans', Helvetica, Arial, sans-serif; font-size: 3px; font-weight: 400; letter-spacing: 4px; line-height: 48px;">
-                            <img src=" https://e-learn.godesqsites.com/assets/img/cdm-logo.png" width="125"
+                            <img src=" https://my-cdm.godesqsites.com/assets/img/cdm-logo.png" width="125"
                                 height="120" style="display: block; border: 0px;" />
                             <h1 style="font-size: 32px; font-weight: 800; margin-bottom: 0;">Welcome to E-CDM!</h1>
                         </td>
