@@ -53,8 +53,8 @@ class SchoolWorkSeeder extends Seeder
             'student_id' => 1,
             'school_work_type' => $school_work_assignment->type,
         ], [
-            'score' => 0,
-            'grade' => 0,
+            'score' => 89,
+            'grade' => 'passed',
             'datetime_submitted' => Carbon::now(),
         ]);
 
@@ -90,8 +90,8 @@ class SchoolWorkSeeder extends Seeder
             'student_id' => 1,
             'school_work_type' => $school_work_activity->type,
         ], [
-            'score' => 0,
-            'grade' => 0,
+            'score' => 92,
+            'grade' => 'passed',
             'datetime_submitted' => Carbon::now(),
         ]);
 
@@ -127,8 +127,8 @@ class SchoolWorkSeeder extends Seeder
             'student_id' => 1,
             'school_work_type' => $school_work_quiz->type,
         ], [
-            'score' => 0,
-            'grade' => 0,
+            'score' => 17,
+            'grade' => 'passed',
             'datetime_submitted' => Carbon::now(),
         ]);
 
@@ -153,7 +153,7 @@ class SchoolWorkSeeder extends Seeder
 
             $exam = Exam::create([
                 'school_work_id' => $school_work_exam->id,
-                'points' => '20',
+                'points' => '60',
                 'exam_type' => 'prelim exam',
                 'assessment_type' => 'prelim',
             ]);
@@ -164,8 +164,8 @@ class SchoolWorkSeeder extends Seeder
             'student_id' => 1,
             'school_work_type' => $school_work_exam->type,
         ], [
-            'score' => 0,
-            'grade' => 0,
+            'score' => '48',
+            'grade' => 'passed',
             'datetime_submitted' => Carbon::now(),
         ]);
 
