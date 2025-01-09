@@ -30,7 +30,7 @@ class StudentSchoolWorkGradeController extends Controller
 
         // Count the total submitted works for each school work type
         $submittedCounts = StudentSubmission::where('student_id', $studentId)
-            ->whereHas('school_work', function ($query) use ($classId) {
+            ->whereHas('school_work.school_work_class', function ($query) use ($classId) {
                 $query->where('class_id', $classId);
             })
             ->selectRaw('school_work_type, COUNT(*) as total_submitted')

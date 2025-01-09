@@ -175,5 +175,6 @@ class SchoolWorkSeeder extends Seeder
         $gradeService->computeClassStudentGrade('quiz', 1, 1);
         $gradeService->computeClassStudentGrade('exam', 1, 1);
 
+
     }
 }
