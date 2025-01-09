@@ -7,6 +7,7 @@ use App\Models\Assignment;
 use App\Models\ClassRubric;
 use App\Models\ClassSchoolWork;
 use App\Models\Exam;
+use App\Models\Quiz;
 use App\Models\StudentFinalGrade;
 use App\Models\StudentSchoolWorkGrade;
 use App\Models\StudentSubmission;
@@ -38,7 +39,7 @@ class GradeService
         $models = [
             'assignment' => Assignment::class,
             'activity' => Activity::class,
-            'quiz' => Activity::class, // Assuming quiz is stored in Activity model
+            'quiz' => Quiz::class, // Assuming quiz is stored in Activity model
             'exam' => Exam::class,
         ];
 

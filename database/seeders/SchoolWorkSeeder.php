@@ -116,7 +116,7 @@ class SchoolWorkSeeder extends Seeder
 
             $quiz = Quiz::create([
                 'school_work_id' => $school_work_quiz->id,
-                'points' => '20',
+                'points' => 20,
                 'quiz_type' => 'short',
                 'assessment_type' => 'prelim',
             ]);
