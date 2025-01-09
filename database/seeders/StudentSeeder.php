@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\ClassStudent;
 use App\Models\Student;
 use Carbon\Carbon;
 use Illuminate\Database\Seeder;
@@ -14,7 +15,7 @@ class StudentSeeder extends Seeder
      */
     public function run(): void
     {
-        Student::create([
+        $student = Student::create([
             'student_id' => '21-00091',
             'email' => 'jamesgarnfil15@gmail.com',
             'password' => Hash::make('Test123!'),
@@ -31,4 +32,6 @@ class StudentSeeder extends Seeder
             'email_verified_at' => Carbon::now(),
         ]);
     }
+
+
 }

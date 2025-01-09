@@ -3,9 +3,9 @@
 namespace Database\Seeders;
 
 use App\Models\Classroom;
+use App\Models\ClassStudent;
 use App\Models\InstructorAttendance;
 use Carbon\Carbon;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Str;
 
@@ -17,7 +17,6 @@ class ClassroomSeeder extends Seeder
     public function run(): void
     {
         $classCode = Str::random(12);
-
 
         $class_one = Classroom::create([
             'title' => 'Test',
@@ -56,5 +55,12 @@ class ClassroomSeeder extends Seeder
             'room' => 'N-124',
             'attendance_datetime' => Carbon::now(),
         ]);
+
+        ClassStudent::create([
+            'student_id' => 1,
+            'class_id' => 1,
+            'status' => 'active',
+        ]);
+
     }
 }

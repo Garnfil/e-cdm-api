@@ -22,6 +22,8 @@ class DatabaseSeeder extends Seeder
             AdminSeeder::class,
             DiscussionSeeder::class,
             ClassroomSeeder::class,
+            ClassRubricSeeder::class,
+            SchoolWorkSeeder::class,
         ]);
     }
 }

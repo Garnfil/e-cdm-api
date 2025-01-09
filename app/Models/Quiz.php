@@ -17,7 +17,6 @@ class Quiz extends Model
         'points',
         'assessment_type',
         'quiz_type',
-        'has_quiz_form',
         'due_datetime',
     ];
 
