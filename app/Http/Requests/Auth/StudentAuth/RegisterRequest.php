@@ -27,7 +27,7 @@ class RegisterRequest extends FormRequest
             'lastname' => ['required', 'min:3'],
             'middlename' => ['nullable', 'min:3'],
             'student_id' => ['required'],
-            'email' => ['required', 'email'],
+            'email' => ['required', 'email', new StudentEmail()],
             'password' => ['required', 'min:8'],
             'institute_id' => ['required', 'exists:institutes,id'],
             'course_id' => ['required', 'exists:courses,id'],

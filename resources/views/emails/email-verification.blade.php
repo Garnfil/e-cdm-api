@@ -66,7 +66,7 @@
                 font-size: 32px !important;
                 line-height: 32px !important;
             }
-        }
+        }   
 
         /* ANDROID CENTER FIX */
         div[style*="margin: 16px 0;"] {
