@@ -13,6 +13,7 @@ use App\Http\Controllers\Web\ExamController;
 use App\Http\Controllers\Web\FingerprintController;
 use App\Http\Controllers\Web\GuardianController;
 use App\Http\Controllers\Web\InstituteController;
+use App\Http\Controllers\Web\InstructorAttendanceController;
 use App\Http\Controllers\Web\InstructorController;
 use App\Http\Controllers\Web\QuizController;
 use App\Http\Controllers\Web\QuizQuestionController;
@@ -92,6 +93,7 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'middleware' => ['auth']], 
     Route::resource('video-conference-sessions', VideoConferenceController::class);
     Route::resource('whiteboard-sessions', WhiteboardController::class);
     Route::resource('rubrics', RubricController::class);
+    Route::resource('instructor-attendances', InstructorAttendanceController::class);
 
     Route::post('quiz-questions/store', [QuizQuestionController::class, 'store'])->name('quiz_questions.store');
     Route::post('school-works/attachments/upload', [SchoolWorkController::class, 'upload'])->name('school_works.attachments.upload');
