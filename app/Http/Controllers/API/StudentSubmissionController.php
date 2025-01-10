@@ -304,7 +304,7 @@ class StudentSubmissionController extends Controller
 
             $student_submission = StudentSubmission::with('school_work')->find($submissionId);
 
-            $rubric = ClassRubric::where('id', $student_submission->school_work->class_id)->first();
+            $rubric = ClassRubric::where('id', $student_submission->school_work->school_work_class->class_id)->first();
             if (! $rubric)
                 throw new Exception("No Class Rubric Found.");
 
