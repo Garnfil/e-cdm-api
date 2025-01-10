@@ -59,7 +59,7 @@ class ProfileController extends Controller
             {
                 $attachment = $request->file('avatar');
 
-                $avatar_path = $student->student_id . '_' . Str::random(7) . '.' . $attachment->getClientOriginalExtension();
+                $avatar_path = $student->student_id.'_'.Str::random(7).'.'.$attachment->getClientOriginalExtension();
 
                 $file_path = 'students/profiles/';
                 Storage::disk('public')->putFileAs($file_path, $attachment, $avatar_path);
@@ -96,7 +96,7 @@ class ProfileController extends Controller
             {
                 $attachment = $request->file('avatar');
 
-                $avatar_path = Str::random(10) . '.' . $attachment->getClientOriginalExtension();
+                $avatar_path = Str::random(10).'.'.$attachment->getClientOriginalExtension();
 
                 $file_path = 'instructors/profiles/';
                 Storage::disk('public')->putFileAs($file_path, $attachment, $avatar_path);
@@ -133,7 +133,7 @@ class ProfileController extends Controller
             {
                 $attachment = $request->file('attachment');
 
-                $avatar_path = Str::random(10) . '.' . $attachment->getClientOriginalExtension();
+                $avatar_path = Str::random(10).'.'.$attachment->getClientOriginalExtension();
 
                 $file_path = 'admins/profiles/';
                 Storage::disk('public')->putFileAs($file_path, $attachment, $avatar_path);
