@@ -318,7 +318,7 @@ class StudentSubmissionController extends Controller
             ]);
 
             $gradeService = new GradeService;
-            $gradeService->computeClassStudentGrade($student_submission->school_work_type, $student_submission->student_id, $student_submission->school_work->class_id);
+            $gradeService->computeClassStudentGrade($student_submission->school_work_type, $student_submission->student_id, $student_submission->school_work->school_work_class->class_id);
 
             return response()->json([
                 'status' => 'success',
