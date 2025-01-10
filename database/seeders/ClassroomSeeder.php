@@ -19,7 +19,7 @@ class ClassroomSeeder extends Seeder
         $classCode = Str::random(12);
 
         $class_one = Classroom::create([
-            'title' => 'Test',
+            'title' => '4H - Capstone Project 1',
             'class_code' => $classCode,
             'semester' => '1st',
             'subject_id' => 11,
@@ -39,7 +39,7 @@ class ClassroomSeeder extends Seeder
         $classCodeOne = Str::random(12);
 
         $class_two = Classroom::create([
-            'title' => 'Test 2',
+            'title' => '4H - Information Assurance and Security',
             'class_code' => $classCodeOne,
             'semester' => '1st',
             'subject_id' => 8,

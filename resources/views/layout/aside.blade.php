@@ -127,7 +127,7 @@
 
         <li class="menu-item {{ Request::is('admin/attendances') ? 'active' : null }}">
             <a href="{{ route('admin.attendances.index') }}" class="menu-link">
-                <i class="menu-icon tf-icons bx bx-collection"></i>
+                <i class="menu-icon tf-icons bx bx-calendar"></i>
                 <div data-i18n="Sections">Attendances</div>
             </a>
         </li>
@@ -143,6 +143,12 @@
                 <div data-i18n="School Events">School Events</div>
             </a>
         </li>
+        <li class="menu-item {{ Request::is('admin/instructor-attendances') ? 'active' : null }}">
+            <a href="{{ route('admin.instructor-attendances.index') }}" class="menu-link">
+                <i class="menu-icon tf-icons bx bx-calendar"></i>
+                <div data-i18n="Instructor Attendances">Instructor Attendances</div>
+            </a>
+        </li>
         <li class="menu-item {{ Request::is('admin/video-conference-sessions') ? 'active' : null }}">
             <a href="{{ route('admin.video-conference-sessions.index') }}" class="menu-link">
                 <i class="menu-icon tf-icons bx bx-collection"></i>
@@ -155,6 +161,7 @@
                 <div data-i18n="Whiteboard Sessions">Whiteboard Sessions</div>
             </a>
         </li>
+
         <!-- <li class="menu-item {{ Request::is('admin/whiteboard-sessions') ? 'active' : null }}">
             <a href="{{ route('admin.whiteboard-sessions.index') }}" class="menu-link">
                 <i class="menu-icon tf-icons bx bx-file"></i>
